@@ -1,7 +1,7 @@
 from renpybuild.context import Context
 from renpybuild.task import task
 
-version = "4.3.1"
+version = "7.1.1"
 
 
 @task(platforms="all")
@@ -14,8 +14,6 @@ def unpack(c: Context):
     c.var("version", version)
     c.chdir("ffmpeg-{{version}}")
 
-    c.patch("ffmpeg-4.3.1-sse.diff")
-    c.patch("ffmpeg-4.3.1-ff_seek_frame_binary.diff")
 
 
 @task()
@@ -80,6 +78,9 @@ def build(c: Context):
 
         --enable-pic
         --enable-static
+        --disable-shared
+        --disable-gpl
+        --disable-nonfree
 
         --disable-all
         --disable-everything
@@ -105,8 +106,6 @@ def build(c: Context):
         --enable-swresample
         --enable-swscale
         --enable-avfilter
-        --enable-avresample
-        --enable-libaom
 
         --disable-bzlib
 
@@ -149,7 +148,34 @@ def build(c: Context):
         --enable-decoder=vp3
         --enable-decoder=vp8
         --enable-decoder=vp9
-        --enable-decoder=libaom_av1
+        --enable-decoder=av1
+        --enable-decoder=libdav1d
+        --enable-libdav1d
+
+{% if c.platform == "windows" %}
+        --enable-d3d11va
+        --enable-hwaccel=h264_d3d11va
+        --enable-hwaccel=hevc_d3d11va
+        --enable-hwaccel=vp9_d3d11va
+        --enable-hwaccel=av1_d3d11va
+        --enable-hwaccel=mpeg2_d3d11va
+        --enable-hwaccel=h264_d3d11va2
+        --enable-hwaccel=hevc_d3d11va2
+        --enable-hwaccel=vp9_d3d11va2
+        --enable-hwaccel=av1_d3d11va2
+        --enable-hwaccel=mpeg2_d3d11va2
+{% endif %}
+
+{% if c.platform == "android" %}
+        --enable-jni
+        --enable-mediacodec
+        --enable-hwaccel=h264_mediacodec
+        --enable-hwaccel=hevc_mediacodec
+        --enable-hwaccel=vp8_mediacodec
+        --enable-hwaccel=vp9_mediacodec
+        --enable-hwaccel=av1_mediacodec
+        --enable-hwaccel=mpeg2_mediacodec
+{% endif %}
 
         --enable-parser=mpegaudio
         --enable-parser=mpegvideo
@@ -166,19 +192,25 @@ def build(c: Context):
         --disable-sndio
         --disable-xlib
 
-
-        --disable-amf
-        --disable-audiotoolbox
-        --disable-cuda-llvm
+{% if c.platform != "windows" %}
         --disable-d3d11va
         --disable-dxva2
+{% endif %}
+{% if c.platform != "android" %}
+        --disable-mediacodec
+{% endif %}
+{% if c.platform != "mac" and c.platform != "ios" %}
+        --disable-videotoolbox
+        --disable-audiotoolbox
+{% endif %}
+        --disable-amf
+        --disable-cuda-llvm
         --disable-ffnvcodec
         --disable-nvdec
         --disable-nvenc
         --disable-v4l2-m2m
         --disable-vaapi
         --disable-vdpau
-        --disable-videotoolbox
     """)
 
     c.run("""{{ make }} V=1""")
@@ -213,6 +245,9 @@ def build_web(c: Context):
 
         --enable-pic
         --enable-static
+        --disable-shared
+        --disable-gpl
+        --disable-nonfree
         --disable-stripping
 
         --disable-pthreads
@@ -231,7 +266,6 @@ def build_web(c: Context):
         --enable-swresample
         --enable-swscale
         --enable-avfilter
-        --enable-avresample
 
         --disable-bzlib
 

@@ -1,7 +1,5 @@
 from renpybuild.context import Context
 from renpybuild.task import task
-import os
-import time
 
 @task(kind="python", always=True)
 def clean(c: Context):
@@ -68,6 +66,7 @@ def link_linux(c: Context):
     -lSDL2
     -lavif
     -laom
+    -ldav1d
     -lyuv
     -ljpeg
     -lpng
@@ -152,6 +151,7 @@ def link_android(c: Context):
 
     -lavif
     -laom
+    -ldav1d
     -lyuv
     -ljpeg
     -lpng
@@ -212,6 +212,7 @@ def link_mac(c: Context):
     -lSDL2
     -lavif
     -laom
+    -ldav1d
     -lyuv
     -ljpeg
     -lpng
@@ -361,11 +362,15 @@ def link_windows(c: Context):
     -lswresample
     -lavutil
 
+    -ld3d11
+    -ldxgi
+
     -lSDL2_image
     -lSDL2
     -lopengl32
     -lavif
     -laom
+    -ldav1d
     -lyuv
     -ljpeg
     -lpng16
@@ -402,6 +407,7 @@ def link_windows(c: Context):
     -lversion
     -luuid
     -lcrypt32
+    -ladvapi32
 
     -Wl,--export-all-symbols
     """)
@@ -616,6 +622,7 @@ def link_web(c: Context):
     -lSDL2
     -lavif
     -laom
+    -ldav1d
     -lyuv
     -ljpeg
     -lpng

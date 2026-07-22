@@ -35,14 +35,14 @@ def build(c: Context):
     def read_setup(dn, suffix=""):
 
         with open(dn / ("Setup" + suffix)) as f:
-            for l in f:
-                l = l.partition("#")[0]
-                l = l.strip()
+            for line in f:
+                line = line.partition("#")[0]
+                line = line.strip()
 
-                if not l:
+                if not line:
                     continue
 
-                parts = l.split()
+                parts = line.split()
 
                 if parts[0] == "renpy.compat.dictviews" and c.python != "2":
                     continue

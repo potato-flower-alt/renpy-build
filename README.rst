@@ -1,6 +1,14 @@
 Ren'Py Build
 ============
 
+Public Fork
+-----------
+
+This branch builds the companion public Ren'Py fork with FFmpeg 7.1.1,
+dav1d, and platform hardware-decoding support. Start with `FORK_NOTES.md
+<FORK_NOTES.md>`_ and `SOURCE_OFFER.md <SOURCE_OFFER.md>`_. Commercial SDKs
+are not included or enabled.
+
 The purpose of the Ren'Py build system is to provide a single system that
 can build the binary components of Ren'Py and all its dependencies, in
 the same manner that is used to make official Ren'Py releases.

@@ -18,12 +18,15 @@ def build(c : Context):
         -DAVIF_CODEC_AOM=1
         -DAVIF_CODEC_AOM_ENCODE=0
         -DBUILD_SHARED_LIBS=0
+        -DCMAKE_THREAD_LIBS_INIT="-lpthread"
+        -DCMAKE_HAVE_THREADS_LIBRARY=1
+        -DTHREADS_FOUND=1
         {{ tmp }}/source/libavif
         """)
 
     try:
         c.run("cmake --build .")
-    except:
+    except Exception:
         c.run("cmake --build . -j 1 -v")
 
     c.run("cmake --install .")

@@ -6,8 +6,6 @@ import sys
 import sysconfig
 import threading
 
-import jinja2
-
 # This caches the results of emsdk_environment.
 emsdk_cache : dict[str, str] = { }
 
@@ -29,8 +27,8 @@ def emsdk_environment(c):
 
         bash = subprocess.check_output([ str(emsdk), "construct_env" ], env=env, text=True)
 
-        for l in bash.split("\n"):
-            m = re.match(r'export (\w+)=\"(.*?)\";?$', l)
+        for line in bash.split("\n"):
+            m = re.match(r'export (\w+)=\"(.*?)\";?$', line)
             if m:
                 emsdk_cache[m.group(1)] = m.group(2)
 
@@ -48,8 +46,6 @@ def llvm(c, bin="", prefix="", suffix="-18", clang_args="", use_ld=True):
     c.var("llvm_bin", bin)
     c.var("llvm_prefix", prefix)
     c.var("llvm_suffix", suffix)
-
-    ld = c.expand("{{llvm_bin}}lld{{llvm_suffix}}")
 
     if use_ld:
         clang_args = "-fuse-ld=lld -Wno-unused-command-line-argument " + clang_args
@@ -207,14 +203,16 @@ def build_environment(c):
 
     elif (c.platform == "linux") and (c.arch == "x86_64"):
 
-        llvm(c, clang_args="-target {{ host_platform }} --sysroot {{ sysroot }} -fPIC -pthread")
-        c.env("LDFLAGS", "{{ LDFLAGS }} -L{{install}}/lib64")
-        c.env("PKG_CONFIG_LIBDIR", "{{ sysroot }}/usr/lib/{{ architecture_name }}/pkgconfig:{{ sysroot }}/usr/share/pkgconfig")
-        # c.env("PKG_CONFIG_SYSROOT_DIR", "{{ sysroot }}")
+        # Use host toolchain directly (no --sysroot) since we're building
+        # x86_64 on x86_64. The sysroot approach causes pthread resolution
+        # failures with lld on Ubuntu 24.04 host.
+        llvm(c, clang_args="-fPIC -pthread")
+        c.env("LDFLAGS", "{{ LDFLAGS }} -L{{install}}/lib64 -L{{install}}/lib/x86_64-linux-gnu")
+        c.env("PKG_CONFIG_LIBDIR", "{{ install }}/lib/pkgconfig:{{ install }}/lib/x86_64-linux-gnu/pkgconfig")
 
         c.var("cmake_system_name", "Linux")
         c.var("cmake_system_processor", "x86_64")
-        c.var("cmake_args", "-DCMAKE_FIND_ROOT_PATH='{{ install }};{{ sysroot }}' -DCMAKE_SYSROOT={{ sysroot }}")
+        c.var("cmake_args", "-DCMAKE_FIND_ROOT_PATH={{ install }}")
 
     elif (c.platform == "linux") and (c.arch == "aarch64"):
 

@@ -119,15 +119,35 @@ def build_posix(c: Context):
 
     common(c)
 
+    # lld with --sysroot can't resolve pthread symbols from libpthread.so
+    # in the Ubuntu 20.04 sysroot. Remove -fuse-ld=lld so clang uses
+    # the system default linker (GNU ld) and add pthread to LIBS so
+    # Python's make links it after other libraries.
+    saved_cc = c.environ.get("CC", "")
+    c.env("CC", saved_cc.replace(" -fuse-ld=lld", "").replace("-fuse-ld=lld ", ""))
+
+    saved_ldflags = c.environ.get("LDFLAGS", "")
+    c.env("LDFLAGS", saved_ldflags + " -lpthread")
+    c.env("LIBS", "-lpthread")
+
     c.run("""
         {{configure}} {{ cross_config }}
         --prefix="{{ install }}"
         --enable-ipv6
         --with-build-python={{host}}/bin/python3
         --with-ensurepip=no
+        ac_cv_pthread=yes
+        ac_cv_lib_pthread_pthread_create=yes
+        ac_cv_func_pthread_create=yes
+        ac_cv_func_pthread_detach=yes
+        ac_cv_header_pthread_h=yes
+        LIBS=-lpthread
         """)
 
     common_post(c)
+
+    c.env("CC", saved_cc)
+    c.env("LDFLAGS", saved_ldflags)
 
 
 @task(kind="python", pythons="3", platforms="ios")

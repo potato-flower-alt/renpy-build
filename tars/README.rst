@@ -1,6 +1,21 @@
 Tars
 ====
 
+Public dependency sources
+-------------------------
+
+The public fork builds FFmpeg 7.1.1. Its exact corresponding source archive
+is committed as ``source/ffmpeg-7.1.1.tar.gz`` and is also available from:
+
+https://ffmpeg.org/releases/ffmpeg-7.1.1.tar.gz
+
+SHA-256: ``bfb2261a9b46e71880aeb2d0caa3f8a8205fce606ee53b25c351f04fa7809e96``
+
+dav1d is checked out by ``tasks/dav1d.py`` from its public upstream repository
+at tag ``1.5.0``. Neither dependency is locally patched by this fork.
+
+The following proprietary platform SDKs are optional and are not committed.
+
 This directory is for source files too big (or too poorly licensed) to go
 into github. Right now, it needs:
 

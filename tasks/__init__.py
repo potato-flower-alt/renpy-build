@@ -26,6 +26,7 @@ from . import libwebp
 
 from . import libyuv
 from . import aom
+from . import dav1d
 from . import libavif
 
 from . import hostpython3

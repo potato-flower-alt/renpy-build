@@ -8,6 +8,7 @@ __pycache__
 /dist
 /renpy
 /pygame_sdl2
+/rapt/templates/.gradle/
 renios/prototype/prebuilt/
 
 ._*
