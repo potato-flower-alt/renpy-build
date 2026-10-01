@@ -3,17 +3,29 @@ from renpybuild.task import task
 import zipfile
 
 
+STEAMWORKS_SDK = "steamworks_sdk_165.zip"
+
+STEAM_DLLS = {
+    ("linux", "x86_64"): "{{ host }}/steam/sdk/redistributable_bin/linux64/libsteam_api.so",
+    ("linux", "aarch64"): "{{ host }}/steam/sdk/redistributable_bin/linuxarm64/libsteam_api.so",
+    ("windows", "x86_64"): "{{ host }}/steam/sdk/redistributable_bin/win64/steam_api64.dll",
+    ("mac", "x86_64"): "{{ host }}/steam/sdk/redistributable_bin/osx/libsteam_api.dylib",
+    ("mac", "arm64"): "{{ host }}/steam/sdk/redistributable_bin/osx/libsteam_api.dylib",
+}
+
+
 @task(kind="host", platforms="all")
 def unpack_sdk(c: Context):
 
     c.clean("{{ install }}/steam")
 
-    if not c.path("{{ tars }}/steamworks_sdk_162.zip").exists():
+    sdk = c.path("{{ tars }}/" + STEAMWORKS_SDK)
+
+    if not sdk.exists():
         return
 
-    zf = zipfile.ZipFile(c.path("{{ tars }}/steamworks_sdk_162.zip"))
-    zf.extractall(c.path("{{ install }}/steam"))
-    zf.close()
+    with zipfile.ZipFile(sdk) as zf:
+        zf.extractall(c.path("{{ install }}/steam"))
 
 
 @task(kind="host", platforms="all")
@@ -32,15 +44,11 @@ def build(c: Context):
     if not c.path("{{host}}/steam/sdk").exists():
         return
 
-    if c.platform == "linux" and c.arch == "x86_64":
-        c.var("steamdll", "{{ host }}/steam/sdk/redistributable_bin/linux64/libsteam_api.so")
-    elif c.platform == "windows" and c.arch == "x86_64":
-        c.var("steamdll", "{{ host }}/steam/sdk/redistributable_bin/win64/steam_api64.dll")
-    elif c.platform == "mac":
-        c.var("steamdll", "{{ host }}/steam/sdk/redistributable_bin/osx/libsteam_api.dylib")
-    else:
+    steamdll = STEAM_DLLS.get((c.platform, c.arch))
+    if steamdll is None:
         return
 
+    c.var("steamdll", steamdll)
     c.run("cp {{steamdll}} {{dlpa}}")
 
     c.run("install -d {{pytmp}}/steam")

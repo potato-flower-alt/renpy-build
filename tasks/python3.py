@@ -119,16 +119,30 @@ def build_posix(c: Context):
 
     common(c)
 
-    # lld with --sysroot can't resolve pthread symbols from libpthread.so
-    # in the Ubuntu 20.04 sysroot. Remove -fuse-ld=lld so clang uses
-    # the system default linker (GNU ld) and add pthread to LIBS so
-    # Python's make links it after other libraries.
     saved_cc = c.environ.get("CC", "")
-    c.env("CC", saved_cc.replace(" -fuse-ld=lld", "").replace("-fuse-ld=lld ", ""))
-
     saved_ldflags = c.environ.get("LDFLAGS", "")
-    c.env("LDFLAGS", saved_ldflags + " -lpthread")
-    c.env("LIBS", "-lpthread")
+    saved_libs = c.environ.get("LIBS", "")
+
+    pthread_config = ""
+    if c.platform == "linux":
+        # lld with --sysroot can't resolve pthread symbols from libpthread.so
+        # in the Ubuntu 20.04 x86_64 sysroot. Use GNU ld for x86_64 and link
+        # pthread after the other libraries. Cross-compiled aarch64 must keep
+        # lld, since the host GNU ld cannot link aarch64 executables.
+        if c.arch == "x86_64":
+            c.env("CC", saved_cc.replace(" -fuse-ld=lld", "").replace("-fuse-ld=lld ", ""))
+        c.env("LDFLAGS", saved_ldflags + " -lpthread")
+        c.env("LIBS", "-lpthread")
+        pthread_config = """
+            ac_cv_pthread=yes
+            ac_cv_lib_pthread_pthread_create=yes
+            ac_cv_func_pthread_create=yes
+            ac_cv_func_pthread_detach=yes
+            ac_cv_header_pthread_h=yes
+            LIBS=-lpthread
+        """
+
+    c.var("pthread_config", pthread_config)
 
     c.run("""
         {{configure}} {{ cross_config }}
@@ -136,18 +150,14 @@ def build_posix(c: Context):
         --enable-ipv6
         --with-build-python={{host}}/bin/python3
         --with-ensurepip=no
-        ac_cv_pthread=yes
-        ac_cv_lib_pthread_pthread_create=yes
-        ac_cv_func_pthread_create=yes
-        ac_cv_func_pthread_detach=yes
-        ac_cv_header_pthread_h=yes
-        LIBS=-lpthread
+        {{ pthread_config }}
         """)
 
     common_post(c)
 
     c.env("CC", saved_cc)
     c.env("LDFLAGS", saved_ldflags)
+    c.env("LIBS", saved_libs)
 
 
 @task(kind="python", pythons="3", platforms="ios")

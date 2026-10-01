@@ -50,7 +50,7 @@ Downloaded from https://www.live2d.com/en/download/cubism-sdk/ .
 Steamworks SDK
 --------------
 
-* steamworks_sdk_160.zip
+* steamworks_sdk_165.zip
 
 Downloaded from https://partner.steamgames.com/doc/sdk , which is only
 available to Steam partners. Ren'Py will build without the Steamworks

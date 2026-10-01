@@ -106,6 +106,7 @@ def build(c: Context):
         --enable-swresample
         --enable-swscale
         --enable-avfilter
+        --enable-filter=atempo
 
         --disable-bzlib
 
@@ -138,6 +139,7 @@ def build(c: Context):
         --enable-decoder=pcm_dvd
         --enable-decoder=pcm_s16be
         --enable-decoder=pcm_s16le
+        --enable-decoder=pcm_s24le
         --enable-decoder=pcm_s8
         --enable-decoder=pcm_u16be
         --enable-decoder=pcm_u16le
@@ -281,6 +283,7 @@ def build_web(c: Context):
         --enable-decoder=pcm_dvd
         --enable-decoder=pcm_s16be
         --enable-decoder=pcm_s16le
+        --enable-decoder=pcm_s24le
         --enable-decoder=pcm_s8
         --enable-decoder=pcm_u16be
         --enable-decoder=pcm_u16le

@@ -80,8 +80,13 @@ def build(c: Context):
     # Meson adds -Werror=unused-command-line-argument to test compilations,
     # which conflicts with -fuse-ld=lld in CC. Remove -fuse-ld=lld from CC
     # for the meson invocation (it's a linker flag, not a compiler flag).
+    # macOS and cross-compiled Linux must keep it so Clang selects the target
+    # linker instead of the host ELF linker when Meson probes the linker.
     saved_cc = c.environ.get("CC", "")
-    c.env("CC", saved_cc.replace("-fuse-ld=lld ", "").replace("-fuse-ld=lld", ""))
+    if c.platform == "mac" or (c.platform == "linux" and is_cross):
+        c.env("CC", saved_cc + " -Qunused-arguments")
+    else:
+        c.env("CC", saved_cc.replace("-fuse-ld=lld ", "").replace("-fuse-ld=lld", ""))
 
     c.run("""
         meson setup {{ build }}/dav1d-build {{ dav1d_cross_arg }} \

@@ -17,6 +17,10 @@ scripts, and link instructions needed to rebuild those binaries.
 - Other dependency source archives and checkout locations are defined by the
   existing tasks and `source/` directory.
 
+The FFmpeg configuration includes native `atempo` filtering and 24-bit PCM WAV
+decoding. Native runtime links include `libavfilter`. These build changes use
+the same FFmpeg 7.1.1 source archive listed above.
+
 ## Binary distributors
 
 For every SDK, game, or runtime release:

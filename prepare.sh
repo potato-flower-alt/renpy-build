@@ -45,7 +45,7 @@ sudo apt-get install -y ninja-build
 
 # Install the standard set of packages needed to build Ren'Py.
 sudo apt-get install -y \
-    libavcodec-dev libavformat-dev \
+    libavcodec-dev libavformat-dev libavfilter-dev \
     libswresample-dev libswscale-dev libfreetype6-dev libfribidi-dev libsdl2-dev \
     libsdl2-image-dev libsdl2-gfx-dev libsdl2-mixer-dev libsdl2-ttf-dev libjpeg-dev \
     libharfbuzz-dev libassimp-dev

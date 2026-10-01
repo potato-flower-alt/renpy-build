@@ -68,13 +68,15 @@ k_ScreenshotThumbWidth = c_int(0xc8)
 k_UGCQueryHandleInvalid = c_ulonglong(0xffffffffffffffff)
 k_UGCUpdateHandleInvalid = c_ulonglong(0xffffffffffffffff)
 kNumUGCResultsPerPage = c_uint(0x32)
-k_cchDeveloperMetadataMax = c_uint(0x1388)
+k_cchDeveloperMetadataMax = c_uint(0x2710)
 INVALID_HTMLBROWSER = c_uint(0)
 k_SteamItemInstanceIDInvalid = c_ulonglong(-1)
 k_SteamInventoryResultInvalid = c_int(-1)
 k_SteamInventoryUpdateHandleInvalid = c_ulonglong(0xffffffffffffffff)
 k_unMaxTimelinePriority = c_uint(0x3e8)
+k_unTimelinePriority_KeepCurrentValue = c_uint(0xf4240)
 k_flMaxTimelineEventDuration = c_float(600.0)
+k_cchMaxPhaseIDLength = c_uint(0x40)
 k_HSteamNetConnection_Invalid = c_uint(0)
 k_HSteamListenSocket_Invalid = c_uint(0)
 k_HSteamNetPollGroup_Invalid = c_uint(0)
@@ -267,6 +269,8 @@ k_EResultCachedCredentialInvalid = EResult(126)
 K_EResultPhoneNumberIsVOIP = EResult(127)
 k_EResultNotSupported = EResult(128)
 k_EResultFamilySizeLimitExceeded = EResult(129)
+k_EResultOfflineAppCacheInvalid = EResult(130)
+k_EResultTryLater = EResult(131)
 
 class EVoiceResult(c_int):
     pass
@@ -447,6 +451,7 @@ k_EMarketNotAllowedReason_RecentSelfRefund = EMarketNotAllowedReasonFlags(4096)
 k_EMarketNotAllowedReason_NewPaymentMethodCannotBeVerified = EMarketNotAllowedReasonFlags(8192)
 k_EMarketNotAllowedReason_NoRecentPurchases = EMarketNotAllowedReasonFlags(16384)
 k_EMarketNotAllowedReason_AcceptedWalletGift = EMarketNotAllowedReasonFlags(32768)
+k_EMarketNotAllowedReason_TradeCooldown = EMarketNotAllowedReasonFlags(65536)
 
 class EDurationControlProgress(c_int):
     pass
@@ -487,28 +492,6 @@ k_EBetaBranch_Available = EBetaBranchFlags(2)
 k_EBetaBranch_Private = EBetaBranchFlags(4)
 k_EBetaBranch_Selected = EBetaBranchFlags(8)
 k_EBetaBranch_Installed = EBetaBranchFlags(16)
-
-class EGameSearchErrorCode_t(c_int):
-    pass
-
-k_EGameSearchErrorCode_OK = EGameSearchErrorCode_t(1)
-k_EGameSearchErrorCode_Failed_Search_Already_In_Progress = EGameSearchErrorCode_t(2)
-k_EGameSearchErrorCode_Failed_No_Search_In_Progress = EGameSearchErrorCode_t(3)
-k_EGameSearchErrorCode_Failed_Not_Lobby_Leader = EGameSearchErrorCode_t(4)
-k_EGameSearchErrorCode_Failed_No_Host_Available = EGameSearchErrorCode_t(5)
-k_EGameSearchErrorCode_Failed_Search_Params_Invalid = EGameSearchErrorCode_t(6)
-k_EGameSearchErrorCode_Failed_Offline = EGameSearchErrorCode_t(7)
-k_EGameSearchErrorCode_Failed_NotAuthorized = EGameSearchErrorCode_t(8)
-k_EGameSearchErrorCode_Failed_Unknown_Error = EGameSearchErrorCode_t(9)
-
-class EPlayerResult_t(c_int):
-    pass
-
-k_EPlayerResultFailedToConnect = EPlayerResult_t(1)
-k_EPlayerResultAbandoned = EPlayerResult_t(2)
-k_EPlayerResultKicked = EPlayerResult_t(3)
-k_EPlayerResultIncomplete = EPlayerResult_t(4)
-k_EPlayerResultCompleted = EPlayerResult_t(5)
 
 class ESteamIPv6ConnectivityProtocol(c_int):
     pass
@@ -565,18 +548,6 @@ k_EFriendFlagIgnored = EFriendFlags(512)
 k_EFriendFlagIgnoredFriend = EFriendFlags(1024)
 k_EFriendFlagChatMember = EFriendFlags(4096)
 k_EFriendFlagAll = EFriendFlags(65535)
-
-class EUserRestriction(c_int):
-    pass
-
-k_nUserRestrictionNone = EUserRestriction(0)
-k_nUserRestrictionUnknown = EUserRestriction(1)
-k_nUserRestrictionAnyChat = EUserRestriction(2)
-k_nUserRestrictionVoiceChat = EUserRestriction(4)
-k_nUserRestrictionGroupChat = EUserRestriction(8)
-k_nUserRestrictionRating = EUserRestriction(16)
-k_nUserRestrictionGameInvites = EUserRestriction(32)
-k_nUserRestrictionTrading = EUserRestriction(64)
 
 class EOverlayToStoreFlag(c_int):
     pass
@@ -671,6 +642,26 @@ k_ETextFilteringContextUnknown = ETextFilteringContext(0)
 k_ETextFilteringContextGameContent = ETextFilteringContext(1)
 k_ETextFilteringContextChat = ETextFilteringContext(2)
 k_ETextFilteringContextName = ETextFilteringContext(3)
+
+class ESteamHardwareType(c_int):
+    pass
+
+k_ESteamHardwareTypeNone = ESteamHardwareType(0)
+k_ESteamHardwareTypeSteamDeck = ESteamHardwareType(1)
+k_ESteamHardwareTypeSteamMachine = ESteamHardwareType(2)
+k_ESteamHardwareTypeSteamFrame = ESteamHardwareType(3)
+
+class ESteamHardwareDefaultConfig(c_int):
+    pass
+
+k_ESteamHardwareDefaultConfigNone = ESteamHardwareDefaultConfig(0)
+k_ESteamHardwareDefaultConfigLow = ESteamHardwareDefaultConfig(1)
+k_ESteamHardwareDefaultConfigMedium = ESteamHardwareDefaultConfig(2)
+k_ESteamHardwareDefaultConfigHigh = ESteamHardwareDefaultConfig(3)
+k_ESteamHardwareDefaultConfigMax = ESteamHardwareDefaultConfig(4)
+k_ESteamHardwareDefaultConfigSteamDeck = ESteamHardwareDefaultConfig(5)
+k_ESteamHardwareDefaultConfigSteamMachine = ESteamHardwareDefaultConfig(6)
+k_ESteamHardwareDefaultConfigSteamFrame = ESteamHardwareDefaultConfig(7)
 
 class ECheckFileSignature(c_int):
     pass
@@ -866,6 +857,16 @@ k_ELeaderboardUploadScoreMethodNone = ELeaderboardUploadScoreMethod(0)
 k_ELeaderboardUploadScoreMethodKeepBest = ELeaderboardUploadScoreMethod(1)
 k_ELeaderboardUploadScoreMethodForceUpdate = ELeaderboardUploadScoreMethod(2)
 
+class EGamePerformanceSetting(c_int):
+    pass
+
+k_EGamePerformanceSetting_NotSet = EGamePerformanceSetting(0)
+k_EGamePerformanceSetting_Low = EGamePerformanceSetting(1)
+k_EGamePerformanceSetting_Medium = EGamePerformanceSetting(2)
+k_EGamePerformanceSetting_High = EGamePerformanceSetting(3)
+k_EGamePerformanceSetting_Ultra = EGamePerformanceSetting(4)
+k_EGamePerformanceSetting_Custom = EGamePerformanceSetting(5)
+
 class EP2PSessionError(c_int):
     pass
 
@@ -976,14 +977,28 @@ k_EHTTPStatusCode415UnsupportedMediaType = EHTTPStatusCode(415)
 k_EHTTPStatusCode416RequestedRangeNotSatisfiable = EHTTPStatusCode(416)
 k_EHTTPStatusCode417ExpectationFailed = EHTTPStatusCode(417)
 k_EHTTPStatusCode4xxUnknown = EHTTPStatusCode(418)
+k_EHTTPStatusCode421MisdirectedRequest = EHTTPStatusCode(421)
+k_EHTTPStatusCode422UnprocessableContent = EHTTPStatusCode(422)
+k_EHTTPStatusCode423Locked = EHTTPStatusCode(423)
+k_EHTTPStatusCode424FailedDependency = EHTTPStatusCode(424)
+k_EHTTPStatusCode425TooEarly = EHTTPStatusCode(425)
+k_EHTTPStatusCode426UpgradeRequired = EHTTPStatusCode(426)
+k_EHTTPStatusCode428PreconditionRequired = EHTTPStatusCode(428)
 k_EHTTPStatusCode429TooManyRequests = EHTTPStatusCode(429)
+k_EHTTPStatusCode431RequestHeaderFieldsTooLarge = EHTTPStatusCode(431)
 k_EHTTPStatusCode444ConnectionClosed = EHTTPStatusCode(444)
+k_EHTTPStatusCode451UnavailableForLegalReasons = EHTTPStatusCode(451)
 k_EHTTPStatusCode500InternalServerError = EHTTPStatusCode(500)
 k_EHTTPStatusCode501NotImplemented = EHTTPStatusCode(501)
 k_EHTTPStatusCode502BadGateway = EHTTPStatusCode(502)
 k_EHTTPStatusCode503ServiceUnavailable = EHTTPStatusCode(503)
 k_EHTTPStatusCode504GatewayTimeout = EHTTPStatusCode(504)
 k_EHTTPStatusCode505HTTPVersionNotSupported = EHTTPStatusCode(505)
+k_EHTTPStatusCode506VariantAlsoNegotiates = EHTTPStatusCode(506)
+k_EHTTPStatusCode507InsufficientStorage = EHTTPStatusCode(507)
+k_EHTTPStatusCode508LoopDetected = EHTTPStatusCode(508)
+k_EHTTPStatusCode510NotExtended = EHTTPStatusCode(510)
+k_EHTTPStatusCode511NetworkAuthenticationRequired = EHTTPStatusCode(511)
 k_EHTTPStatusCode5xxUnknown = EHTTPStatusCode(599)
 
 class EInputSourceMode(c_int):
@@ -1416,7 +1431,296 @@ k_EInputActionOrigin_SteamDeck_Reserved17 = EInputActionOrigin(402)
 k_EInputActionOrigin_SteamDeck_Reserved18 = EInputActionOrigin(403)
 k_EInputActionOrigin_SteamDeck_Reserved19 = EInputActionOrigin(404)
 k_EInputActionOrigin_SteamDeck_Reserved20 = EInputActionOrigin(405)
-k_EInputActionOrigin_Count = EInputActionOrigin(406)
+k_EInputActionOrigin_Horipad_M1 = EInputActionOrigin(406)
+k_EInputActionOrigin_Horipad_M2 = EInputActionOrigin(407)
+k_EInputActionOrigin_Horipad_L4 = EInputActionOrigin(408)
+k_EInputActionOrigin_Horipad_R4 = EInputActionOrigin(409)
+k_EInputActionOrigin_LenovoLegionGo_A = EInputActionOrigin(410)
+k_EInputActionOrigin_LenovoLegionGo_B = EInputActionOrigin(411)
+k_EInputActionOrigin_LenovoLegionGo_X = EInputActionOrigin(412)
+k_EInputActionOrigin_LenovoLegionGo_Y = EInputActionOrigin(413)
+k_EInputActionOrigin_LenovoLegionGo_LB = EInputActionOrigin(414)
+k_EInputActionOrigin_LenovoLegionGo_RB = EInputActionOrigin(415)
+k_EInputActionOrigin_LenovoLegionGo_Menu = EInputActionOrigin(416)
+k_EInputActionOrigin_LenovoLegionGo_View = EInputActionOrigin(417)
+k_EInputActionOrigin_LenovoLegionGo_LeftPad_Touch = EInputActionOrigin(418)
+k_EInputActionOrigin_LenovoLegionGo_LeftPad_Swipe = EInputActionOrigin(419)
+k_EInputActionOrigin_LenovoLegionGo_LeftPad_Click = EInputActionOrigin(420)
+k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadNorth = EInputActionOrigin(421)
+k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadSouth = EInputActionOrigin(422)
+k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadWest = EInputActionOrigin(423)
+k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadEast = EInputActionOrigin(424)
+k_EInputActionOrigin_LenovoLegionGo_RightPad_Touch = EInputActionOrigin(425)
+k_EInputActionOrigin_LenovoLegionGo_RightPad_Swipe = EInputActionOrigin(426)
+k_EInputActionOrigin_LenovoLegionGo_RightPad_Click = EInputActionOrigin(427)
+k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadNorth = EInputActionOrigin(428)
+k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadSouth = EInputActionOrigin(429)
+k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadWest = EInputActionOrigin(430)
+k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadEast = EInputActionOrigin(431)
+k_EInputActionOrigin_LenovoLegionGo_LT_SoftPull = EInputActionOrigin(432)
+k_EInputActionOrigin_LenovoLegionGo_LT = EInputActionOrigin(433)
+k_EInputActionOrigin_LenovoLegionGo_RT_SoftPull = EInputActionOrigin(434)
+k_EInputActionOrigin_LenovoLegionGo_RT = EInputActionOrigin(435)
+k_EInputActionOrigin_LenovoLegionGo_LeftStick_Move = EInputActionOrigin(436)
+k_EInputActionOrigin_LenovoLegionGo_LS = EInputActionOrigin(437)
+k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadNorth = EInputActionOrigin(438)
+k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadSouth = EInputActionOrigin(439)
+k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadWest = EInputActionOrigin(440)
+k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadEast = EInputActionOrigin(441)
+k_EInputActionOrigin_LenovoLegionGo_RightStick_Move = EInputActionOrigin(442)
+k_EInputActionOrigin_LenovoLegionGo_RS = EInputActionOrigin(443)
+k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadNorth = EInputActionOrigin(444)
+k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadSouth = EInputActionOrigin(445)
+k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadWest = EInputActionOrigin(446)
+k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadEast = EInputActionOrigin(447)
+k_EInputActionOrigin_LenovoLegionGo_Y1 = EInputActionOrigin(448)
+k_EInputActionOrigin_LenovoLegionGo_Y2 = EInputActionOrigin(449)
+k_EInputActionOrigin_LenovoLegionGo_DPad_Move = EInputActionOrigin(450)
+k_EInputActionOrigin_LenovoLegionGo_DPad_North = EInputActionOrigin(451)
+k_EInputActionOrigin_LenovoLegionGo_DPad_South = EInputActionOrigin(452)
+k_EInputActionOrigin_LenovoLegionGo_DPad_West = EInputActionOrigin(453)
+k_EInputActionOrigin_LenovoLegionGo_DPad_East = EInputActionOrigin(454)
+k_EInputActionOrigin_LenovoLegionGo_Gyro_Move = EInputActionOrigin(455)
+k_EInputActionOrigin_LenovoLegionGo_Gyro_Pitch = EInputActionOrigin(456)
+k_EInputActionOrigin_LenovoLegionGo_Gyro_Yaw = EInputActionOrigin(457)
+k_EInputActionOrigin_LenovoLegionGo_Gyro_Roll = EInputActionOrigin(458)
+k_EInputActionOrigin_LenovoLegionGo_Reserved1 = EInputActionOrigin(459)
+k_EInputActionOrigin_LenovoLegionGo_Reserved2 = EInputActionOrigin(460)
+k_EInputActionOrigin_LenovoLegionGo_Reserved3 = EInputActionOrigin(461)
+k_EInputActionOrigin_LenovoLegionGo_Reserved4 = EInputActionOrigin(462)
+k_EInputActionOrigin_LenovoLegionGo_Reserved5 = EInputActionOrigin(463)
+k_EInputActionOrigin_LenovoLegionGo_Reserved6 = EInputActionOrigin(464)
+k_EInputActionOrigin_LenovoLegionGo_Reserved7 = EInputActionOrigin(465)
+k_EInputActionOrigin_LenovoLegionGo_Reserved8 = EInputActionOrigin(466)
+k_EInputActionOrigin_LenovoLegionGo_Reserved9 = EInputActionOrigin(467)
+k_EInputActionOrigin_LenovoLegionGo_Reserved10 = EInputActionOrigin(468)
+k_EInputActionOrigin_LenovoLegionGo_Reserved11 = EInputActionOrigin(469)
+k_EInputActionOrigin_LenovoLegionGo_Reserved12 = EInputActionOrigin(470)
+k_EInputActionOrigin_LenovoLegionGo_Reserved13 = EInputActionOrigin(471)
+k_EInputActionOrigin_LenovoLegionGo_Reserved14 = EInputActionOrigin(472)
+k_EInputActionOrigin_LenovoLegionGo_Reserved15 = EInputActionOrigin(473)
+k_EInputActionOrigin_LenovoLegionGo_Reserved16 = EInputActionOrigin(474)
+k_EInputActionOrigin_LenovoLegionGo_Reserved17 = EInputActionOrigin(475)
+k_EInputActionOrigin_LenovoLegionGo_Reserved18 = EInputActionOrigin(476)
+k_EInputActionOrigin_LenovoLegionGo_Reserved19 = EInputActionOrigin(477)
+k_EInputActionOrigin_LenovoLegionGo_Reserved20 = EInputActionOrigin(478)
+k_EInputActionOrigin_Generic_L4 = EInputActionOrigin(479)
+k_EInputActionOrigin_Generic_R4 = EInputActionOrigin(480)
+k_EInputActionOrigin_Generic_L5 = EInputActionOrigin(481)
+k_EInputActionOrigin_Generic_R5 = EInputActionOrigin(482)
+k_EInputActionOrigin_Generic_PL = EInputActionOrigin(483)
+k_EInputActionOrigin_Generic_PR = EInputActionOrigin(484)
+k_EInputActionOrigin_Generic_C = EInputActionOrigin(485)
+k_EInputActionOrigin_Generic_Z = EInputActionOrigin(486)
+k_EInputActionOrigin_Generic_MISC1 = EInputActionOrigin(487)
+k_EInputActionOrigin_Generic_MISC2 = EInputActionOrigin(488)
+k_EInputActionOrigin_Generic_MISC3 = EInputActionOrigin(489)
+k_EInputActionOrigin_Generic_MISC4 = EInputActionOrigin(490)
+k_EInputActionOrigin_Generic_MISC5 = EInputActionOrigin(491)
+k_EInputActionOrigin_Generic_MISC6 = EInputActionOrigin(492)
+k_EInputActionOrigin_Generic_MISC7 = EInputActionOrigin(493)
+k_EInputActionOrigin_Generic_MISC8 = EInputActionOrigin(494)
+k_EInputActionOrigin_Switch2_A = EInputActionOrigin(495)
+k_EInputActionOrigin_Switch2_B = EInputActionOrigin(496)
+k_EInputActionOrigin_Switch2_X = EInputActionOrigin(497)
+k_EInputActionOrigin_Switch2_Y = EInputActionOrigin(498)
+k_EInputActionOrigin_Switch2_LeftBumper = EInputActionOrigin(499)
+k_EInputActionOrigin_Switch2_RightBumper = EInputActionOrigin(500)
+k_EInputActionOrigin_Switch2_Plus = EInputActionOrigin(501)
+k_EInputActionOrigin_Switch2_Minus = EInputActionOrigin(502)
+k_EInputActionOrigin_Switch2_Capture = EInputActionOrigin(503)
+k_EInputActionOrigin_Switch2_LeftTrigger_Pull = EInputActionOrigin(504)
+k_EInputActionOrigin_Switch2_LeftTrigger_Click = EInputActionOrigin(505)
+k_EInputActionOrigin_Switch2_RightTrigger_Pull = EInputActionOrigin(506)
+k_EInputActionOrigin_Switch2_RightTrigger_Click = EInputActionOrigin(507)
+k_EInputActionOrigin_Switch2_LeftStick_Move = EInputActionOrigin(508)
+k_EInputActionOrigin_Switch2_LeftStick_Click = EInputActionOrigin(509)
+k_EInputActionOrigin_Switch2_LeftStick_DPadNorth = EInputActionOrigin(510)
+k_EInputActionOrigin_Switch2_LeftStick_DPadSouth = EInputActionOrigin(511)
+k_EInputActionOrigin_Switch2_LeftStick_DPadWest = EInputActionOrigin(512)
+k_EInputActionOrigin_Switch2_LeftStick_DPadEast = EInputActionOrigin(513)
+k_EInputActionOrigin_Switch2_RightStick_Move = EInputActionOrigin(514)
+k_EInputActionOrigin_Switch2_RightStick_Click = EInputActionOrigin(515)
+k_EInputActionOrigin_Switch2_RightStick_DPadNorth = EInputActionOrigin(516)
+k_EInputActionOrigin_Switch2_RightStick_DPadSouth = EInputActionOrigin(517)
+k_EInputActionOrigin_Switch2_RightStick_DPadWest = EInputActionOrigin(518)
+k_EInputActionOrigin_Switch2_RightStick_DPadEast = EInputActionOrigin(519)
+k_EInputActionOrigin_Switch2_DPad_Move = EInputActionOrigin(520)
+k_EInputActionOrigin_Switch2_DPad_North = EInputActionOrigin(521)
+k_EInputActionOrigin_Switch2_DPad_South = EInputActionOrigin(522)
+k_EInputActionOrigin_Switch2_DPad_West = EInputActionOrigin(523)
+k_EInputActionOrigin_Switch2_DPad_East = EInputActionOrigin(524)
+k_EInputActionOrigin_Switch2_ProGyro_Move = EInputActionOrigin(525)
+k_EInputActionOrigin_Switch2_ProGyro_Pitch = EInputActionOrigin(526)
+k_EInputActionOrigin_Switch2_ProGyro_Yaw = EInputActionOrigin(527)
+k_EInputActionOrigin_Switch2_ProGyro_Roll = EInputActionOrigin(528)
+k_EInputActionOrigin_Switch2_GL = EInputActionOrigin(529)
+k_EInputActionOrigin_Switch2_GR = EInputActionOrigin(530)
+k_EInputActionOrigin_Switch2_C = EInputActionOrigin(531)
+k_EInputActionOrigin_Switch2_Reserved1 = EInputActionOrigin(532)
+k_EInputActionOrigin_Switch2_Reserved2 = EInputActionOrigin(533)
+k_EInputActionOrigin_Switch2_Reserved3 = EInputActionOrigin(534)
+k_EInputActionOrigin_Switch2_Reserved4 = EInputActionOrigin(535)
+k_EInputActionOrigin_Switch2_Reserved5 = EInputActionOrigin(536)
+k_EInputActionOrigin_Switch2_Reserved6 = EInputActionOrigin(537)
+k_EInputActionOrigin_Switch2_Reserved7 = EInputActionOrigin(538)
+k_EInputActionOrigin_Switch2_Reserved8 = EInputActionOrigin(539)
+k_EInputActionOrigin_Switch2_Reserved9 = EInputActionOrigin(540)
+k_EInputActionOrigin_Switch2_Reserved10 = EInputActionOrigin(541)
+k_EInputActionOrigin_SteamController2026_A = EInputActionOrigin(542)
+k_EInputActionOrigin_SteamController2026_B = EInputActionOrigin(543)
+k_EInputActionOrigin_SteamController2026_X = EInputActionOrigin(544)
+k_EInputActionOrigin_SteamController2026_Y = EInputActionOrigin(545)
+k_EInputActionOrigin_SteamController2026_L1 = EInputActionOrigin(546)
+k_EInputActionOrigin_SteamController2026_R1 = EInputActionOrigin(547)
+k_EInputActionOrigin_SteamController2026_Menu = EInputActionOrigin(548)
+k_EInputActionOrigin_SteamController2026_View = EInputActionOrigin(549)
+k_EInputActionOrigin_SteamController2026_LeftPad_Touch = EInputActionOrigin(550)
+k_EInputActionOrigin_SteamController2026_LeftPad_Swipe = EInputActionOrigin(551)
+k_EInputActionOrigin_SteamController2026_LeftPad_Click = EInputActionOrigin(552)
+k_EInputActionOrigin_SteamController2026_LeftPad_DPadNorth = EInputActionOrigin(553)
+k_EInputActionOrigin_SteamController2026_LeftPad_DPadSouth = EInputActionOrigin(554)
+k_EInputActionOrigin_SteamController2026_LeftPad_DPadWest = EInputActionOrigin(555)
+k_EInputActionOrigin_SteamController2026_LeftPad_DPadEast = EInputActionOrigin(556)
+k_EInputActionOrigin_SteamController2026_RightPad_Touch = EInputActionOrigin(557)
+k_EInputActionOrigin_SteamController2026_RightPad_Swipe = EInputActionOrigin(558)
+k_EInputActionOrigin_SteamController2026_RightPad_Click = EInputActionOrigin(559)
+k_EInputActionOrigin_SteamController2026_RightPad_DPadNorth = EInputActionOrigin(560)
+k_EInputActionOrigin_SteamController2026_RightPad_DPadSouth = EInputActionOrigin(561)
+k_EInputActionOrigin_SteamController2026_RightPad_DPadWest = EInputActionOrigin(562)
+k_EInputActionOrigin_SteamController2026_RightPad_DPadEast = EInputActionOrigin(563)
+k_EInputActionOrigin_SteamController2026_L2_SoftPull = EInputActionOrigin(564)
+k_EInputActionOrigin_SteamController2026_L2 = EInputActionOrigin(565)
+k_EInputActionOrigin_SteamController2026_R2_SoftPull = EInputActionOrigin(566)
+k_EInputActionOrigin_SteamController2026_R2 = EInputActionOrigin(567)
+k_EInputActionOrigin_SteamController2026_LeftStick_Move = EInputActionOrigin(568)
+k_EInputActionOrigin_SteamController2026_L3 = EInputActionOrigin(569)
+k_EInputActionOrigin_SteamController2026_LeftStick_DPadNorth = EInputActionOrigin(570)
+k_EInputActionOrigin_SteamController2026_LeftStick_DPadSouth = EInputActionOrigin(571)
+k_EInputActionOrigin_SteamController2026_LeftStick_DPadWest = EInputActionOrigin(572)
+k_EInputActionOrigin_SteamController2026_LeftStick_DPadEast = EInputActionOrigin(573)
+k_EInputActionOrigin_SteamController2026_LeftStick_Touch = EInputActionOrigin(574)
+k_EInputActionOrigin_SteamController2026_RightStick_Move = EInputActionOrigin(575)
+k_EInputActionOrigin_SteamController2026_R3 = EInputActionOrigin(576)
+k_EInputActionOrigin_SteamController2026_RightStick_DPadNorth = EInputActionOrigin(577)
+k_EInputActionOrigin_SteamController2026_RightStick_DPadSouth = EInputActionOrigin(578)
+k_EInputActionOrigin_SteamController2026_RightStick_DPadWest = EInputActionOrigin(579)
+k_EInputActionOrigin_SteamController2026_RightStick_DPadEast = EInputActionOrigin(580)
+k_EInputActionOrigin_SteamController2026_RightStick_Touch = EInputActionOrigin(581)
+k_EInputActionOrigin_SteamController2026_L4 = EInputActionOrigin(582)
+k_EInputActionOrigin_SteamController2026_R4 = EInputActionOrigin(583)
+k_EInputActionOrigin_SteamController2026_L5 = EInputActionOrigin(584)
+k_EInputActionOrigin_SteamController2026_R5 = EInputActionOrigin(585)
+k_EInputActionOrigin_SteamController2026_DPad_Move = EInputActionOrigin(586)
+k_EInputActionOrigin_SteamController2026_DPad_North = EInputActionOrigin(587)
+k_EInputActionOrigin_SteamController2026_DPad_South = EInputActionOrigin(588)
+k_EInputActionOrigin_SteamController2026_DPad_West = EInputActionOrigin(589)
+k_EInputActionOrigin_SteamController2026_DPad_East = EInputActionOrigin(590)
+k_EInputActionOrigin_SteamController2026_Gyro_Move = EInputActionOrigin(591)
+k_EInputActionOrigin_SteamController2026_Gyro_Pitch = EInputActionOrigin(592)
+k_EInputActionOrigin_SteamController2026_Gyro_Yaw = EInputActionOrigin(593)
+k_EInputActionOrigin_SteamController2026_Gyro_Roll = EInputActionOrigin(594)
+k_EInputActionOrigin_SteamController2026_LGrip = EInputActionOrigin(595)
+k_EInputActionOrigin_SteamController2026_RGrip = EInputActionOrigin(596)
+k_EInputActionOrigin_SteamController2026_Reserved1 = EInputActionOrigin(597)
+k_EInputActionOrigin_SteamController2026_Reserved2 = EInputActionOrigin(598)
+k_EInputActionOrigin_SteamController2026_Reserved3 = EInputActionOrigin(599)
+k_EInputActionOrigin_SteamController2026_Reserved4 = EInputActionOrigin(600)
+k_EInputActionOrigin_SteamController2026_Reserved5 = EInputActionOrigin(601)
+k_EInputActionOrigin_SteamController2026_Reserved6 = EInputActionOrigin(602)
+k_EInputActionOrigin_SteamController2026_Reserved7 = EInputActionOrigin(603)
+k_EInputActionOrigin_SteamController2026_Reserved8 = EInputActionOrigin(604)
+k_EInputActionOrigin_SteamController2026_Reserved9 = EInputActionOrigin(605)
+k_EInputActionOrigin_SteamController2026_Reserved10 = EInputActionOrigin(606)
+k_EInputActionOrigin_SteamController2026_Reserved11 = EInputActionOrigin(607)
+k_EInputActionOrigin_SteamController2026_Reserved12 = EInputActionOrigin(608)
+k_EInputActionOrigin_SteamController2026_Reserved13 = EInputActionOrigin(609)
+k_EInputActionOrigin_SteamController2026_Reserved14 = EInputActionOrigin(610)
+k_EInputActionOrigin_SteamController2026_Reserved15 = EInputActionOrigin(611)
+k_EInputActionOrigin_SteamController2026_Reserved16 = EInputActionOrigin(612)
+k_EInputActionOrigin_SteamController2026_Reserved17 = EInputActionOrigin(613)
+k_EInputActionOrigin_SteamController2026_Reserved18 = EInputActionOrigin(614)
+k_EInputActionOrigin_SteamController2026_Reserved19 = EInputActionOrigin(615)
+k_EInputActionOrigin_SteamController2026_Reserved20 = EInputActionOrigin(616)
+k_EInputActionOrigin_SteamFrameController_A_Click = EInputActionOrigin(617)
+k_EInputActionOrigin_SteamFrameController_A_Touch = EInputActionOrigin(618)
+k_EInputActionOrigin_SteamFrameController_B_Click = EInputActionOrigin(619)
+k_EInputActionOrigin_SteamFrameController_B_Touch = EInputActionOrigin(620)
+k_EInputActionOrigin_SteamFrameController_X_Click = EInputActionOrigin(621)
+k_EInputActionOrigin_SteamFrameController_X_Touch = EInputActionOrigin(622)
+k_EInputActionOrigin_SteamFrameController_Y_Click = EInputActionOrigin(623)
+k_EInputActionOrigin_SteamFrameController_Y_Touch = EInputActionOrigin(624)
+k_EInputActionOrigin_SteamFrameController_LeftTrigger_Pull = EInputActionOrigin(625)
+k_EInputActionOrigin_SteamFrameController_LeftTrigger_Click = EInputActionOrigin(626)
+k_EInputActionOrigin_SteamFrameController_LeftTrigger_Touch = EInputActionOrigin(627)
+k_EInputActionOrigin_SteamFrameController_RightTrigger_Pull = EInputActionOrigin(628)
+k_EInputActionOrigin_SteamFrameController_RightTrigger_Click = EInputActionOrigin(629)
+k_EInputActionOrigin_SteamFrameController_RightTrigger_Touch = EInputActionOrigin(630)
+k_EInputActionOrigin_SteamFrameController_Menu_Click = EInputActionOrigin(631)
+k_EInputActionOrigin_SteamFrameController_Menu_Touch = EInputActionOrigin(632)
+k_EInputActionOrigin_SteamFrameController_View_Click = EInputActionOrigin(633)
+k_EInputActionOrigin_SteamFrameController_View_Touch = EInputActionOrigin(634)
+k_EInputActionOrigin_SteamFrameController_LeftBumper_Click = EInputActionOrigin(635)
+k_EInputActionOrigin_SteamFrameController_LeftBumper_Touch = EInputActionOrigin(636)
+k_EInputActionOrigin_SteamFrameController_RightBumper_Click = EInputActionOrigin(637)
+k_EInputActionOrigin_SteamFrameController_RightBumper_Touch = EInputActionOrigin(638)
+k_EInputActionOrigin_SteamFrameController_LeftStick_Move = EInputActionOrigin(639)
+k_EInputActionOrigin_SteamFrameController_LeftStick_Click = EInputActionOrigin(640)
+k_EInputActionOrigin_SteamFrameController_LeftStick_DPadNorth = EInputActionOrigin(641)
+k_EInputActionOrigin_SteamFrameController_LeftStick_DPadSouth = EInputActionOrigin(642)
+k_EInputActionOrigin_SteamFrameController_LeftStick_DPadWest = EInputActionOrigin(643)
+k_EInputActionOrigin_SteamFrameController_LeftStick_DPadEast = EInputActionOrigin(644)
+k_EInputActionOrigin_SteamFrameController_LeftStick_Touch = EInputActionOrigin(645)
+k_EInputActionOrigin_SteamFrameController_RightStick_Move = EInputActionOrigin(646)
+k_EInputActionOrigin_SteamFrameController_RightStick_Click = EInputActionOrigin(647)
+k_EInputActionOrigin_SteamFrameController_RightStick_DPadNorth = EInputActionOrigin(648)
+k_EInputActionOrigin_SteamFrameController_RightStick_DPadSouth = EInputActionOrigin(649)
+k_EInputActionOrigin_SteamFrameController_RightStick_DPadWest = EInputActionOrigin(650)
+k_EInputActionOrigin_SteamFrameController_RightStick_DPadEast = EInputActionOrigin(651)
+k_EInputActionOrigin_SteamFrameController_RightStick_Touch = EInputActionOrigin(652)
+k_EInputActionOrigin_SteamFrameController_DPad_Move = EInputActionOrigin(653)
+k_EInputActionOrigin_SteamFrameController_DPad_North = EInputActionOrigin(654)
+k_EInputActionOrigin_SteamFrameController_DPad_South = EInputActionOrigin(655)
+k_EInputActionOrigin_SteamFrameController_DPad_West = EInputActionOrigin(656)
+k_EInputActionOrigin_SteamFrameController_DPad_East = EInputActionOrigin(657)
+k_EInputActionOrigin_SteamFrameController_DPad_Touch = EInputActionOrigin(658)
+k_EInputActionOrigin_SteamFrameController_LeftGyro_Move = EInputActionOrigin(659)
+k_EInputActionOrigin_SteamFrameController_LeftGyro_Pitch = EInputActionOrigin(660)
+k_EInputActionOrigin_SteamFrameController_LeftGyro_Yaw = EInputActionOrigin(661)
+k_EInputActionOrigin_SteamFrameController_LeftGyro_Roll = EInputActionOrigin(662)
+k_EInputActionOrigin_SteamFrameController_RightGyro_Move = EInputActionOrigin(663)
+k_EInputActionOrigin_SteamFrameController_RightGyro_Pitch = EInputActionOrigin(664)
+k_EInputActionOrigin_SteamFrameController_RightGyro_Yaw = EInputActionOrigin(665)
+k_EInputActionOrigin_SteamFrameController_RightGyro_Roll = EInputActionOrigin(666)
+k_EInputActionOrigin_SteamFrameController_LeftGrip_Pull = EInputActionOrigin(667)
+k_EInputActionOrigin_SteamFrameController_LeftGrip_Click = EInputActionOrigin(668)
+k_EInputActionOrigin_SteamFrameController_LeftGrip_Touch = EInputActionOrigin(669)
+k_EInputActionOrigin_SteamFrameController_RightGrip_Pull = EInputActionOrigin(670)
+k_EInputActionOrigin_SteamFrameController_RightGrip_Click = EInputActionOrigin(671)
+k_EInputActionOrigin_SteamFrameController_RightGrip_Touch = EInputActionOrigin(672)
+k_EInputActionOrigin_SteamFrameController_LeftThumbrest_Touch = EInputActionOrigin(673)
+k_EInputActionOrigin_SteamFrameController_RightThumbrest_Touch = EInputActionOrigin(674)
+k_EInputActionOrigin_SteamFrameController_Reserved1 = EInputActionOrigin(675)
+k_EInputActionOrigin_SteamFrameController_Reserved2 = EInputActionOrigin(676)
+k_EInputActionOrigin_SteamFrameController_Reserved3 = EInputActionOrigin(677)
+k_EInputActionOrigin_SteamFrameController_Reserved4 = EInputActionOrigin(678)
+k_EInputActionOrigin_SteamFrameController_Reserved5 = EInputActionOrigin(679)
+k_EInputActionOrigin_SteamFrameController_Reserved6 = EInputActionOrigin(680)
+k_EInputActionOrigin_SteamFrameController_Reserved7 = EInputActionOrigin(681)
+k_EInputActionOrigin_SteamFrameController_Reserved8 = EInputActionOrigin(682)
+k_EInputActionOrigin_SteamFrameController_Reserved9 = EInputActionOrigin(683)
+k_EInputActionOrigin_SteamFrameController_Reserved10 = EInputActionOrigin(684)
+k_EInputActionOrigin_SteamFrameController_Reserved11 = EInputActionOrigin(685)
+k_EInputActionOrigin_SteamFrameController_Reserved12 = EInputActionOrigin(686)
+k_EInputActionOrigin_SteamFrameController_Reserved13 = EInputActionOrigin(687)
+k_EInputActionOrigin_SteamFrameController_Reserved14 = EInputActionOrigin(688)
+k_EInputActionOrigin_SteamFrameController_Reserved15 = EInputActionOrigin(689)
+k_EInputActionOrigin_SteamFrameController_Reserved16 = EInputActionOrigin(690)
+k_EInputActionOrigin_SteamFrameController_Reserved17 = EInputActionOrigin(691)
+k_EInputActionOrigin_SteamFrameController_Reserved18 = EInputActionOrigin(692)
+k_EInputActionOrigin_SteamFrameController_Reserved19 = EInputActionOrigin(693)
+k_EInputActionOrigin_SteamFrameController_Reserved20 = EInputActionOrigin(694)
+k_EInputActionOrigin_Count = EInputActionOrigin(695)
 k_EInputActionOrigin_MaximumPossibleValue = EInputActionOrigin(32767)
 
 class EXboxOrigin(c_int):
@@ -1457,6 +1761,10 @@ class ESteamControllerPad(c_int):
 
 k_ESteamControllerPad_Left = ESteamControllerPad(0)
 k_ESteamControllerPad_Right = ESteamControllerPad(1)
+k_ESteamControllerPad_Both = ESteamControllerPad(2)
+k_ESteamControllerGrip_Left = ESteamControllerPad(3)
+k_ESteamControllerGrip_Right = ESteamControllerPad(4)
+k_ESteamControllerGrip_Both = ESteamControllerPad(5)
 
 class EControllerHapticLocation(c_int):
     pass
@@ -1490,7 +1798,11 @@ k_ESteamInputType_MobileTouch = ESteamInputType(11)
 k_ESteamInputType_PS3Controller = ESteamInputType(12)
 k_ESteamInputType_PS5Controller = ESteamInputType(13)
 k_ESteamInputType_SteamDeckController = ESteamInputType(14)
-k_ESteamInputType_Count = ESteamInputType(15)
+k_ESteamInputType_SteamOSHandheld = ESteamInputType(15)
+k_ESteamInputType_Switch2ProController = ESteamInputType(16)
+k_ESteamInputType_SteamController2026 = ESteamInputType(17)
+k_ESteamInputType_SteamFrameControllerPair = ESteamInputType(18)
+k_ESteamInputType_Count = ESteamInputType(19)
 k_ESteamInputType_MaximumPossibleValue = ESteamInputType(255)
 
 class ESteamInputConfigurationEnableType(c_int):
@@ -1920,7 +2232,296 @@ k_EControllerActionOrigin_PS5_LeftGrip = EControllerActionOrigin(382)
 k_EControllerActionOrigin_PS5_RightGrip = EControllerActionOrigin(383)
 k_EControllerActionOrigin_PS5_LeftFn = EControllerActionOrigin(384)
 k_EControllerActionOrigin_PS5_RightFn = EControllerActionOrigin(385)
-k_EControllerActionOrigin_Count = EControllerActionOrigin(386)
+k_EControllerActionOrigin_Horipad_M1 = EControllerActionOrigin(386)
+k_EControllerActionOrigin_Horipad_M2 = EControllerActionOrigin(387)
+k_EControllerActionOrigin_Horipad_L4 = EControllerActionOrigin(388)
+k_EControllerActionOrigin_Horipad_R4 = EControllerActionOrigin(389)
+k_EControllerActionOrigin_LenovoLegionGo_A = EControllerActionOrigin(390)
+k_EControllerActionOrigin_LenovoLegionGo_B = EControllerActionOrigin(391)
+k_EControllerActionOrigin_LenovoLegionGo_X = EControllerActionOrigin(392)
+k_EControllerActionOrigin_LenovoLegionGo_Y = EControllerActionOrigin(393)
+k_EControllerActionOrigin_LenovoLegionGo_LB = EControllerActionOrigin(394)
+k_EControllerActionOrigin_LenovoLegionGo_RB = EControllerActionOrigin(395)
+k_EControllerActionOrigin_LenovoLegionGo_Menu = EControllerActionOrigin(396)
+k_EControllerActionOrigin_LenovoLegionGo_View = EControllerActionOrigin(397)
+k_EControllerActionOrigin_LenovoLegionGo_LeftPad_Touch = EControllerActionOrigin(398)
+k_EControllerActionOrigin_LenovoLegionGo_LeftPad_Swipe = EControllerActionOrigin(399)
+k_EControllerActionOrigin_LenovoLegionGo_LeftPad_Click = EControllerActionOrigin(400)
+k_EControllerActionOrigin_LenovoLegionGo_LeftPad_DPadNorth = EControllerActionOrigin(401)
+k_EControllerActionOrigin_LenovoLegionGo_LeftPad_DPadSouth = EControllerActionOrigin(402)
+k_EControllerActionOrigin_LenovoLegionGo_LeftPad_DPadWest = EControllerActionOrigin(403)
+k_EControllerActionOrigin_LenovoLegionGo_LeftPad_DPadEast = EControllerActionOrigin(404)
+k_EControllerActionOrigin_LenovoLegionGo_RightPad_Touch = EControllerActionOrigin(405)
+k_EControllerActionOrigin_LenovoLegionGo_RightPad_Swipe = EControllerActionOrigin(406)
+k_EControllerActionOrigin_LenovoLegionGo_RightPad_Click = EControllerActionOrigin(407)
+k_EControllerActionOrigin_LenovoLegionGo_RightPad_DPadNorth = EControllerActionOrigin(408)
+k_EControllerActionOrigin_LenovoLegionGo_RightPad_DPadSouth = EControllerActionOrigin(409)
+k_EControllerActionOrigin_LenovoLegionGo_RightPad_DPadWest = EControllerActionOrigin(410)
+k_EControllerActionOrigin_LenovoLegionGo_RightPad_DPadEast = EControllerActionOrigin(411)
+k_EControllerActionOrigin_LenovoLegionGo_LT_SoftPull = EControllerActionOrigin(412)
+k_EControllerActionOrigin_LenovoLegionGo_LT = EControllerActionOrigin(413)
+k_EControllerActionOrigin_LenovoLegionGo_RT_SoftPull = EControllerActionOrigin(414)
+k_EControllerActionOrigin_LenovoLegionGo_RT = EControllerActionOrigin(415)
+k_EControllerActionOrigin_LenovoLegionGo_LeftStick_Move = EControllerActionOrigin(416)
+k_EControllerActionOrigin_LenovoLegionGo_LS = EControllerActionOrigin(417)
+k_EControllerActionOrigin_LenovoLegionGo_LeftStick_DPadNorth = EControllerActionOrigin(418)
+k_EControllerActionOrigin_LenovoLegionGo_LeftStick_DPadSouth = EControllerActionOrigin(419)
+k_EControllerActionOrigin_LenovoLegionGo_LeftStick_DPadWest = EControllerActionOrigin(420)
+k_EControllerActionOrigin_LenovoLegionGo_LeftStick_DPadEast = EControllerActionOrigin(421)
+k_EControllerActionOrigin_LenovoLegionGo_RightStick_Move = EControllerActionOrigin(422)
+k_EControllerActionOrigin_LenovoLegionGo_RS = EControllerActionOrigin(423)
+k_EControllerActionOrigin_LenovoLegionGo_RightStick_DPadNorth = EControllerActionOrigin(424)
+k_EControllerActionOrigin_LenovoLegionGo_RightStick_DPadSouth = EControllerActionOrigin(425)
+k_EControllerActionOrigin_LenovoLegionGo_RightStick_DPadWest = EControllerActionOrigin(426)
+k_EControllerActionOrigin_LenovoLegionGo_RightStick_DPadEast = EControllerActionOrigin(427)
+k_EControllerActionOrigin_LenovoLegionGo_Y1 = EControllerActionOrigin(428)
+k_EControllerActionOrigin_LenovoLegionGo_Y2 = EControllerActionOrigin(429)
+k_EControllerActionOrigin_LenovoLegionGo_DPad_Move = EControllerActionOrigin(430)
+k_EControllerActionOrigin_LenovoLegionGo_DPad_North = EControllerActionOrigin(431)
+k_EControllerActionOrigin_LenovoLegionGo_DPad_South = EControllerActionOrigin(432)
+k_EControllerActionOrigin_LenovoLegionGo_DPad_West = EControllerActionOrigin(433)
+k_EControllerActionOrigin_LenovoLegionGo_DPad_East = EControllerActionOrigin(434)
+k_EControllerActionOrigin_LenovoLegionGo_Gyro_Move = EControllerActionOrigin(435)
+k_EControllerActionOrigin_LenovoLegionGo_Gyro_Pitch = EControllerActionOrigin(436)
+k_EControllerActionOrigin_LenovoLegionGo_Gyro_Yaw = EControllerActionOrigin(437)
+k_EControllerActionOrigin_LenovoLegionGo_Gyro_Roll = EControllerActionOrigin(438)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved1 = EControllerActionOrigin(439)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved2 = EControllerActionOrigin(440)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved3 = EControllerActionOrigin(441)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved4 = EControllerActionOrigin(442)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved5 = EControllerActionOrigin(443)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved6 = EControllerActionOrigin(444)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved7 = EControllerActionOrigin(445)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved8 = EControllerActionOrigin(446)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved9 = EControllerActionOrigin(447)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved10 = EControllerActionOrigin(448)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved11 = EControllerActionOrigin(449)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved12 = EControllerActionOrigin(450)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved13 = EControllerActionOrigin(451)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved14 = EControllerActionOrigin(452)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved15 = EControllerActionOrigin(453)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved16 = EControllerActionOrigin(454)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved17 = EControllerActionOrigin(455)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved18 = EControllerActionOrigin(456)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved19 = EControllerActionOrigin(457)
+k_EControllerActionOrigin_LenovoLegionGo_Reserved20 = EControllerActionOrigin(458)
+k_EControllerActionOrigin_Generic_L4 = EControllerActionOrigin(459)
+k_EControllerActionOrigin_Generic_R4 = EControllerActionOrigin(460)
+k_EControllerActionOrigin_Generic_L5 = EControllerActionOrigin(461)
+k_EControllerActionOrigin_Generic_R5 = EControllerActionOrigin(462)
+k_EControllerActionOrigin_Generic_PL = EControllerActionOrigin(463)
+k_EControllerActionOrigin_Generic_PR = EControllerActionOrigin(464)
+k_EControllerActionOrigin_Generic_C = EControllerActionOrigin(465)
+k_EControllerActionOrigin_Generic_Z = EControllerActionOrigin(466)
+k_EControllerActionOrigin_Generic_MISC1 = EControllerActionOrigin(467)
+k_EControllerActionOrigin_Generic_MISC2 = EControllerActionOrigin(468)
+k_EControllerActionOrigin_Generic_MISC3 = EControllerActionOrigin(469)
+k_EControllerActionOrigin_Generic_MISC4 = EControllerActionOrigin(470)
+k_EControllerActionOrigin_Generic_MISC5 = EControllerActionOrigin(471)
+k_EControllerActionOrigin_Generic_MISC6 = EControllerActionOrigin(472)
+k_EControllerActionOrigin_Generic_MISC7 = EControllerActionOrigin(473)
+k_EControllerActionOrigin_Generic_MISC8 = EControllerActionOrigin(474)
+k_EControllerActionOrigin_Switch2_A = EControllerActionOrigin(475)
+k_EControllerActionOrigin_Switch2_B = EControllerActionOrigin(476)
+k_EControllerActionOrigin_Switch2_X = EControllerActionOrigin(477)
+k_EControllerActionOrigin_Switch2_Y = EControllerActionOrigin(478)
+k_EControllerActionOrigin_Switch2_LeftBumper = EControllerActionOrigin(479)
+k_EControllerActionOrigin_Switch2_RightBumper = EControllerActionOrigin(480)
+k_EControllerActionOrigin_Switch2_Plus = EControllerActionOrigin(481)
+k_EControllerActionOrigin_Switch2_Minus = EControllerActionOrigin(482)
+k_EControllerActionOrigin_Switch2_Capture = EControllerActionOrigin(483)
+k_EControllerActionOrigin_Switch2_LeftTrigger_Pull = EControllerActionOrigin(484)
+k_EControllerActionOrigin_Switch2_LeftTrigger_Click = EControllerActionOrigin(485)
+k_EControllerActionOrigin_Switch2_RightTrigger_Pull = EControllerActionOrigin(486)
+k_EControllerActionOrigin_Switch2_RightTrigger_Click = EControllerActionOrigin(487)
+k_EControllerActionOrigin_Switch2_LeftStick_Move = EControllerActionOrigin(488)
+k_EControllerActionOrigin_Switch2_LeftStick_Click = EControllerActionOrigin(489)
+k_EControllerActionOrigin_Switch2_LeftStick_DPadNorth = EControllerActionOrigin(490)
+k_EControllerActionOrigin_Switch2_LeftStick_DPadSouth = EControllerActionOrigin(491)
+k_EControllerActionOrigin_Switch2_LeftStick_DPadWest = EControllerActionOrigin(492)
+k_EControllerActionOrigin_Switch2_LeftStick_DPadEast = EControllerActionOrigin(493)
+k_EControllerActionOrigin_Switch2_RightStick_Move = EControllerActionOrigin(494)
+k_EControllerActionOrigin_Switch2_RightStick_Click = EControllerActionOrigin(495)
+k_EControllerActionOrigin_Switch2_RightStick_DPadNorth = EControllerActionOrigin(496)
+k_EControllerActionOrigin_Switch2_RightStick_DPadSouth = EControllerActionOrigin(497)
+k_EControllerActionOrigin_Switch2_RightStick_DPadWest = EControllerActionOrigin(498)
+k_EControllerActionOrigin_Switch2_RightStick_DPadEast = EControllerActionOrigin(499)
+k_EControllerActionOrigin_Switch2_DPad_Move = EControllerActionOrigin(500)
+k_EControllerActionOrigin_Switch2_DPad_North = EControllerActionOrigin(501)
+k_EControllerActionOrigin_Switch2_DPad_South = EControllerActionOrigin(502)
+k_EControllerActionOrigin_Switch2_DPad_West = EControllerActionOrigin(503)
+k_EControllerActionOrigin_Switch2_DPad_East = EControllerActionOrigin(504)
+k_EControllerActionOrigin_Switch2_ProGyro_Move = EControllerActionOrigin(505)
+k_EControllerActionOrigin_Switch2_ProGyro_Pitch = EControllerActionOrigin(506)
+k_EControllerActionOrigin_Switch2_ProGyro_Yaw = EControllerActionOrigin(507)
+k_EControllerActionOrigin_Switch2_ProGyro_Roll = EControllerActionOrigin(508)
+k_EControllerActionOrigin_Switch2_GL = EControllerActionOrigin(509)
+k_EControllerActionOrigin_Switch2_GR = EControllerActionOrigin(510)
+k_EControllerActionOrigin_Switch2_C = EControllerActionOrigin(511)
+k_EControllerActionOrigin_Switch2_Reserved1 = EControllerActionOrigin(512)
+k_EControllerActionOrigin_Switch2_Reserved2 = EControllerActionOrigin(513)
+k_EControllerActionOrigin_Switch2_Reserved3 = EControllerActionOrigin(514)
+k_EControllerActionOrigin_Switch2_Reserved4 = EControllerActionOrigin(515)
+k_EControllerActionOrigin_Switch2_Reserved5 = EControllerActionOrigin(516)
+k_EControllerActionOrigin_Switch2_Reserved6 = EControllerActionOrigin(517)
+k_EControllerActionOrigin_Switch2_Reserved7 = EControllerActionOrigin(518)
+k_EControllerActionOrigin_Switch2_Reserved8 = EControllerActionOrigin(519)
+k_EControllerActionOrigin_Switch2_Reserved9 = EControllerActionOrigin(520)
+k_EControllerActionOrigin_Switch2_Reserved10 = EControllerActionOrigin(521)
+k_EControllerActionOrigin_SteamController2026_A = EControllerActionOrigin(522)
+k_EControllerActionOrigin_SteamController2026_B = EControllerActionOrigin(523)
+k_EControllerActionOrigin_SteamController2026_X = EControllerActionOrigin(524)
+k_EControllerActionOrigin_SteamController2026_Y = EControllerActionOrigin(525)
+k_EControllerActionOrigin_SteamController2026_L1 = EControllerActionOrigin(526)
+k_EControllerActionOrigin_SteamController2026_R1 = EControllerActionOrigin(527)
+k_EControllerActionOrigin_SteamController2026_Menu = EControllerActionOrigin(528)
+k_EControllerActionOrigin_SteamController2026_View = EControllerActionOrigin(529)
+k_EControllerActionOrigin_SteamController2026_LeftPad_Touch = EControllerActionOrigin(530)
+k_EControllerActionOrigin_SteamController2026_LeftPad_Swipe = EControllerActionOrigin(531)
+k_EControllerActionOrigin_SteamController2026_LeftPad_Click = EControllerActionOrigin(532)
+k_EControllerActionOrigin_SteamController2026_LeftPad_DPadNorth = EControllerActionOrigin(533)
+k_EControllerActionOrigin_SteamController2026_LeftPad_DPadSouth = EControllerActionOrigin(534)
+k_EControllerActionOrigin_SteamController2026_LeftPad_DPadWest = EControllerActionOrigin(535)
+k_EControllerActionOrigin_SteamController2026_LeftPad_DPadEast = EControllerActionOrigin(536)
+k_EControllerActionOrigin_SteamController2026_RightPad_Touch = EControllerActionOrigin(537)
+k_EControllerActionOrigin_SteamController2026_RightPad_Swipe = EControllerActionOrigin(538)
+k_EControllerActionOrigin_SteamController2026_RightPad_Click = EControllerActionOrigin(539)
+k_EControllerActionOrigin_SteamController2026_RightPad_DPadNorth = EControllerActionOrigin(540)
+k_EControllerActionOrigin_SteamController2026_RightPad_DPadSouth = EControllerActionOrigin(541)
+k_EControllerActionOrigin_SteamController2026_RightPad_DPadWest = EControllerActionOrigin(542)
+k_EControllerActionOrigin_SteamController2026_RightPad_DPadEast = EControllerActionOrigin(543)
+k_EControllerActionOrigin_SteamController2026_L2_SoftPull = EControllerActionOrigin(544)
+k_EControllerActionOrigin_SteamController2026_L2 = EControllerActionOrigin(545)
+k_EControllerActionOrigin_SteamController2026_R2_SoftPull = EControllerActionOrigin(546)
+k_EControllerActionOrigin_SteamController2026_R2 = EControllerActionOrigin(547)
+k_EControllerActionOrigin_SteamController2026_LeftStick_Move = EControllerActionOrigin(548)
+k_EControllerActionOrigin_SteamController2026_L3 = EControllerActionOrigin(549)
+k_EControllerActionOrigin_SteamController2026_LeftStick_DPadNorth = EControllerActionOrigin(550)
+k_EControllerActionOrigin_SteamController2026_LeftStick_DPadSouth = EControllerActionOrigin(551)
+k_EControllerActionOrigin_SteamController2026_LeftStick_DPadWest = EControllerActionOrigin(552)
+k_EControllerActionOrigin_SteamController2026_LeftStick_DPadEast = EControllerActionOrigin(553)
+k_EControllerActionOrigin_SteamController2026_LeftStick_Touch = EControllerActionOrigin(554)
+k_EControllerActionOrigin_SteamController2026_RightStick_Move = EControllerActionOrigin(555)
+k_EControllerActionOrigin_SteamController2026_R3 = EControllerActionOrigin(556)
+k_EControllerActionOrigin_SteamController2026_RightStick_DPadNorth = EControllerActionOrigin(557)
+k_EControllerActionOrigin_SteamController2026_RightStick_DPadSouth = EControllerActionOrigin(558)
+k_EControllerActionOrigin_SteamController2026_RightStick_DPadWest = EControllerActionOrigin(559)
+k_EControllerActionOrigin_SteamController2026_RightStick_DPadEast = EControllerActionOrigin(560)
+k_EControllerActionOrigin_SteamController2026_RightStick_Touch = EControllerActionOrigin(561)
+k_EControllerActionOrigin_SteamController2026_L4 = EControllerActionOrigin(562)
+k_EControllerActionOrigin_SteamController2026_R4 = EControllerActionOrigin(563)
+k_EControllerActionOrigin_SteamController2026_L5 = EControllerActionOrigin(564)
+k_EControllerActionOrigin_SteamController2026_R5 = EControllerActionOrigin(565)
+k_EControllerActionOrigin_SteamController2026_DPad_Move = EControllerActionOrigin(566)
+k_EControllerActionOrigin_SteamController2026_DPad_North = EControllerActionOrigin(567)
+k_EControllerActionOrigin_SteamController2026_DPad_South = EControllerActionOrigin(568)
+k_EControllerActionOrigin_SteamController2026_DPad_West = EControllerActionOrigin(569)
+k_EControllerActionOrigin_SteamController2026_DPad_East = EControllerActionOrigin(570)
+k_EControllerActionOrigin_SteamController2026_Gyro_Move = EControllerActionOrigin(571)
+k_EControllerActionOrigin_SteamController2026_Gyro_Pitch = EControllerActionOrigin(572)
+k_EControllerActionOrigin_SteamController2026_Gyro_Yaw = EControllerActionOrigin(573)
+k_EControllerActionOrigin_SteamController2026_Gyro_Roll = EControllerActionOrigin(574)
+k_EControllerActionOrigin_SteamController2026_LGrip = EControllerActionOrigin(575)
+k_EControllerActionOrigin_SteamController2026_RGrip = EControllerActionOrigin(576)
+k_EControllerActionOrigin_SteamController2026_Reserved1 = EControllerActionOrigin(577)
+k_EControllerActionOrigin_SteamController2026_Reserved2 = EControllerActionOrigin(578)
+k_EControllerActionOrigin_SteamController2026_Reserved3 = EControllerActionOrigin(579)
+k_EControllerActionOrigin_SteamController2026_Reserved4 = EControllerActionOrigin(580)
+k_EControllerActionOrigin_SteamController2026_Reserved5 = EControllerActionOrigin(581)
+k_EControllerActionOrigin_SteamController2026_Reserved6 = EControllerActionOrigin(582)
+k_EControllerActionOrigin_SteamController2026_Reserved7 = EControllerActionOrigin(583)
+k_EControllerActionOrigin_SteamController2026_Reserved8 = EControllerActionOrigin(584)
+k_EControllerActionOrigin_SteamController2026_Reserved9 = EControllerActionOrigin(585)
+k_EControllerActionOrigin_SteamController2026_Reserved10 = EControllerActionOrigin(586)
+k_EControllerActionOrigin_SteamController2026_Reserved11 = EControllerActionOrigin(587)
+k_EControllerActionOrigin_SteamController2026_Reserved12 = EControllerActionOrigin(588)
+k_EControllerActionOrigin_SteamController2026_Reserved13 = EControllerActionOrigin(589)
+k_EControllerActionOrigin_SteamController2026_Reserved14 = EControllerActionOrigin(590)
+k_EControllerActionOrigin_SteamController2026_Reserved15 = EControllerActionOrigin(591)
+k_EControllerActionOrigin_SteamController2026_Reserved16 = EControllerActionOrigin(592)
+k_EControllerActionOrigin_SteamController2026_Reserved17 = EControllerActionOrigin(593)
+k_EControllerActionOrigin_SteamController2026_Reserved18 = EControllerActionOrigin(594)
+k_EControllerActionOrigin_SteamController2026_Reserved19 = EControllerActionOrigin(595)
+k_EControllerActionOrigin_SteamController2026_Reserved20 = EControllerActionOrigin(596)
+k_EControllerActionOrigin_SteamFrameController_A_Click = EControllerActionOrigin(597)
+k_EControllerActionOrigin_SteamFrameController_A_Touch = EControllerActionOrigin(598)
+k_EControllerActionOrigin_SteamFrameController_B_Click = EControllerActionOrigin(599)
+k_EControllerActionOrigin_SteamFrameController_B_Touch = EControllerActionOrigin(600)
+k_EControllerActionOrigin_SteamFrameController_X_Click = EControllerActionOrigin(601)
+k_EControllerActionOrigin_SteamFrameController_X_Touch = EControllerActionOrigin(602)
+k_EControllerActionOrigin_SteamFrameController_Y_Click = EControllerActionOrigin(603)
+k_EControllerActionOrigin_SteamFrameController_Y_Touch = EControllerActionOrigin(604)
+k_EControllerActionOrigin_SteamFrameController_LeftTrigger_Pull = EControllerActionOrigin(605)
+k_EControllerActionOrigin_SteamFrameController_LeftTrigger_Click = EControllerActionOrigin(606)
+k_EControllerActionOrigin_SteamFrameController_LeftTrigger_Touch = EControllerActionOrigin(607)
+k_EControllerActionOrigin_SteamFrameController_RightTrigger_Pull = EControllerActionOrigin(608)
+k_EControllerActionOrigin_SteamFrameController_RightTrigger_Click = EControllerActionOrigin(609)
+k_EControllerActionOrigin_SteamFrameController_RightTrigger_Touch = EControllerActionOrigin(610)
+k_EControllerActionOrigin_SteamFrameController_Menu_Click = EControllerActionOrigin(611)
+k_EControllerActionOrigin_SteamFrameController_Menu_Touch = EControllerActionOrigin(612)
+k_EControllerActionOrigin_SteamFrameController_View_Click = EControllerActionOrigin(613)
+k_EControllerActionOrigin_SteamFrameController_View_Touch = EControllerActionOrigin(614)
+k_EControllerActionOrigin_SteamFrameController_LeftBumper_Click = EControllerActionOrigin(615)
+k_EControllerActionOrigin_SteamFrameController_LeftBumper_Touch = EControllerActionOrigin(616)
+k_EControllerActionOrigin_SteamFrameController_RightBumper_Click = EControllerActionOrigin(617)
+k_EControllerActionOrigin_SteamFrameController_RightBumper_Touch = EControllerActionOrigin(618)
+k_EControllerActionOrigin_SteamFrameController_LeftStick_Move = EControllerActionOrigin(619)
+k_EControllerActionOrigin_SteamFrameController_LeftStick_Click = EControllerActionOrigin(620)
+k_EControllerActionOrigin_SteamFrameController_LeftStick_DPadNorth = EControllerActionOrigin(621)
+k_EControllerActionOrigin_SteamFrameController_LeftStick_DPadSouth = EControllerActionOrigin(622)
+k_EControllerActionOrigin_SteamFrameController_LeftStick_DPadWest = EControllerActionOrigin(623)
+k_EControllerActionOrigin_SteamFrameController_LeftStick_DPadEast = EControllerActionOrigin(624)
+k_EControllerActionOrigin_SteamFrameController_LeftStick_Touch = EControllerActionOrigin(625)
+k_EControllerActionOrigin_SteamFrameController_RightStick_Move = EControllerActionOrigin(626)
+k_EControllerActionOrigin_SteamFrameController_RightStick_Click = EControllerActionOrigin(627)
+k_EControllerActionOrigin_SteamFrameController_RightStick_DPadNorth = EControllerActionOrigin(628)
+k_EControllerActionOrigin_SteamFrameController_RightStick_DPadSouth = EControllerActionOrigin(629)
+k_EControllerActionOrigin_SteamFrameController_RightStick_DPadWest = EControllerActionOrigin(630)
+k_EControllerActionOrigin_SteamFrameController_RightStick_DPadEast = EControllerActionOrigin(631)
+k_EControllerActionOrigin_SteamFrameController_RightStick_Touch = EControllerActionOrigin(632)
+k_EControllerActionOrigin_SteamFrameController_DPad_Move = EControllerActionOrigin(633)
+k_EControllerActionOrigin_SteamFrameController_DPad_North = EControllerActionOrigin(634)
+k_EControllerActionOrigin_SteamFrameController_DPad_South = EControllerActionOrigin(635)
+k_EControllerActionOrigin_SteamFrameController_DPad_West = EControllerActionOrigin(636)
+k_EControllerActionOrigin_SteamFrameController_DPad_East = EControllerActionOrigin(637)
+k_EControllerActionOrigin_SteamFrameController_DPad_Touch = EControllerActionOrigin(638)
+k_EControllerActionOrigin_SteamFrameController_LeftGyro_Move = EControllerActionOrigin(639)
+k_EControllerActionOrigin_SteamFrameController_LeftGyro_Pitch = EControllerActionOrigin(640)
+k_EControllerActionOrigin_SteamFrameController_LeftGyro_Yaw = EControllerActionOrigin(641)
+k_EControllerActionOrigin_SteamFrameController_LeftGyro_Roll = EControllerActionOrigin(642)
+k_EControllerActionOrigin_SteamFrameController_RightGyro_Move = EControllerActionOrigin(643)
+k_EControllerActionOrigin_SteamFrameController_RightGyro_Pitch = EControllerActionOrigin(644)
+k_EControllerActionOrigin_SteamFrameController_RightGyro_Yaw = EControllerActionOrigin(645)
+k_EControllerActionOrigin_SteamFrameController_RightGyro_Roll = EControllerActionOrigin(646)
+k_EControllerActionOrigin_SteamFrameController_LeftGrip_Pull = EControllerActionOrigin(647)
+k_EControllerActionOrigin_SteamFrameController_LeftGrip_Click = EControllerActionOrigin(648)
+k_EControllerActionOrigin_SteamFrameController_LeftGrip_Touch = EControllerActionOrigin(649)
+k_EControllerActionOrigin_SteamFrameController_RightGrip_Pull = EControllerActionOrigin(650)
+k_EControllerActionOrigin_SteamFrameController_RightGrip_Click = EControllerActionOrigin(651)
+k_EControllerActionOrigin_SteamFrameController_RightGrip_Touch = EControllerActionOrigin(652)
+k_EControllerActionOrigin_SteamFrameController_LeftThumbrest_Touch = EControllerActionOrigin(653)
+k_EControllerActionOrigin_SteamFrameController_RightThumbrest_Touch = EControllerActionOrigin(654)
+k_EControllerActionOrigin_SteamFrameController_Reserved1 = EControllerActionOrigin(655)
+k_EControllerActionOrigin_SteamFrameController_Reserved2 = EControllerActionOrigin(656)
+k_EControllerActionOrigin_SteamFrameController_Reserved3 = EControllerActionOrigin(657)
+k_EControllerActionOrigin_SteamFrameController_Reserved4 = EControllerActionOrigin(658)
+k_EControllerActionOrigin_SteamFrameController_Reserved5 = EControllerActionOrigin(659)
+k_EControllerActionOrigin_SteamFrameController_Reserved6 = EControllerActionOrigin(660)
+k_EControllerActionOrigin_SteamFrameController_Reserved7 = EControllerActionOrigin(661)
+k_EControllerActionOrigin_SteamFrameController_Reserved8 = EControllerActionOrigin(662)
+k_EControllerActionOrigin_SteamFrameController_Reserved9 = EControllerActionOrigin(663)
+k_EControllerActionOrigin_SteamFrameController_Reserved10 = EControllerActionOrigin(664)
+k_EControllerActionOrigin_SteamFrameController_Reserved11 = EControllerActionOrigin(665)
+k_EControllerActionOrigin_SteamFrameController_Reserved12 = EControllerActionOrigin(666)
+k_EControllerActionOrigin_SteamFrameController_Reserved13 = EControllerActionOrigin(667)
+k_EControllerActionOrigin_SteamFrameController_Reserved14 = EControllerActionOrigin(668)
+k_EControllerActionOrigin_SteamFrameController_Reserved15 = EControllerActionOrigin(669)
+k_EControllerActionOrigin_SteamFrameController_Reserved16 = EControllerActionOrigin(670)
+k_EControllerActionOrigin_SteamFrameController_Reserved17 = EControllerActionOrigin(671)
+k_EControllerActionOrigin_SteamFrameController_Reserved18 = EControllerActionOrigin(672)
+k_EControllerActionOrigin_SteamFrameController_Reserved19 = EControllerActionOrigin(673)
+k_EControllerActionOrigin_SteamFrameController_Reserved20 = EControllerActionOrigin(674)
+k_EControllerActionOrigin_Count = EControllerActionOrigin(675)
 k_EControllerActionOrigin_MaximumPossibleValue = EControllerActionOrigin(32767)
 
 class ESteamControllerLEDFlag(c_int):
@@ -1994,6 +2595,8 @@ k_EUGCQuery_RankedByLifetimeAveragePlaytime = EUGCQuery(16)
 k_EUGCQuery_RankedByPlaytimeSessionsTrend = EUGCQuery(17)
 k_EUGCQuery_RankedByLifetimePlaytimeSessions = EUGCQuery(18)
 k_EUGCQuery_RankedByLastUpdatedDate = EUGCQuery(19)
+k_EUGCQuery_RankedByNumParentItems = EUGCQuery(20)
+k_EUGCQuery_RankedByNumParentCollections = EUGCQuery(21)
 
 class EItemUpdateStatus(c_int):
     pass
@@ -2098,7 +2701,8 @@ k_EFeatureTest = EParentalFeature(12)
 k_EFeatureSiteLicense = EParentalFeature(13)
 k_EFeatureKioskMode_Deprecated = EParentalFeature(14)
 k_EFeatureBlockAlways = EParentalFeature(15)
-k_EFeatureMax = EParentalFeature(16)
+k_EFeatureDesktop = EParentalFeature(16)
+k_EFeatureMax = EParentalFeature(17)
 
 class ESteamDeviceFormFactor(c_int):
     pass
@@ -2109,6 +2713,154 @@ k_ESteamDeviceFormFactorTablet = ESteamDeviceFormFactor(2)
 k_ESteamDeviceFormFactorComputer = ESteamDeviceFormFactor(3)
 k_ESteamDeviceFormFactorTV = ESteamDeviceFormFactor(4)
 k_ESteamDeviceFormFactorVRHeadset = ESteamDeviceFormFactor(5)
+
+class ERemotePlayInputType(c_int):
+    pass
+
+k_ERemotePlayInputUnknown = ERemotePlayInputType(0)
+k_ERemotePlayInputMouseMotion = ERemotePlayInputType(1)
+k_ERemotePlayInputMouseButtonDown = ERemotePlayInputType(2)
+k_ERemotePlayInputMouseButtonUp = ERemotePlayInputType(3)
+k_ERemotePlayInputMouseWheel = ERemotePlayInputType(4)
+k_ERemotePlayInputKeyDown = ERemotePlayInputType(5)
+k_ERemotePlayInputKeyUp = ERemotePlayInputType(6)
+
+class ERemotePlayMouseButton(c_int):
+    pass
+
+k_ERemotePlayMouseButtonLeft = ERemotePlayMouseButton(1)
+k_ERemotePlayMouseButtonRight = ERemotePlayMouseButton(2)
+k_ERemotePlayMouseButtonMiddle = ERemotePlayMouseButton(16)
+k_ERemotePlayMouseButtonX1 = ERemotePlayMouseButton(32)
+k_ERemotePlayMouseButtonX2 = ERemotePlayMouseButton(64)
+
+class ERemotePlayMouseWheelDirection(c_int):
+    pass
+
+k_ERemotePlayMouseWheelUp = ERemotePlayMouseWheelDirection(1)
+k_ERemotePlayMouseWheelDown = ERemotePlayMouseWheelDirection(2)
+k_ERemotePlayMouseWheelLeft = ERemotePlayMouseWheelDirection(3)
+k_ERemotePlayMouseWheelRight = ERemotePlayMouseWheelDirection(4)
+
+class ERemotePlayScancode(c_int):
+    pass
+
+k_ERemotePlayScancodeUnknown = ERemotePlayScancode(0)
+k_ERemotePlayScancodeA = ERemotePlayScancode(4)
+k_ERemotePlayScancodeB = ERemotePlayScancode(5)
+k_ERemotePlayScancodeC = ERemotePlayScancode(6)
+k_ERemotePlayScancodeD = ERemotePlayScancode(7)
+k_ERemotePlayScancodeE = ERemotePlayScancode(8)
+k_ERemotePlayScancodeF = ERemotePlayScancode(9)
+k_ERemotePlayScancodeG = ERemotePlayScancode(10)
+k_ERemotePlayScancodeH = ERemotePlayScancode(11)
+k_ERemotePlayScancodeI = ERemotePlayScancode(12)
+k_ERemotePlayScancodeJ = ERemotePlayScancode(13)
+k_ERemotePlayScancodeK = ERemotePlayScancode(14)
+k_ERemotePlayScancodeL = ERemotePlayScancode(15)
+k_ERemotePlayScancodeM = ERemotePlayScancode(16)
+k_ERemotePlayScancodeN = ERemotePlayScancode(17)
+k_ERemotePlayScancodeO = ERemotePlayScancode(18)
+k_ERemotePlayScancodeP = ERemotePlayScancode(19)
+k_ERemotePlayScancodeQ = ERemotePlayScancode(20)
+k_ERemotePlayScancodeR = ERemotePlayScancode(21)
+k_ERemotePlayScancodeS = ERemotePlayScancode(22)
+k_ERemotePlayScancodeT = ERemotePlayScancode(23)
+k_ERemotePlayScancodeU = ERemotePlayScancode(24)
+k_ERemotePlayScancodeV = ERemotePlayScancode(25)
+k_ERemotePlayScancodeW = ERemotePlayScancode(26)
+k_ERemotePlayScancodeX = ERemotePlayScancode(27)
+k_ERemotePlayScancodeY = ERemotePlayScancode(28)
+k_ERemotePlayScancodeZ = ERemotePlayScancode(29)
+k_ERemotePlayScancode1 = ERemotePlayScancode(30)
+k_ERemotePlayScancode2 = ERemotePlayScancode(31)
+k_ERemotePlayScancode3 = ERemotePlayScancode(32)
+k_ERemotePlayScancode4 = ERemotePlayScancode(33)
+k_ERemotePlayScancode5 = ERemotePlayScancode(34)
+k_ERemotePlayScancode6 = ERemotePlayScancode(35)
+k_ERemotePlayScancode7 = ERemotePlayScancode(36)
+k_ERemotePlayScancode8 = ERemotePlayScancode(37)
+k_ERemotePlayScancode9 = ERemotePlayScancode(38)
+k_ERemotePlayScancode0 = ERemotePlayScancode(39)
+k_ERemotePlayScancodeReturn = ERemotePlayScancode(40)
+k_ERemotePlayScancodeEscape = ERemotePlayScancode(41)
+k_ERemotePlayScancodeBackspace = ERemotePlayScancode(42)
+k_ERemotePlayScancodeTab = ERemotePlayScancode(43)
+k_ERemotePlayScancodeSpace = ERemotePlayScancode(44)
+k_ERemotePlayScancodeMinus = ERemotePlayScancode(45)
+k_ERemotePlayScancodeEquals = ERemotePlayScancode(46)
+k_ERemotePlayScancodeLeftBracket = ERemotePlayScancode(47)
+k_ERemotePlayScancodeRightBracket = ERemotePlayScancode(48)
+k_ERemotePlayScancodeBackslash = ERemotePlayScancode(49)
+k_ERemotePlayScancodeSemicolon = ERemotePlayScancode(51)
+k_ERemotePlayScancodeApostrophe = ERemotePlayScancode(52)
+k_ERemotePlayScancodeGrave = ERemotePlayScancode(53)
+k_ERemotePlayScancodeComma = ERemotePlayScancode(54)
+k_ERemotePlayScancodePeriod = ERemotePlayScancode(55)
+k_ERemotePlayScancodeSlash = ERemotePlayScancode(56)
+k_ERemotePlayScancodeCapsLock = ERemotePlayScancode(57)
+k_ERemotePlayScancodeF1 = ERemotePlayScancode(58)
+k_ERemotePlayScancodeF2 = ERemotePlayScancode(59)
+k_ERemotePlayScancodeF3 = ERemotePlayScancode(60)
+k_ERemotePlayScancodeF4 = ERemotePlayScancode(61)
+k_ERemotePlayScancodeF5 = ERemotePlayScancode(62)
+k_ERemotePlayScancodeF6 = ERemotePlayScancode(63)
+k_ERemotePlayScancodeF7 = ERemotePlayScancode(64)
+k_ERemotePlayScancodeF8 = ERemotePlayScancode(65)
+k_ERemotePlayScancodeF9 = ERemotePlayScancode(66)
+k_ERemotePlayScancodeF10 = ERemotePlayScancode(67)
+k_ERemotePlayScancodeF11 = ERemotePlayScancode(68)
+k_ERemotePlayScancodeF12 = ERemotePlayScancode(69)
+k_ERemotePlayScancodeInsert = ERemotePlayScancode(73)
+k_ERemotePlayScancodeHome = ERemotePlayScancode(74)
+k_ERemotePlayScancodePageUp = ERemotePlayScancode(75)
+k_ERemotePlayScancodeDelete = ERemotePlayScancode(76)
+k_ERemotePlayScancodeEnd = ERemotePlayScancode(77)
+k_ERemotePlayScancodePageDown = ERemotePlayScancode(78)
+k_ERemotePlayScancodeRight = ERemotePlayScancode(79)
+k_ERemotePlayScancodeLeft = ERemotePlayScancode(80)
+k_ERemotePlayScancodeDown = ERemotePlayScancode(81)
+k_ERemotePlayScancodeUp = ERemotePlayScancode(82)
+k_ERemotePlayScancodeKeypadDivide = ERemotePlayScancode(84)
+k_ERemotePlayScancodeKeypadMultiply = ERemotePlayScancode(85)
+k_ERemotePlayScancodeKeypadMinus = ERemotePlayScancode(86)
+k_ERemotePlayScancodeKeypadPlus = ERemotePlayScancode(87)
+k_ERemotePlayScancodeKeypadEnter = ERemotePlayScancode(88)
+k_ERemotePlayScancodeKeypad1 = ERemotePlayScancode(89)
+k_ERemotePlayScancodeKeypad2 = ERemotePlayScancode(90)
+k_ERemotePlayScancodeKeypad3 = ERemotePlayScancode(91)
+k_ERemotePlayScancodeKeypad4 = ERemotePlayScancode(92)
+k_ERemotePlayScancodeKeypad5 = ERemotePlayScancode(93)
+k_ERemotePlayScancodeKeypad6 = ERemotePlayScancode(94)
+k_ERemotePlayScancodeKeypad7 = ERemotePlayScancode(95)
+k_ERemotePlayScancodeKeypad8 = ERemotePlayScancode(96)
+k_ERemotePlayScancodeKeypad9 = ERemotePlayScancode(97)
+k_ERemotePlayScancodeKeypad0 = ERemotePlayScancode(98)
+k_ERemotePlayScancodeKeypadPeriod = ERemotePlayScancode(99)
+k_ERemotePlayScancodeLeftControl = ERemotePlayScancode(224)
+k_ERemotePlayScancodeLeftShift = ERemotePlayScancode(225)
+k_ERemotePlayScancodeLeftAlt = ERemotePlayScancode(226)
+k_ERemotePlayScancodeLeftGUI = ERemotePlayScancode(227)
+k_ERemotePlayScancodeRightControl = ERemotePlayScancode(228)
+k_ERemotePlayScancodeRightShift = ERemotePlayScancode(229)
+k_ERemotePlayScancodeRightALT = ERemotePlayScancode(230)
+k_ERemotePlayScancodeRightGUI = ERemotePlayScancode(231)
+
+class ERemotePlayKeyModifier(c_int):
+    pass
+
+k_ERemotePlayKeyModifierNone = ERemotePlayKeyModifier(0)
+k_ERemotePlayKeyModifierLeftShift = ERemotePlayKeyModifier(1)
+k_ERemotePlayKeyModifierRightShift = ERemotePlayKeyModifier(2)
+k_ERemotePlayKeyModifierLeftControl = ERemotePlayKeyModifier(64)
+k_ERemotePlayKeyModifierRightControl = ERemotePlayKeyModifier(128)
+k_ERemotePlayKeyModifierLeftAlt = ERemotePlayKeyModifier(256)
+k_ERemotePlayKeyModifierRightAlt = ERemotePlayKeyModifier(512)
+k_ERemotePlayKeyModifierLeftGUI = ERemotePlayKeyModifier(1024)
+k_ERemotePlayKeyModifierRightGUI = ERemotePlayKeyModifier(2048)
+k_ERemotePlayKeyModifierNumLock = ERemotePlayKeyModifier(4096)
+k_ERemotePlayKeyModifierCapsLock = ERemotePlayKeyModifier(8192)
+k_ERemotePlayKeyModifierMask = ERemotePlayKeyModifier(65535)
 
 class ESteamNetworkingAvailability(c_int):
     pass
@@ -2131,7 +2883,6 @@ k_ESteamNetworkingIdentityType_Invalid = ESteamNetworkingIdentityType(0)
 k_ESteamNetworkingIdentityType_SteamID = ESteamNetworkingIdentityType(16)
 k_ESteamNetworkingIdentityType_XboxPairwiseID = ESteamNetworkingIdentityType(17)
 k_ESteamNetworkingIdentityType_SonyPSN = ESteamNetworkingIdentityType(18)
-k_ESteamNetworkingIdentityType_GoogleStadia = ESteamNetworkingIdentityType(19)
 k_ESteamNetworkingIdentityType_IPAddress = ESteamNetworkingIdentityType(1)
 k_ESteamNetworkingIdentityType_GenericString = ESteamNetworkingIdentityType(2)
 k_ESteamNetworkingIdentityType_GenericBytes = ESteamNetworkingIdentityType(3)
@@ -2241,10 +2992,17 @@ k_ESteamNetworkingConfig_SymmetricConnect = ESteamNetworkingConfigValue(37)
 k_ESteamNetworkingConfig_LocalVirtualPort = ESteamNetworkingConfigValue(38)
 k_ESteamNetworkingConfig_DualWifi_Enable = ESteamNetworkingConfigValue(39)
 k_ESteamNetworkingConfig_EnableDiagnosticsUI = ESteamNetworkingConfigValue(46)
+k_ESteamNetworkingConfig_SendTimeSincePreviousPacket = ESteamNetworkingConfigValue(59)
 k_ESteamNetworkingConfig_FakePacketLoss_Send = ESteamNetworkingConfigValue(2)
 k_ESteamNetworkingConfig_FakePacketLoss_Recv = ESteamNetworkingConfigValue(3)
 k_ESteamNetworkingConfig_FakePacketLag_Send = ESteamNetworkingConfigValue(4)
 k_ESteamNetworkingConfig_FakePacketLag_Recv = ESteamNetworkingConfigValue(5)
+k_ESteamNetworkingConfig_FakePacketJitter_Send_Avg = ESteamNetworkingConfigValue(53)
+k_ESteamNetworkingConfig_FakePacketJitter_Send_Max = ESteamNetworkingConfigValue(54)
+k_ESteamNetworkingConfig_FakePacketJitter_Send_Pct = ESteamNetworkingConfigValue(55)
+k_ESteamNetworkingConfig_FakePacketJitter_Recv_Avg = ESteamNetworkingConfigValue(56)
+k_ESteamNetworkingConfig_FakePacketJitter_Recv_Max = ESteamNetworkingConfigValue(57)
+k_ESteamNetworkingConfig_FakePacketJitter_Recv_Pct = ESteamNetworkingConfigValue(58)
 k_ESteamNetworkingConfig_FakePacketReorder_Send = ESteamNetworkingConfigValue(6)
 k_ESteamNetworkingConfig_FakePacketReorder_Recv = ESteamNetworkingConfigValue(7)
 k_ESteamNetworkingConfig_FakePacketReorder_Time = ESteamNetworkingConfigValue(8)
@@ -2288,6 +3046,7 @@ k_ESteamNetworkingConfig_LogLevel_PacketGaps = ESteamNetworkingConfigValue(16)
 k_ESteamNetworkingConfig_LogLevel_P2PRendezvous = ESteamNetworkingConfigValue(17)
 k_ESteamNetworkingConfig_LogLevel_SDRRelayPings = ESteamNetworkingConfigValue(18)
 k_ESteamNetworkingConfig_ECN = ESteamNetworkingConfigValue(999)
+k_ESteamNetworkingConfig_SDRClient_EnableTOSProbes = ESteamNetworkingConfigValue(998)
 k_ESteamNetworkingConfig_DELETED_EnumerateDevVars = ESteamNetworkingConfigValue(35)
 k_ESteamNetworkingConfigValue__Force32Bit = ESteamNetworkingConfigValue(2147483647)
 
@@ -2339,16 +3098,6 @@ class EFailureType(c_int):
 
 k_EFailureFlushedCallbackQueue = EFailureType(0)
 k_EFailurePipeFail = EFailureType(1)
-
-
-# Enums
-
-class PlayerAcceptState_t(c_int):
-    pass
-
-k_EStateUnknown = PlayerAcceptState_t(0)
-k_EStatePlayerAccepted = PlayerAcceptState_t(1)
-k_EStatePlayerDeclined = PlayerAcceptState_t(2)
 
 class SteamIPAddress_t(Structure):
     _pack_ = PACK
@@ -2424,6 +3173,9 @@ class servernetadr_t(Structure):
     def t_Assign(self, that):
         return servernetadr_t_Assign(byref(self), that) # type: ignore
 
+    def t_IsEqualTo(self, rhs):
+        return servernetadr_t_IsEqualTo(byref(self), rhs) # type: ignore
+
 class gameserveritem_t(Structure):
     _pack_ = PACK
     _fields_ = [
@@ -2445,6 +3197,8 @@ class gameserveritem_t(Structure):
         ('m_szServerName', (c_byte * 64)),
         ('m_szGameTags', (c_byte * 128)),
         ('m_steamID', c_ulonglong),
+        ('m_nCurrentFriendCount', c_int),
+        ('m_nTotalFriendCount', c_int),
     ]
 
     def t_Construct(self, ):
@@ -2455,6 +3209,9 @@ class gameserveritem_t(Structure):
 
     def t_SetName(self, pName):
         return gameserveritem_t_SetName(byref(self), pName) # type: ignore
+
+    def t_IsEqualTo(self, rhs):
+        return gameserveritem_t_IsEqualTo(byref(self), rhs) # type: ignore
 
 class SteamPartyBeaconLocation_t(Structure):
     _pack_ = PACK
@@ -2572,6 +3329,39 @@ class SteamItemDetails_t(Structure):
         ('m_unFlags', c_ushort),
     ]
 
+class RemotePlayInputMouseMotion_t(Structure):
+    _pack_ = PACK
+    _fields_ = [
+        ('m_bAbsolute', c_bool),
+        ('m_flNormalizedX', c_float),
+        ('m_flNormalizedY', c_float),
+        ('m_nDeltaX', c_int),
+        ('m_nDeltaY', c_int),
+    ]
+
+class RemotePlayInputMouseWheel_t(Structure):
+    _pack_ = PACK
+    _fields_ = [
+        ('m_eDirection', ERemotePlayMouseWheelDirection),
+        ('m_flAmount', c_float),
+    ]
+
+class RemotePlayInputKey_t(Structure):
+    _pack_ = PACK
+    _fields_ = [
+        ('m_eScancode', c_int),
+        ('m_unModifiers', c_uint),
+        ('m_unKeycode', c_uint),
+    ]
+
+class RemotePlayInput_t(Structure):
+    _pack_ = PACK
+    _fields_ = [
+        ('m_unSessionID', c_uint),
+        ('m_eType', ERemotePlayInputType),
+        ('padding', (c_byte * 56)),
+    ]
+
 class SteamNetworkingIPAddr(Structure):
     _pack_ = PACK
     _fields_ = [
@@ -2656,12 +3446,6 @@ class SteamNetworkingIdentity(Structure):
     def GetPSNID(self, ):
         return SteamNetworkingIdentity_GetPSNID(byref(self), ) # type: ignore
 
-    def SetStadiaID(self, id):
-        return SteamNetworkingIdentity_SetStadiaID(byref(self), id) # type: ignore
-
-    def GetStadiaID(self, ):
-        return SteamNetworkingIdentity_GetStadiaID(byref(self), ) # type: ignore
-
     def SetIPAddr(self, addr):
         return SteamNetworkingIdentity_SetIPAddr(byref(self), addr) # type: ignore
 
@@ -2741,7 +3525,8 @@ class SteamNetConnectionRealTimeStatus_t(Structure):
         ('m_cbPendingReliable', c_int),
         ('m_cbSentUnackedReliable', c_int),
         ('m_usecQueueTime', c_longlong),
-        ('reserved', (c_uint * 16)),
+        ('m_usecMaxJitter', c_int),
+        ('reserved', (c_uint * 15)),
     ]
 
 class SteamNetConnectionRealTimeLaneStatus_t(Structure):
@@ -3107,15 +3892,6 @@ class FriendsEnumerateFollowingList_t(Structure):
     ]
     callback_id = 346
 
-class SetPersonaNameResponse_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_bSuccess', c_bool),
-        ('m_bLocalSuccess', c_bool),
-        ('m_result', EResult),
-    ]
-    callback_id = 347
-
 class UnreadChatMessagesChanged_t(Structure):
     _pack_ = PACK
     _fields_ = [
@@ -3146,6 +3922,7 @@ class EquippedProfileItems_t(Structure):
         ('m_bHasProfileModifier', c_bool),
         ('m_bHasProfileBackground', c_bool),
         ('m_bHasMiniProfileBackground', c_bool),
+        ('m_bFromCache', c_bool),
     ]
     callback_id = 351
 
@@ -3307,94 +4084,12 @@ class LobbyCreated_t(Structure):
     ]
     callback_id = 513
 
-class PSNGameBootInviteResult_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_bGameBootInviteExists', c_bool),
-        ('m_steamIDLobby', c_ulonglong),
-    ]
-    callback_id = 515
-
 class FavoritesListAccountsUpdated_t(Structure):
     _pack_ = PACK
     _fields_ = [
         ('m_eResult', EResult),
     ]
     callback_id = 516
-
-class SearchForGameProgressCallback_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_ullSearchID', c_ulonglong),
-        ('m_eResult', EResult),
-        ('m_lobbyID', c_ulonglong),
-        ('m_steamIDEndedSearch', c_ulonglong),
-        ('m_nSecondsRemainingEstimate', c_int),
-        ('m_cPlayersSearching', c_int),
-    ]
-    callback_id = 5201
-
-class SearchForGameResultCallback_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_ullSearchID', c_ulonglong),
-        ('m_eResult', EResult),
-        ('m_nCountPlayersInGame', c_int),
-        ('m_nCountAcceptedGame', c_int),
-        ('m_steamIDHost', c_ulonglong),
-        ('m_bFinalCallback', c_bool),
-    ]
-    callback_id = 5202
-
-class RequestPlayersForGameProgressCallback_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_eResult', EResult),
-        ('m_ullSearchID', c_ulonglong),
-    ]
-    callback_id = 5211
-
-class RequestPlayersForGameResultCallback_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_eResult', EResult),
-        ('m_ullSearchID', c_ulonglong),
-        ('m_SteamIDPlayerFound', c_ulonglong),
-        ('m_SteamIDLobby', c_ulonglong),
-        ('m_ePlayerAcceptState', PlayerAcceptState_t),
-        ('m_nPlayerIndex', c_int),
-        ('m_nTotalPlayersFound', c_int),
-        ('m_nTotalPlayersAcceptedGame', c_int),
-        ('m_nSuggestedTeamIndex', c_int),
-        ('m_ullUniqueGameID', c_ulonglong),
-    ]
-    callback_id = 5212
-
-class RequestPlayersForGameFinalResultCallback_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_eResult', EResult),
-        ('m_ullSearchID', c_ulonglong),
-        ('m_ullUniqueGameID', c_ulonglong),
-    ]
-    callback_id = 5213
-
-class SubmitPlayerResultResultCallback_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_eResult', EResult),
-        ('ullUniqueGameID', c_ulonglong),
-        ('steamIDPlayer', c_ulonglong),
-    ]
-    callback_id = 5214
-
-class EndGameResultCallback_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_eResult', EResult),
-        ('ullUniqueGameID', c_ulonglong),
-    ]
-    callback_id = 5215
 
 class JoinPartyCallback_t(Structure):
     _pack_ = PACK
@@ -3787,15 +4482,6 @@ class LeaderboardUGCSet_t(Structure):
     ]
     callback_id = 1111
 
-class PS3TrophiesInstalled_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_nGameID', c_ulonglong),
-        ('m_eResult', EResult),
-        ('m_ulRequiredDiskSpace', c_ulonglong),
-    ]
-    callback_id = 1112
-
 class GlobalStatsReceived_t(Structure):
     _pack_ = PACK
     _fields_ = [
@@ -3898,96 +4584,6 @@ class VolumeHasChanged_t(Structure):
         ('m_flNewVolume', c_float),
     ]
     callback_id = 4002
-
-class MusicPlayerRemoteWillActivate_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-    callback_id = 4101
-
-class MusicPlayerRemoteWillDeactivate_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-    callback_id = 4102
-
-class MusicPlayerRemoteToFront_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-    callback_id = 4103
-
-class MusicPlayerWillQuit_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-    callback_id = 4104
-
-class MusicPlayerWantsPlay_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-    callback_id = 4105
-
-class MusicPlayerWantsPause_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-    callback_id = 4106
-
-class MusicPlayerWantsPlayPrevious_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-    callback_id = 4107
-
-class MusicPlayerWantsPlayNext_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-    callback_id = 4108
-
-class MusicPlayerWantsShuffled_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_bShuffled', c_bool),
-    ]
-    callback_id = 4109
-
-class MusicPlayerWantsLooped_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_bLooped', c_bool),
-    ]
-    callback_id = 4110
-
-class MusicPlayerWantsVolume_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_flNewVolume', c_float),
-    ]
-    callback_id = 4011
-
-class MusicPlayerSelectsQueueEntry_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('nID', c_int),
-    ]
-    callback_id = 4012
-
-class MusicPlayerSelectsPlaylistEntry_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('nID', c_int),
-    ]
-    callback_id = 4013
-
-class MusicPlayerWantsPlayingRepeatStatus_t(Structure):
-    _pack_ = PACK
-    _fields_ = [
-        ('m_nPlayingRepeatStatus', c_int),
-    ]
-    callback_id = 4114
 
 class HTTPRequestCompleted_t(Structure):
     _pack_ = PACK
@@ -4497,6 +5093,25 @@ class SteamInventoryRequestPricesResult_t(Structure):
     ]
     callback_id = 4705
 
+class SteamTimelineGamePhaseRecordingExists_t(Structure):
+    _pack_ = PACK
+    _fields_ = [
+        ('m_rgchPhaseID', (c_byte * 64)),
+        ('m_ulRecordingMS', c_ulonglong),
+        ('m_ulLongestClipMS', c_ulonglong),
+        ('m_unClipCount', c_uint),
+        ('m_unScreenshotCount', c_uint),
+    ]
+    callback_id = 6001
+
+class SteamTimelineEventRecordingExists_t(Structure):
+    _pack_ = PACK
+    _fields_ = [
+        ('m_ulEventID', c_ulonglong),
+        ('m_bRecordingExists', c_bool),
+    ]
+    callback_id = 6002
+
 class GetVideoURLResult_t(Structure):
     _pack_ = PACK
     _fields_ = [
@@ -4513,6 +5128,20 @@ class GetOPFSettingsResult_t(Structure):
         ('m_unVideoAppID', c_uint),
     ]
     callback_id = 4624
+
+class BroadcastUploadStart_t(Structure):
+    _pack_ = PACK
+    _fields_ = [
+        ('m_bIsRTMP', c_bool),
+    ]
+    callback_id = 4604
+
+class BroadcastUploadStop_t(Structure):
+    _pack_ = PACK
+    _fields_ = [
+        ('m_eResult', EBroadcastUploadResult),
+    ]
+    callback_id = 4605
 
 class SteamParentalSettingsChanged_t(Structure):
     _pack_ = PACK
@@ -4540,6 +5169,16 @@ class SteamRemotePlayTogetherGuestInvite_t(Structure):
         ('m_szConnectURL', (c_byte * 1024)),
     ]
     callback_id = 5703
+
+class SteamRemotePlaySessionAvatarLoaded_t(Structure):
+    _pack_ = PACK
+    _fields_ = [
+        ('m_unSessionID', c_uint),
+        ('m_iImage', c_int),
+        ('m_iWide', c_int),
+        ('m_iTall', c_int),
+    ]
+    callback_id = 5704
 
 class SteamNetworkingMessagesSessionRequest_t(Structure):
     _pack_ = PACK
@@ -4741,7 +5380,6 @@ callback_by_id = {
 344 : FriendsGetFollowerCount_t,
 345 : FriendsIsFollowing_t,
 346 : FriendsEnumerateFollowingList_t,
-347 : SetPersonaNameResponse_t,
 348 : UnreadChatMessagesChanged_t,
 349 : OverlayBrowserProtocolNavigation_t,
 350 : EquippedProfileItemsChanged_t,
@@ -4765,15 +5403,7 @@ callback_by_id = {
 510 : LobbyMatchList_t,
 512 : LobbyKicked_t,
 513 : LobbyCreated_t,
-515 : PSNGameBootInviteResult_t,
 516 : FavoritesListAccountsUpdated_t,
-5201 : SearchForGameProgressCallback_t,
-5202 : SearchForGameResultCallback_t,
-5211 : RequestPlayersForGameProgressCallback_t,
-5212 : RequestPlayersForGameResultCallback_t,
-5213 : RequestPlayersForGameFinalResultCallback_t,
-5214 : SubmitPlayerResultResultCallback_t,
-5215 : EndGameResultCallback_t,
 5301 : JoinPartyCallback_t,
 5302 : CreateBeaconCallback_t,
 5303 : ReservationNotificationCallback_t,
@@ -4816,7 +5446,6 @@ callback_by_id = {
 1109 : UserAchievementIconFetched_t,
 1110 : GlobalAchievementPercentagesReady_t,
 1111 : LeaderboardUGCSet_t,
-1112 : PS3TrophiesInstalled_t,
 1112 : GlobalStatsReceived_t,
 1005 : DlcInstalled_t,
 1014 : NewUrlLaunchParameters_t,
@@ -4830,20 +5459,6 @@ callback_by_id = {
 2302 : ScreenshotRequested_t,
 4001 : PlaybackStatusHasChanged_t,
 4002 : VolumeHasChanged_t,
-4101 : MusicPlayerRemoteWillActivate_t,
-4102 : MusicPlayerRemoteWillDeactivate_t,
-4103 : MusicPlayerRemoteToFront_t,
-4104 : MusicPlayerWillQuit_t,
-4105 : MusicPlayerWantsPlay_t,
-4106 : MusicPlayerWantsPause_t,
-4107 : MusicPlayerWantsPlayPrevious_t,
-4108 : MusicPlayerWantsPlayNext_t,
-4109 : MusicPlayerWantsShuffled_t,
-4110 : MusicPlayerWantsLooped_t,
-4011 : MusicPlayerWantsVolume_t,
-4012 : MusicPlayerSelectsQueueEntry_t,
-4013 : MusicPlayerSelectsPlaylistEntry_t,
-4114 : MusicPlayerWantsPlayingRepeatStatus_t,
 2101 : HTTPRequestCompleted_t,
 2102 : HTTPRequestHeadersReceived_t,
 2103 : HTTPRequestDataReceived_t,
@@ -4899,12 +5514,17 @@ callback_by_id = {
 4703 : SteamInventoryEligiblePromoItemDefIDs_t,
 4704 : SteamInventoryStartPurchaseResult_t,
 4705 : SteamInventoryRequestPricesResult_t,
+6001 : SteamTimelineGamePhaseRecordingExists_t,
+6002 : SteamTimelineEventRecordingExists_t,
 4611 : GetVideoURLResult_t,
 4624 : GetOPFSettingsResult_t,
+4604 : BroadcastUploadStart_t,
+4605 : BroadcastUploadStop_t,
 5001 : SteamParentalSettingsChanged_t,
 5701 : SteamRemotePlaySessionConnected_t,
 5702 : SteamRemotePlaySessionDisconnected_t,
 5703 : SteamRemotePlayTogetherGuestInvite_t,
+5704 : SteamRemotePlaySessionAvatarLoaded_t,
 1251 : SteamNetworkingMessagesSessionRequest_t,
 1252 : SteamNetworkingMessagesSessionFailed_t,
 1221 : SteamNetConnectionStatusChangedCallback_t,
@@ -4988,9 +5608,6 @@ class ISteamClient(Structure):
     def GetISteamScreenshots(self, hSteamuser, hSteamPipe, pchVersion):
         return ISteamClient_GetISteamScreenshots(byref(self), hSteamuser, hSteamPipe, pchVersion) # type: ignore
 
-    def GetISteamGameSearch(self, hSteamuser, hSteamPipe, pchVersion):
-        return ISteamClient_GetISteamGameSearch(byref(self), hSteamuser, hSteamPipe, pchVersion) # type: ignore
-
     def GetIPCCallCount(self, ):
         return ISteamClient_GetIPCCallCount(byref(self), ) # type: ignore
 
@@ -5011,9 +5628,6 @@ class ISteamClient(Structure):
 
     def GetISteamMusic(self, hSteamuser, hSteamPipe, pchVersion):
         return ISteamClient_GetISteamMusic(byref(self), hSteamuser, hSteamPipe, pchVersion) # type: ignore
-
-    def GetISteamMusicRemote(self, hSteamuser, hSteamPipe, pchVersion):
-        return ISteamClient_GetISteamMusicRemote(byref(self), hSteamuser, hSteamPipe, pchVersion) # type: ignore
 
     def GetISteamHTMLSurface(self, hSteamuser, hSteamPipe, pchVersion):
         return ISteamClient_GetISteamHTMLSurface(byref(self), hSteamuser, hSteamPipe, pchVersion) # type: ignore
@@ -5148,9 +5762,6 @@ class ISteamFriends(Structure):
     def GetPersonaName(self, ):
         return ISteamFriends_GetPersonaName(byref(self), ) # type: ignore
 
-    def SetPersonaName(self, pchPersonaName):
-        return ISteamFriends_SetPersonaName(byref(self), pchPersonaName) # type: ignore
-
     def GetPersonaState(self, ):
         return ISteamFriends_GetPersonaState(byref(self), ) # type: ignore
 
@@ -5270,9 +5881,6 @@ class ISteamFriends(Structure):
 
     def GetClanOfficerByIndex(self, steamIDClan, iOfficer):
         return ISteamFriends_GetClanOfficerByIndex(byref(self), steamIDClan, iOfficer) # type: ignore
-
-    def GetUserRestrictions(self, ):
-        return ISteamFriends_GetUserRestrictions(byref(self), ) # type: ignore
 
     def SetRichPresence(self, pchKey, pchValue):
         return ISteamFriends_SetRichPresence(byref(self), pchKey, pchValue) # type: ignore
@@ -5486,9 +6094,6 @@ class ISteamUtils(Structure):
     def GetIPv6ConnectivityState(self, eProtocol):
         return ISteamUtils_GetIPv6ConnectivityState(byref(self), eProtocol) # type: ignore
 
-    def IsSteamRunningOnSteamDeck(self, ):
-        return ISteamUtils_IsSteamRunningOnSteamDeck(byref(self), ) # type: ignore
-
     def ShowFloatingGamepadTextInput(self, eKeyboardMode, nTextFieldXPosition, nTextFieldYPosition, nTextFieldWidth, nTextFieldHeight):
         return ISteamUtils_ShowFloatingGamepadTextInput(byref(self), eKeyboardMode, nTextFieldXPosition, nTextFieldYPosition, nTextFieldWidth, nTextFieldHeight) # type: ignore
 
@@ -5500,6 +6105,15 @@ class ISteamUtils(Structure):
 
     def DismissGamepadTextInput(self, ):
         return ISteamUtils_DismissGamepadTextInput(byref(self), ) # type: ignore
+
+    def IsRunningOnSteamHardware(self, ):
+        return ISteamUtils_IsRunningOnSteamHardware(byref(self), ) # type: ignore
+
+    def GetSteamHardwareDefaultConfig(self, ):
+        return ISteamUtils_GetSteamHardwareDefaultConfig(byref(self), ) # type: ignore
+
+    def IsRunningUnderProton(self, ):
+        return ISteamUtils_IsRunningUnderProton(byref(self), ) # type: ignore
 
 class ISteamMatchmaking(Structure):
     _pack_ = PACK
@@ -5673,6 +6287,20 @@ class ISteamMatchmakingRulesResponse(Structure):
     def RulesRefreshComplete(self, ):
         return ISteamMatchmakingRulesResponse_RulesRefreshComplete(byref(self), ) # type: ignore
 
+class ISteamMatchmakingServerFriendsResponse(Structure):
+    _pack_ = PACK
+    _fields_ = [
+    ]
+
+    def AddFriendToList(self, steamID, pchName, bCurrentlyConnected):
+        return ISteamMatchmakingServerFriendsResponse_AddFriendToList(byref(self), steamID, pchName, bCurrentlyConnected) # type: ignore
+
+    def FriendsFailedToRespond(self, ):
+        return ISteamMatchmakingServerFriendsResponse_FriendsFailedToRespond(byref(self), ) # type: ignore
+
+    def FriendsRefreshComplete(self, ):
+        return ISteamMatchmakingServerFriendsResponse_FriendsRefreshComplete(byref(self), ) # type: ignore
+
 class ISteamMatchmakingServers(Structure):
     _pack_ = PACK
     _fields_ = [
@@ -5726,55 +6354,11 @@ class ISteamMatchmakingServers(Structure):
     def ServerRules(self, unIP, usPort, pRequestServersResponse):
         return ISteamMatchmakingServers_ServerRules(byref(self), unIP, usPort, pRequestServersResponse) # type: ignore
 
+    def ServerFriends(self, unIP, usPort, pRequestServersResponse):
+        return ISteamMatchmakingServers_ServerFriends(byref(self), unIP, usPort, pRequestServersResponse) # type: ignore
+
     def CancelServerQuery(self, hServerQuery):
         return ISteamMatchmakingServers_CancelServerQuery(byref(self), hServerQuery) # type: ignore
-
-class ISteamGameSearch(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-
-    def AddGameSearchParams(self, pchKeyToFind, pchValuesToFind):
-        return ISteamGameSearch_AddGameSearchParams(byref(self), pchKeyToFind, pchValuesToFind) # type: ignore
-
-    def SearchForGameWithLobby(self, steamIDLobby, nPlayerMin, nPlayerMax):
-        return ISteamGameSearch_SearchForGameWithLobby(byref(self), steamIDLobby, nPlayerMin, nPlayerMax) # type: ignore
-
-    def SearchForGameSolo(self, nPlayerMin, nPlayerMax):
-        return ISteamGameSearch_SearchForGameSolo(byref(self), nPlayerMin, nPlayerMax) # type: ignore
-
-    def AcceptGame(self, ):
-        return ISteamGameSearch_AcceptGame(byref(self), ) # type: ignore
-
-    def DeclineGame(self, ):
-        return ISteamGameSearch_DeclineGame(byref(self), ) # type: ignore
-
-    def RetrieveConnectionDetails(self, steamIDHost, pchConnectionDetails, cubConnectionDetails):
-        return ISteamGameSearch_RetrieveConnectionDetails(byref(self), steamIDHost, pchConnectionDetails, cubConnectionDetails) # type: ignore
-
-    def EndGameSearch(self, ):
-        return ISteamGameSearch_EndGameSearch(byref(self), ) # type: ignore
-
-    def SetGameHostParams(self, pchKey, pchValue):
-        return ISteamGameSearch_SetGameHostParams(byref(self), pchKey, pchValue) # type: ignore
-
-    def SetConnectionDetails(self, pchConnectionDetails, cubConnectionDetails):
-        return ISteamGameSearch_SetConnectionDetails(byref(self), pchConnectionDetails, cubConnectionDetails) # type: ignore
-
-    def RequestPlayersForGame(self, nPlayerMin, nPlayerMax, nMaxTeamSize):
-        return ISteamGameSearch_RequestPlayersForGame(byref(self), nPlayerMin, nPlayerMax, nMaxTeamSize) # type: ignore
-
-    def HostConfirmGameStart(self, ullUniqueGameID):
-        return ISteamGameSearch_HostConfirmGameStart(byref(self), ullUniqueGameID) # type: ignore
-
-    def CancelRequestPlayersForGame(self, ):
-        return ISteamGameSearch_CancelRequestPlayersForGame(byref(self), ) # type: ignore
-
-    def SubmitPlayerResult(self, ullUniqueGameID, steamIDPlayer, EPlayerResult):
-        return ISteamGameSearch_SubmitPlayerResult(byref(self), ullUniqueGameID, steamIDPlayer, EPlayerResult) # type: ignore
-
-    def EndGame(self, ullUniqueGameID):
-        return ISteamGameSearch_EndGame(byref(self), ullUniqueGameID) # type: ignore
 
 class ISteamParties(Structure):
     _pack_ = PACK
@@ -6004,9 +6588,6 @@ class ISteamUserStats(Structure):
     _fields_ = [
     ]
 
-    def RequestCurrentStats(self, ):
-        return ISteamUserStats_RequestCurrentStats(byref(self), ) # type: ignore
-
     def GetStatInt32(self, pchName, pData):
         return ISteamUserStats_GetStatInt32(byref(self), pchName, pData) # type: ignore
 
@@ -6234,14 +6815,20 @@ class ISteamApps(Structure):
     def SetDlcContext(self, nAppID):
         return ISteamApps_SetDlcContext(byref(self), nAppID) # type: ignore
 
-    def GetNumBetas(self, unAppID, pnAvailable, pnPrivate):
-        return ISteamApps_GetNumBetas(byref(self), unAppID, pnAvailable, pnPrivate) # type: ignore
+    def GetNumBetas(self, pnAvailable, pnPrivate):
+        return ISteamApps_GetNumBetas(byref(self), pnAvailable, pnPrivate) # type: ignore
 
-    def GetBetaInfo(self, unAppID, iBetaIndex, punFlags, punBuildID, pchBetaName, cchBetaName, pchDescription, cchDescription):
-        return ISteamApps_GetBetaInfo(byref(self), unAppID, iBetaIndex, punFlags, punBuildID, pchBetaName, cchBetaName, pchDescription, cchDescription) # type: ignore
+    def GetBetaInfo(self, iBetaIndex, punFlags, punBuildID, pchBetaName, cchBetaName, pchDescription, cchDescription, punLastUpdated):
+        return ISteamApps_GetBetaInfo(byref(self), iBetaIndex, punFlags, punBuildID, pchBetaName, cchBetaName, pchDescription, cchDescription, punLastUpdated) # type: ignore
 
-    def SetActiveBeta(self, unAppID, pchBetaName):
-        return ISteamApps_SetActiveBeta(byref(self), unAppID, pchBetaName) # type: ignore
+    def SetActiveBeta(self, pchBetaName):
+        return ISteamApps_SetActiveBeta(byref(self), pchBetaName) # type: ignore
+
+    def SetGamePerformanceSetting(self, setting):
+        return ISteamApps_SetGamePerformanceSetting(byref(self), setting) # type: ignore
+
+    def SetGameRenderResolution(self, unWidth, unHeight):
+        return ISteamApps_SetGameRenderResolution(byref(self), unWidth, unHeight) # type: ignore
 
 class ISteamNetworking(Structure):
     _pack_ = PACK
@@ -6377,107 +6964,6 @@ class ISteamMusic(Structure):
 
     def GetVolume(self, ):
         return ISteamMusic_GetVolume(byref(self), ) # type: ignore
-
-class ISteamMusicRemote(Structure):
-    _pack_ = PACK
-    _fields_ = [
-    ]
-
-    def RegisterSteamMusicRemote(self, pchName):
-        return ISteamMusicRemote_RegisterSteamMusicRemote(byref(self), pchName) # type: ignore
-
-    def DeregisterSteamMusicRemote(self, ):
-        return ISteamMusicRemote_DeregisterSteamMusicRemote(byref(self), ) # type: ignore
-
-    def BIsCurrentMusicRemote(self, ):
-        return ISteamMusicRemote_BIsCurrentMusicRemote(byref(self), ) # type: ignore
-
-    def BActivationSuccess(self, bValue):
-        return ISteamMusicRemote_BActivationSuccess(byref(self), bValue) # type: ignore
-
-    def SetDisplayName(self, pchDisplayName):
-        return ISteamMusicRemote_SetDisplayName(byref(self), pchDisplayName) # type: ignore
-
-    def SetPNGIcon_64x64(self, pvBuffer, cbBufferLength):
-        return ISteamMusicRemote_SetPNGIcon_64x64(byref(self), pvBuffer, cbBufferLength) # type: ignore
-
-    def EnablePlayPrevious(self, bValue):
-        return ISteamMusicRemote_EnablePlayPrevious(byref(self), bValue) # type: ignore
-
-    def EnablePlayNext(self, bValue):
-        return ISteamMusicRemote_EnablePlayNext(byref(self), bValue) # type: ignore
-
-    def EnableShuffled(self, bValue):
-        return ISteamMusicRemote_EnableShuffled(byref(self), bValue) # type: ignore
-
-    def EnableLooped(self, bValue):
-        return ISteamMusicRemote_EnableLooped(byref(self), bValue) # type: ignore
-
-    def EnableQueue(self, bValue):
-        return ISteamMusicRemote_EnableQueue(byref(self), bValue) # type: ignore
-
-    def EnablePlaylists(self, bValue):
-        return ISteamMusicRemote_EnablePlaylists(byref(self), bValue) # type: ignore
-
-    def UpdatePlaybackStatus(self, nStatus):
-        return ISteamMusicRemote_UpdatePlaybackStatus(byref(self), nStatus) # type: ignore
-
-    def UpdateShuffled(self, bValue):
-        return ISteamMusicRemote_UpdateShuffled(byref(self), bValue) # type: ignore
-
-    def UpdateLooped(self, bValue):
-        return ISteamMusicRemote_UpdateLooped(byref(self), bValue) # type: ignore
-
-    def UpdateVolume(self, flValue):
-        return ISteamMusicRemote_UpdateVolume(byref(self), flValue) # type: ignore
-
-    def CurrentEntryWillChange(self, ):
-        return ISteamMusicRemote_CurrentEntryWillChange(byref(self), ) # type: ignore
-
-    def CurrentEntryIsAvailable(self, bAvailable):
-        return ISteamMusicRemote_CurrentEntryIsAvailable(byref(self), bAvailable) # type: ignore
-
-    def UpdateCurrentEntryText(self, pchText):
-        return ISteamMusicRemote_UpdateCurrentEntryText(byref(self), pchText) # type: ignore
-
-    def UpdateCurrentEntryElapsedSeconds(self, nValue):
-        return ISteamMusicRemote_UpdateCurrentEntryElapsedSeconds(byref(self), nValue) # type: ignore
-
-    def UpdateCurrentEntryCoverArt(self, pvBuffer, cbBufferLength):
-        return ISteamMusicRemote_UpdateCurrentEntryCoverArt(byref(self), pvBuffer, cbBufferLength) # type: ignore
-
-    def CurrentEntryDidChange(self, ):
-        return ISteamMusicRemote_CurrentEntryDidChange(byref(self), ) # type: ignore
-
-    def QueueWillChange(self, ):
-        return ISteamMusicRemote_QueueWillChange(byref(self), ) # type: ignore
-
-    def ResetQueueEntries(self, ):
-        return ISteamMusicRemote_ResetQueueEntries(byref(self), ) # type: ignore
-
-    def SetQueueEntry(self, nID, nPosition, pchEntryText):
-        return ISteamMusicRemote_SetQueueEntry(byref(self), nID, nPosition, pchEntryText) # type: ignore
-
-    def SetCurrentQueueEntry(self, nID):
-        return ISteamMusicRemote_SetCurrentQueueEntry(byref(self), nID) # type: ignore
-
-    def QueueDidChange(self, ):
-        return ISteamMusicRemote_QueueDidChange(byref(self), ) # type: ignore
-
-    def PlaylistWillChange(self, ):
-        return ISteamMusicRemote_PlaylistWillChange(byref(self), ) # type: ignore
-
-    def ResetPlaylistEntries(self, ):
-        return ISteamMusicRemote_ResetPlaylistEntries(byref(self), ) # type: ignore
-
-    def SetPlaylistEntry(self, nID, nPosition, pchEntryText):
-        return ISteamMusicRemote_SetPlaylistEntry(byref(self), nID, nPosition, pchEntryText) # type: ignore
-
-    def SetCurrentPlaylistEntry(self, nID):
-        return ISteamMusicRemote_SetCurrentPlaylistEntry(byref(self), nID) # type: ignore
-
-    def PlaylistDidChange(self, ):
-        return ISteamMusicRemote_PlaylistDidChange(byref(self), ) # type: ignore
 
 class ISteamHTTP(Structure):
     _pack_ = PACK
@@ -7042,11 +7528,11 @@ class ISteamUGC(Structure):
     def UnsubscribeItem(self, nPublishedFileID):
         return ISteamUGC_UnsubscribeItem(byref(self), nPublishedFileID) # type: ignore
 
-    def GetNumSubscribedItems(self, ):
-        return ISteamUGC_GetNumSubscribedItems(byref(self), ) # type: ignore
+    def GetNumSubscribedItems(self, bIncludeLocallyDisabled):
+        return ISteamUGC_GetNumSubscribedItems(byref(self), bIncludeLocallyDisabled) # type: ignore
 
-    def GetSubscribedItems(self, pvecPublishedFileID, cMaxEntries):
-        return ISteamUGC_GetSubscribedItems(byref(self), pvecPublishedFileID, cMaxEntries) # type: ignore
+    def GetSubscribedItems(self, pvecPublishedFileID, cMaxEntries, bIncludeLocallyDisabled):
+        return ISteamUGC_GetSubscribedItems(byref(self), pvecPublishedFileID, cMaxEntries, bIncludeLocallyDisabled) # type: ignore
 
     def GetItemState(self, nPublishedFileID):
         return ISteamUGC_GetItemState(byref(self), nPublishedFileID) # type: ignore
@@ -7101,6 +7587,21 @@ class ISteamUGC(Structure):
 
     def GetUserContentDescriptorPreferences(self, pvecDescriptors, cMaxEntries):
         return ISteamUGC_GetUserContentDescriptorPreferences(byref(self), pvecDescriptors, cMaxEntries) # type: ignore
+
+    def SetItemsDisabledLocally(self, pvecPublishedFileIDs, unNumPublishedFileIDs, bDisabledLocally):
+        return ISteamUGC_SetItemsDisabledLocally(byref(self), pvecPublishedFileIDs, unNumPublishedFileIDs, bDisabledLocally) # type: ignore
+
+    def SetSubscriptionsLoadOrder(self, pvecPublishedFileIDs, unNumPublishedFileIDs):
+        return ISteamUGC_SetSubscriptionsLoadOrder(byref(self), pvecPublishedFileIDs, unNumPublishedFileIDs) # type: ignore
+
+    def MarkDownloadedItemAsUnused(self, nPublishedFileID):
+        return ISteamUGC_MarkDownloadedItemAsUnused(byref(self), nPublishedFileID) # type: ignore
+
+    def GetNumDownloadedItems(self, ):
+        return ISteamUGC_GetNumDownloadedItems(byref(self), ) # type: ignore
+
+    def GetDownloadedItems(self, pvecPublishedFileIDs, cMaxEntries):
+        return ISteamUGC_GetDownloadedItems(byref(self), pvecPublishedFileIDs, cMaxEntries) # type: ignore
 
 class ISteamHTMLSurface(Structure):
     _pack_ = PACK
@@ -7342,17 +7843,59 @@ class ISteamTimeline(Structure):
     _fields_ = [
     ]
 
-    def SetTimelineStateDescription(self, pchDescription, flTimeDelta):
-        return ISteamTimeline_SetTimelineStateDescription(byref(self), pchDescription, flTimeDelta) # type: ignore
+    def SetTimelineTooltip(self, pchDescription, flTimeDelta):
+        return ISteamTimeline_SetTimelineTooltip(byref(self), pchDescription, flTimeDelta) # type: ignore
 
-    def ClearTimelineStateDescription(self, flTimeDelta):
-        return ISteamTimeline_ClearTimelineStateDescription(byref(self), flTimeDelta) # type: ignore
-
-    def AddTimelineEvent(self, pchIcon, pchTitle, pchDescription, unPriority, flStartOffsetSeconds, flDurationSeconds, ePossibleClip):
-        return ISteamTimeline_AddTimelineEvent(byref(self), pchIcon, pchTitle, pchDescription, unPriority, flStartOffsetSeconds, flDurationSeconds, ePossibleClip) # type: ignore
+    def ClearTimelineTooltip(self, flTimeDelta):
+        return ISteamTimeline_ClearTimelineTooltip(byref(self), flTimeDelta) # type: ignore
 
     def SetTimelineGameMode(self, eMode):
         return ISteamTimeline_SetTimelineGameMode(byref(self), eMode) # type: ignore
+
+    def AddInstantaneousTimelineEvent(self, pchTitle, pchDescription, pchIcon, unIconPriority, flStartOffsetSeconds, ePossibleClip):
+        return ISteamTimeline_AddInstantaneousTimelineEvent(byref(self), pchTitle, pchDescription, pchIcon, unIconPriority, flStartOffsetSeconds, ePossibleClip) # type: ignore
+
+    def AddRangeTimelineEvent(self, pchTitle, pchDescription, pchIcon, unIconPriority, flStartOffsetSeconds, flDuration, ePossibleClip):
+        return ISteamTimeline_AddRangeTimelineEvent(byref(self), pchTitle, pchDescription, pchIcon, unIconPriority, flStartOffsetSeconds, flDuration, ePossibleClip) # type: ignore
+
+    def StartRangeTimelineEvent(self, pchTitle, pchDescription, pchIcon, unPriority, flStartOffsetSeconds, ePossibleClip):
+        return ISteamTimeline_StartRangeTimelineEvent(byref(self), pchTitle, pchDescription, pchIcon, unPriority, flStartOffsetSeconds, ePossibleClip) # type: ignore
+
+    def UpdateRangeTimelineEvent(self, ulEvent, pchTitle, pchDescription, pchIcon, unPriority, ePossibleClip):
+        return ISteamTimeline_UpdateRangeTimelineEvent(byref(self), ulEvent, pchTitle, pchDescription, pchIcon, unPriority, ePossibleClip) # type: ignore
+
+    def EndRangeTimelineEvent(self, ulEvent, flEndOffsetSeconds):
+        return ISteamTimeline_EndRangeTimelineEvent(byref(self), ulEvent, flEndOffsetSeconds) # type: ignore
+
+    def RemoveTimelineEvent(self, ulEvent):
+        return ISteamTimeline_RemoveTimelineEvent(byref(self), ulEvent) # type: ignore
+
+    def DoesEventRecordingExist(self, ulEvent):
+        return ISteamTimeline_DoesEventRecordingExist(byref(self), ulEvent) # type: ignore
+
+    def StartGamePhase(self, ):
+        return ISteamTimeline_StartGamePhase(byref(self), ) # type: ignore
+
+    def EndGamePhase(self, ):
+        return ISteamTimeline_EndGamePhase(byref(self), ) # type: ignore
+
+    def SetGamePhaseID(self, pchPhaseID):
+        return ISteamTimeline_SetGamePhaseID(byref(self), pchPhaseID) # type: ignore
+
+    def DoesGamePhaseRecordingExist(self, pchPhaseID):
+        return ISteamTimeline_DoesGamePhaseRecordingExist(byref(self), pchPhaseID) # type: ignore
+
+    def AddGamePhaseTag(self, pchTagName, pchTagIcon, pchTagGroup, unPriority):
+        return ISteamTimeline_AddGamePhaseTag(byref(self), pchTagName, pchTagIcon, pchTagGroup, unPriority) # type: ignore
+
+    def SetGamePhaseAttribute(self, pchAttributeGroup, pchAttributeValue, unPriority):
+        return ISteamTimeline_SetGamePhaseAttribute(byref(self), pchAttributeGroup, pchAttributeValue, unPriority) # type: ignore
+
+    def OpenOverlayToGamePhase(self, pchPhaseID):
+        return ISteamTimeline_OpenOverlayToGamePhase(byref(self), pchPhaseID) # type: ignore
+
+    def OpenOverlayToTimelineEvent(self, ulEvent):
+        return ISteamTimeline_OpenOverlayToTimelineEvent(byref(self), ulEvent) # type: ignore
 
 class ISteamVideo(Structure):
     _pack_ = PACK
@@ -7405,8 +7948,23 @@ class ISteamRemotePlay(Structure):
     def GetSessionID(self, iSessionIndex):
         return ISteamRemotePlay_GetSessionID(byref(self), iSessionIndex) # type: ignore
 
+    def BSessionRemotePlayTogether(self, unSessionID):
+        return ISteamRemotePlay_BSessionRemotePlayTogether(byref(self), unSessionID) # type: ignore
+
     def GetSessionSteamID(self, unSessionID):
         return ISteamRemotePlay_GetSessionSteamID(byref(self), unSessionID) # type: ignore
+
+    def GetSessionGuestID(self, unSessionID):
+        return ISteamRemotePlay_GetSessionGuestID(byref(self), unSessionID) # type: ignore
+
+    def GetSmallSessionAvatar(self, unSessionID):
+        return ISteamRemotePlay_GetSmallSessionAvatar(byref(self), unSessionID) # type: ignore
+
+    def GetMediumSessionAvatar(self, unSessionID):
+        return ISteamRemotePlay_GetMediumSessionAvatar(byref(self), unSessionID) # type: ignore
+
+    def GetLargeSessionAvatar(self, unSessionID):
+        return ISteamRemotePlay_GetLargeSessionAvatar(byref(self), unSessionID) # type: ignore
 
     def GetSessionClientName(self, unSessionID):
         return ISteamRemotePlay_GetSessionClientName(byref(self), unSessionID) # type: ignore
@@ -7417,11 +7975,32 @@ class ISteamRemotePlay(Structure):
     def BGetSessionClientResolution(self, unSessionID, pnResolutionX, pnResolutionY):
         return ISteamRemotePlay_BGetSessionClientResolution(byref(self), unSessionID, pnResolutionX, pnResolutionY) # type: ignore
 
-    def BStartRemotePlayTogether(self, bShowOverlay):
-        return ISteamRemotePlay_BStartRemotePlayTogether(byref(self), bShowOverlay) # type: ignore
+    def ShowRemotePlayTogetherUI(self, ):
+        return ISteamRemotePlay_ShowRemotePlayTogetherUI(byref(self), ) # type: ignore
 
     def BSendRemotePlayTogetherInvite(self, steamIDFriend):
         return ISteamRemotePlay_BSendRemotePlayTogetherInvite(byref(self), steamIDFriend) # type: ignore
+
+    def BEnableRemotePlayTogetherDirectInput(self, ):
+        return ISteamRemotePlay_BEnableRemotePlayTogetherDirectInput(byref(self), ) # type: ignore
+
+    def DisableRemotePlayTogetherDirectInput(self, ):
+        return ISteamRemotePlay_DisableRemotePlayTogetherDirectInput(byref(self), ) # type: ignore
+
+    def GetInput(self, pInput, unMaxEvents):
+        return ISteamRemotePlay_GetInput(byref(self), pInput, unMaxEvents) # type: ignore
+
+    def SetMouseVisibility(self, unSessionID, bVisible):
+        return ISteamRemotePlay_SetMouseVisibility(byref(self), unSessionID, bVisible) # type: ignore
+
+    def SetMousePosition(self, unSessionID, flNormalizedX, flNormalizedY):
+        return ISteamRemotePlay_SetMousePosition(byref(self), unSessionID, flNormalizedX, flNormalizedY) # type: ignore
+
+    def CreateMouseCursor(self, nWidth, nHeight, nHotX, nHotY, pBGRA, nPitch):
+        return ISteamRemotePlay_CreateMouseCursor(byref(self), nWidth, nHeight, nHotX, nHotY, pBGRA, nPitch) # type: ignore
+
+    def SetMouseCursor(self, unSessionID, unCursorID):
+        return ISteamRemotePlay_SetMouseCursor(byref(self), unSessionID, unCursorID) # type: ignore
 
 class ISteamNetworkingMessages(Structure):
     _pack_ = PACK
@@ -7487,8 +8066,8 @@ class ISteamNetworkingSockets(Structure):
     def SendMessageToConnection(self, hConn, pData, cbData, nSendFlags, pOutMessageNumber):
         return ISteamNetworkingSockets_SendMessageToConnection(byref(self), hConn, pData, cbData, nSendFlags, pOutMessageNumber) # type: ignore
 
-    def SendMessages(self, nMessages, pMessages, pOutMessageNumberOrResult):
-        return ISteamNetworkingSockets_SendMessages(byref(self), nMessages, pMessages, pOutMessageNumberOrResult) # type: ignore
+    def SendMessages(self, nMessages, pMessages, pOutMessageNumberOrResult, bDeleteFailedMessages):
+        return ISteamNetworkingSockets_SendMessages(byref(self), nMessages, pMessages, pOutMessageNumberOrResult, bDeleteFailedMessages) # type: ignore
 
     def FlushMessagesOnConnection(self, hConn):
         return ISteamNetworkingSockets_FlushMessagesOnConnection(byref(self), hConn) # type: ignore
@@ -7508,8 +8087,8 @@ class ISteamNetworkingSockets(Structure):
     def GetListenSocketAddress(self, hSocket, address):
         return ISteamNetworkingSockets_GetListenSocketAddress(byref(self), hSocket, address) # type: ignore
 
-    def CreateSocketPair(self, pOutConnection1, pOutConnection2, bUseNetworkLoopback, pIdentity1, pIdentity2):
-        return ISteamNetworkingSockets_CreateSocketPair(byref(self), pOutConnection1, pOutConnection2, bUseNetworkLoopback, pIdentity1, pIdentity2) # type: ignore
+    def CreateSocketPair(self, pOutConnection1, pOutConnection2, bUseNetworkLoopback, pPeerIdentity1, pPeerIdentity2):
+        return ISteamNetworkingSockets_CreateSocketPair(byref(self), pOutConnection1, pOutConnection2, bUseNetworkLoopback, pPeerIdentity1, pPeerIdentity2) # type: ignore
 
     def ConfigureConnectionLanes(self, hConn, nNumLanes, pLanePriorities, pLaneWeights):
         return ISteamNetworkingSockets_ConfigureConnectionLanes(byref(self), hConn, nNumLanes, pLanePriorities, pLaneWeights) # type: ignore
@@ -7972,6 +8551,11 @@ def load(dll):
     servernetadr_t_Assign.argtypes = [ POINTER(servernetadr_t), POINTER(servernetadr_t) ]
     servernetadr_t_Assign.restype = None
 
+    global servernetadr_t_IsEqualTo
+    servernetadr_t_IsEqualTo = dll.SteamAPI_servernetadr_t_IsEqualTo
+    servernetadr_t_IsEqualTo.argtypes = [ POINTER(servernetadr_t), POINTER(servernetadr_t) ]
+    servernetadr_t_IsEqualTo.restype = c_bool
+
     global gameserveritem_t_Construct
     gameserveritem_t_Construct = dll.SteamAPI_gameserveritem_t_Construct
     gameserveritem_t_Construct.argtypes = [ POINTER(gameserveritem_t),  ]
@@ -7986,6 +8570,11 @@ def load(dll):
     gameserveritem_t_SetName = dll.SteamAPI_gameserveritem_t_SetName
     gameserveritem_t_SetName.argtypes = [ POINTER(gameserveritem_t), c_char_p ]
     gameserveritem_t_SetName.restype = None
+
+    global gameserveritem_t_IsEqualTo
+    gameserveritem_t_IsEqualTo = dll.SteamAPI_gameserveritem_t_IsEqualTo
+    gameserveritem_t_IsEqualTo.argtypes = [ POINTER(gameserveritem_t), POINTER(gameserveritem_t) ]
+    gameserveritem_t_IsEqualTo.restype = c_bool
 
     global SteamNetworkingIPAddr_Clear
     SteamNetworkingIPAddr_Clear = dll.SteamAPI_SteamNetworkingIPAddr_Clear
@@ -8101,16 +8690,6 @@ def load(dll):
     SteamNetworkingIdentity_GetPSNID = dll.SteamAPI_SteamNetworkingIdentity_GetPSNID
     SteamNetworkingIdentity_GetPSNID.argtypes = [ POINTER(SteamNetworkingIdentity),  ]
     SteamNetworkingIdentity_GetPSNID.restype = c_ulonglong
-
-    global SteamNetworkingIdentity_SetStadiaID
-    SteamNetworkingIdentity_SetStadiaID = dll.SteamAPI_SteamNetworkingIdentity_SetStadiaID
-    SteamNetworkingIdentity_SetStadiaID.argtypes = [ POINTER(SteamNetworkingIdentity), c_ulonglong ]
-    SteamNetworkingIdentity_SetStadiaID.restype = None
-
-    global SteamNetworkingIdentity_GetStadiaID
-    SteamNetworkingIdentity_GetStadiaID = dll.SteamAPI_SteamNetworkingIdentity_GetStadiaID
-    SteamNetworkingIdentity_GetStadiaID.argtypes = [ POINTER(SteamNetworkingIdentity),  ]
-    SteamNetworkingIdentity_GetStadiaID.restype = c_ulonglong
 
     global SteamNetworkingIdentity_SetIPAddr
     SteamNetworkingIdentity_SetIPAddr = dll.SteamAPI_SteamNetworkingIdentity_SetIPAddr
@@ -8327,11 +8906,6 @@ def load(dll):
     ISteamClient_GetISteamScreenshots.argtypes = [ POINTER(ISteamClient), c_int, c_int, c_char_p ]
     ISteamClient_GetISteamScreenshots.restype = POINTER(ISteamScreenshots)
 
-    global ISteamClient_GetISteamGameSearch
-    ISteamClient_GetISteamGameSearch = dll.SteamAPI_ISteamClient_GetISteamGameSearch
-    ISteamClient_GetISteamGameSearch.argtypes = [ POINTER(ISteamClient), c_int, c_int, c_char_p ]
-    ISteamClient_GetISteamGameSearch.restype = POINTER(ISteamGameSearch)
-
     global ISteamClient_GetIPCCallCount
     ISteamClient_GetIPCCallCount = dll.SteamAPI_ISteamClient_GetIPCCallCount
     ISteamClient_GetIPCCallCount.argtypes = [ POINTER(ISteamClient),  ]
@@ -8366,11 +8940,6 @@ def load(dll):
     ISteamClient_GetISteamMusic = dll.SteamAPI_ISteamClient_GetISteamMusic
     ISteamClient_GetISteamMusic.argtypes = [ POINTER(ISteamClient), c_int, c_int, c_char_p ]
     ISteamClient_GetISteamMusic.restype = POINTER(ISteamMusic)
-
-    global ISteamClient_GetISteamMusicRemote
-    ISteamClient_GetISteamMusicRemote = dll.SteamAPI_ISteamClient_GetISteamMusicRemote
-    ISteamClient_GetISteamMusicRemote.argtypes = [ POINTER(ISteamClient), c_int, c_int, c_char_p ]
-    ISteamClient_GetISteamMusicRemote.restype = POINTER(ISteamMusicRemote)
 
     global ISteamClient_GetISteamHTMLSurface
     ISteamClient_GetISteamHTMLSurface = dll.SteamAPI_ISteamClient_GetISteamHTMLSurface
@@ -8582,11 +9151,6 @@ def load(dll):
     ISteamFriends_GetPersonaName.argtypes = [ POINTER(ISteamFriends),  ]
     ISteamFriends_GetPersonaName.restype = c_char_p
 
-    global ISteamFriends_SetPersonaName
-    ISteamFriends_SetPersonaName = dll.SteamAPI_ISteamFriends_SetPersonaName
-    ISteamFriends_SetPersonaName.argtypes = [ POINTER(ISteamFriends), c_char_p ]
-    ISteamFriends_SetPersonaName.restype = c_ulonglong
-
     global ISteamFriends_GetPersonaState
     ISteamFriends_GetPersonaState = dll.SteamAPI_ISteamFriends_GetPersonaState
     ISteamFriends_GetPersonaState.argtypes = [ POINTER(ISteamFriends),  ]
@@ -8787,11 +9351,6 @@ def load(dll):
     ISteamFriends_GetClanOfficerByIndex.argtypes = [ POINTER(ISteamFriends), c_ulonglong, c_int ]
     ISteamFriends_GetClanOfficerByIndex.restype = c_ulonglong
 
-    global ISteamFriends_GetUserRestrictions
-    ISteamFriends_GetUserRestrictions = dll.SteamAPI_ISteamFriends_GetUserRestrictions
-    ISteamFriends_GetUserRestrictions.argtypes = [ POINTER(ISteamFriends),  ]
-    ISteamFriends_GetUserRestrictions.restype = c_uint
-
     global ISteamFriends_SetRichPresence
     ISteamFriends_SetRichPresence = dll.SteamAPI_ISteamFriends_SetRichPresence
     ISteamFriends_SetRichPresence.argtypes = [ POINTER(ISteamFriends), c_char_p, c_char_p ]
@@ -8977,10 +9536,10 @@ def load(dll):
     ISteamFriends_GetProfileItemPropertyUint.argtypes = [ POINTER(ISteamFriends), c_ulonglong, ECommunityProfileItemType, ECommunityProfileItemProperty ]
     ISteamFriends_GetProfileItemPropertyUint.restype = c_uint
 
-    global SteamFriends_v017
-    SteamFriends_v017 = dll.SteamAPI_SteamFriends_v017
-    SteamFriends_v017.argtypes = [ ]
-    SteamFriends_v017.restype = POINTER(ISteamFriends)
+    global SteamFriends_v018
+    SteamFriends_v018 = dll.SteamAPI_SteamFriends_v018
+    SteamFriends_v018.argtypes = [ ]
+    SteamFriends_v018.restype = POINTER(ISteamFriends)
 
     global ISteamUtils_GetSecondsSinceAppActive
     ISteamUtils_GetSecondsSinceAppActive = dll.SteamAPI_ISteamUtils_GetSecondsSinceAppActive
@@ -9142,11 +9701,6 @@ def load(dll):
     ISteamUtils_GetIPv6ConnectivityState.argtypes = [ POINTER(ISteamUtils), ESteamIPv6ConnectivityProtocol ]
     ISteamUtils_GetIPv6ConnectivityState.restype = ESteamIPv6ConnectivityState
 
-    global ISteamUtils_IsSteamRunningOnSteamDeck
-    ISteamUtils_IsSteamRunningOnSteamDeck = dll.SteamAPI_ISteamUtils_IsSteamRunningOnSteamDeck
-    ISteamUtils_IsSteamRunningOnSteamDeck.argtypes = [ POINTER(ISteamUtils),  ]
-    ISteamUtils_IsSteamRunningOnSteamDeck.restype = c_bool
-
     global ISteamUtils_ShowFloatingGamepadTextInput
     ISteamUtils_ShowFloatingGamepadTextInput = dll.SteamAPI_ISteamUtils_ShowFloatingGamepadTextInput
     ISteamUtils_ShowFloatingGamepadTextInput.argtypes = [ POINTER(ISteamUtils), EFloatingGamepadTextInputMode, c_int, c_int, c_int, c_int ]
@@ -9167,15 +9721,30 @@ def load(dll):
     ISteamUtils_DismissGamepadTextInput.argtypes = [ POINTER(ISteamUtils),  ]
     ISteamUtils_DismissGamepadTextInput.restype = c_bool
 
-    global SteamUtils_v010
-    SteamUtils_v010 = dll.SteamAPI_SteamUtils_v010
-    SteamUtils_v010.argtypes = [ ]
-    SteamUtils_v010.restype = POINTER(ISteamUtils)
+    global ISteamUtils_IsRunningOnSteamHardware
+    ISteamUtils_IsRunningOnSteamHardware = dll.SteamAPI_ISteamUtils_IsRunningOnSteamHardware
+    ISteamUtils_IsRunningOnSteamHardware.argtypes = [ POINTER(ISteamUtils),  ]
+    ISteamUtils_IsRunningOnSteamHardware.restype = ESteamHardwareType
 
-    global SteamGameServerUtils_v010
-    SteamGameServerUtils_v010 = dll.SteamAPI_SteamGameServerUtils_v010
-    SteamGameServerUtils_v010.argtypes = [ ]
-    SteamGameServerUtils_v010.restype = POINTER(ISteamUtils)
+    global ISteamUtils_GetSteamHardwareDefaultConfig
+    ISteamUtils_GetSteamHardwareDefaultConfig = dll.SteamAPI_ISteamUtils_GetSteamHardwareDefaultConfig
+    ISteamUtils_GetSteamHardwareDefaultConfig.argtypes = [ POINTER(ISteamUtils),  ]
+    ISteamUtils_GetSteamHardwareDefaultConfig.restype = ESteamHardwareDefaultConfig
+
+    global ISteamUtils_IsRunningUnderProton
+    ISteamUtils_IsRunningUnderProton = dll.SteamAPI_ISteamUtils_IsRunningUnderProton
+    ISteamUtils_IsRunningUnderProton.argtypes = [ POINTER(ISteamUtils),  ]
+    ISteamUtils_IsRunningUnderProton.restype = c_bool
+
+    global SteamUtils_v011
+    SteamUtils_v011 = dll.SteamAPI_SteamUtils_v011
+    SteamUtils_v011.argtypes = [ ]
+    SteamUtils_v011.restype = POINTER(ISteamUtils)
+
+    global SteamGameServerUtils_v011
+    SteamGameServerUtils_v011 = dll.SteamAPI_SteamGameServerUtils_v011
+    SteamGameServerUtils_v011.argtypes = [ ]
+    SteamGameServerUtils_v011.restype = POINTER(ISteamUtils)
 
     global ISteamMatchmaking_GetFavoriteGameCount
     ISteamMatchmaking_GetFavoriteGameCount = dll.SteamAPI_ISteamMatchmaking_GetFavoriteGameCount
@@ -9427,6 +9996,21 @@ def load(dll):
     ISteamMatchmakingRulesResponse_RulesRefreshComplete.argtypes = [ POINTER(ISteamMatchmakingRulesResponse),  ]
     ISteamMatchmakingRulesResponse_RulesRefreshComplete.restype = None
 
+    global ISteamMatchmakingServerFriendsResponse_AddFriendToList
+    ISteamMatchmakingServerFriendsResponse_AddFriendToList = dll.SteamAPI_ISteamMatchmakingServerFriendsResponse_AddFriendToList
+    ISteamMatchmakingServerFriendsResponse_AddFriendToList.argtypes = [ POINTER(ISteamMatchmakingServerFriendsResponse), c_ulonglong, c_char_p, c_bool ]
+    ISteamMatchmakingServerFriendsResponse_AddFriendToList.restype = None
+
+    global ISteamMatchmakingServerFriendsResponse_FriendsFailedToRespond
+    ISteamMatchmakingServerFriendsResponse_FriendsFailedToRespond = dll.SteamAPI_ISteamMatchmakingServerFriendsResponse_FriendsFailedToRespond
+    ISteamMatchmakingServerFriendsResponse_FriendsFailedToRespond.argtypes = [ POINTER(ISteamMatchmakingServerFriendsResponse),  ]
+    ISteamMatchmakingServerFriendsResponse_FriendsFailedToRespond.restype = None
+
+    global ISteamMatchmakingServerFriendsResponse_FriendsRefreshComplete
+    ISteamMatchmakingServerFriendsResponse_FriendsRefreshComplete = dll.SteamAPI_ISteamMatchmakingServerFriendsResponse_FriendsRefreshComplete
+    ISteamMatchmakingServerFriendsResponse_FriendsRefreshComplete.argtypes = [ POINTER(ISteamMatchmakingServerFriendsResponse),  ]
+    ISteamMatchmakingServerFriendsResponse_FriendsRefreshComplete.restype = None
+
     global ISteamMatchmakingServers_RequestInternetServerList
     ISteamMatchmakingServers_RequestInternetServerList = dll.SteamAPI_ISteamMatchmakingServers_RequestInternetServerList
     ISteamMatchmakingServers_RequestInternetServerList.argtypes = [ POINTER(ISteamMatchmakingServers), c_uint, POINTER(POINTER(MatchMakingKeyValuePair_t)), c_uint, POINTER(ISteamMatchmakingServerListResponse) ]
@@ -9507,90 +10091,20 @@ def load(dll):
     ISteamMatchmakingServers_ServerRules.argtypes = [ POINTER(ISteamMatchmakingServers), c_uint, c_ushort, POINTER(ISteamMatchmakingRulesResponse) ]
     ISteamMatchmakingServers_ServerRules.restype = c_int
 
+    global ISteamMatchmakingServers_ServerFriends
+    ISteamMatchmakingServers_ServerFriends = dll.SteamAPI_ISteamMatchmakingServers_ServerFriends
+    ISteamMatchmakingServers_ServerFriends.argtypes = [ POINTER(ISteamMatchmakingServers), c_uint, c_ushort, POINTER(ISteamMatchmakingServerFriendsResponse) ]
+    ISteamMatchmakingServers_ServerFriends.restype = c_int
+
     global ISteamMatchmakingServers_CancelServerQuery
     ISteamMatchmakingServers_CancelServerQuery = dll.SteamAPI_ISteamMatchmakingServers_CancelServerQuery
     ISteamMatchmakingServers_CancelServerQuery.argtypes = [ POINTER(ISteamMatchmakingServers), c_int ]
     ISteamMatchmakingServers_CancelServerQuery.restype = None
 
-    global SteamMatchmakingServers_v002
-    SteamMatchmakingServers_v002 = dll.SteamAPI_SteamMatchmakingServers_v002
-    SteamMatchmakingServers_v002.argtypes = [ ]
-    SteamMatchmakingServers_v002.restype = POINTER(ISteamMatchmakingServers)
-
-    global ISteamGameSearch_AddGameSearchParams
-    ISteamGameSearch_AddGameSearchParams = dll.SteamAPI_ISteamGameSearch_AddGameSearchParams
-    ISteamGameSearch_AddGameSearchParams.argtypes = [ POINTER(ISteamGameSearch), c_char_p, c_char_p ]
-    ISteamGameSearch_AddGameSearchParams.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_SearchForGameWithLobby
-    ISteamGameSearch_SearchForGameWithLobby = dll.SteamAPI_ISteamGameSearch_SearchForGameWithLobby
-    ISteamGameSearch_SearchForGameWithLobby.argtypes = [ POINTER(ISteamGameSearch), c_ulonglong, c_int, c_int ]
-    ISteamGameSearch_SearchForGameWithLobby.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_SearchForGameSolo
-    ISteamGameSearch_SearchForGameSolo = dll.SteamAPI_ISteamGameSearch_SearchForGameSolo
-    ISteamGameSearch_SearchForGameSolo.argtypes = [ POINTER(ISteamGameSearch), c_int, c_int ]
-    ISteamGameSearch_SearchForGameSolo.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_AcceptGame
-    ISteamGameSearch_AcceptGame = dll.SteamAPI_ISteamGameSearch_AcceptGame
-    ISteamGameSearch_AcceptGame.argtypes = [ POINTER(ISteamGameSearch),  ]
-    ISteamGameSearch_AcceptGame.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_DeclineGame
-    ISteamGameSearch_DeclineGame = dll.SteamAPI_ISteamGameSearch_DeclineGame
-    ISteamGameSearch_DeclineGame.argtypes = [ POINTER(ISteamGameSearch),  ]
-    ISteamGameSearch_DeclineGame.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_RetrieveConnectionDetails
-    ISteamGameSearch_RetrieveConnectionDetails = dll.SteamAPI_ISteamGameSearch_RetrieveConnectionDetails
-    ISteamGameSearch_RetrieveConnectionDetails.argtypes = [ POINTER(ISteamGameSearch), c_ulonglong, c_char_p, c_int ]
-    ISteamGameSearch_RetrieveConnectionDetails.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_EndGameSearch
-    ISteamGameSearch_EndGameSearch = dll.SteamAPI_ISteamGameSearch_EndGameSearch
-    ISteamGameSearch_EndGameSearch.argtypes = [ POINTER(ISteamGameSearch),  ]
-    ISteamGameSearch_EndGameSearch.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_SetGameHostParams
-    ISteamGameSearch_SetGameHostParams = dll.SteamAPI_ISteamGameSearch_SetGameHostParams
-    ISteamGameSearch_SetGameHostParams.argtypes = [ POINTER(ISteamGameSearch), c_char_p, c_char_p ]
-    ISteamGameSearch_SetGameHostParams.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_SetConnectionDetails
-    ISteamGameSearch_SetConnectionDetails = dll.SteamAPI_ISteamGameSearch_SetConnectionDetails
-    ISteamGameSearch_SetConnectionDetails.argtypes = [ POINTER(ISteamGameSearch), c_char_p, c_int ]
-    ISteamGameSearch_SetConnectionDetails.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_RequestPlayersForGame
-    ISteamGameSearch_RequestPlayersForGame = dll.SteamAPI_ISteamGameSearch_RequestPlayersForGame
-    ISteamGameSearch_RequestPlayersForGame.argtypes = [ POINTER(ISteamGameSearch), c_int, c_int, c_int ]
-    ISteamGameSearch_RequestPlayersForGame.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_HostConfirmGameStart
-    ISteamGameSearch_HostConfirmGameStart = dll.SteamAPI_ISteamGameSearch_HostConfirmGameStart
-    ISteamGameSearch_HostConfirmGameStart.argtypes = [ POINTER(ISteamGameSearch), c_ulonglong ]
-    ISteamGameSearch_HostConfirmGameStart.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_CancelRequestPlayersForGame
-    ISteamGameSearch_CancelRequestPlayersForGame = dll.SteamAPI_ISteamGameSearch_CancelRequestPlayersForGame
-    ISteamGameSearch_CancelRequestPlayersForGame.argtypes = [ POINTER(ISteamGameSearch),  ]
-    ISteamGameSearch_CancelRequestPlayersForGame.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_SubmitPlayerResult
-    ISteamGameSearch_SubmitPlayerResult = dll.SteamAPI_ISteamGameSearch_SubmitPlayerResult
-    ISteamGameSearch_SubmitPlayerResult.argtypes = [ POINTER(ISteamGameSearch), c_ulonglong, c_ulonglong, EPlayerResult_t ]
-    ISteamGameSearch_SubmitPlayerResult.restype = EGameSearchErrorCode_t
-
-    global ISteamGameSearch_EndGame
-    ISteamGameSearch_EndGame = dll.SteamAPI_ISteamGameSearch_EndGame
-    ISteamGameSearch_EndGame.argtypes = [ POINTER(ISteamGameSearch), c_ulonglong ]
-    ISteamGameSearch_EndGame.restype = EGameSearchErrorCode_t
-
-    global SteamGameSearch_v001
-    SteamGameSearch_v001 = dll.SteamAPI_SteamGameSearch_v001
-    SteamGameSearch_v001.argtypes = [ ]
-    SteamGameSearch_v001.restype = POINTER(ISteamGameSearch)
+    global SteamMatchmakingServers_v003
+    SteamMatchmakingServers_v003 = dll.SteamAPI_SteamMatchmakingServers_v003
+    SteamMatchmakingServers_v003.argtypes = [ ]
+    SteamMatchmakingServers_v003.restype = POINTER(ISteamMatchmakingServers)
 
     global ISteamParties_GetNumActiveBeacons
     ISteamParties_GetNumActiveBeacons = dll.SteamAPI_ISteamParties_GetNumActiveBeacons
@@ -9957,11 +10471,6 @@ def load(dll):
     SteamRemoteStorage_v016.argtypes = [ ]
     SteamRemoteStorage_v016.restype = POINTER(ISteamRemoteStorage)
 
-    global ISteamUserStats_RequestCurrentStats
-    ISteamUserStats_RequestCurrentStats = dll.SteamAPI_ISteamUserStats_RequestCurrentStats
-    ISteamUserStats_RequestCurrentStats.argtypes = [ POINTER(ISteamUserStats),  ]
-    ISteamUserStats_RequestCurrentStats.restype = c_bool
-
     global ISteamUserStats_GetStatInt32
     ISteamUserStats_GetStatInt32 = dll.SteamAPI_ISteamUserStats_GetStatInt32
     ISteamUserStats_GetStatInt32.argtypes = [ POINTER(ISteamUserStats), c_char_p, POINTER(c_int) ]
@@ -10182,10 +10691,10 @@ def load(dll):
     ISteamUserStats_GetAchievementProgressLimitsFloat.argtypes = [ POINTER(ISteamUserStats), c_char_p, POINTER(c_float), POINTER(c_float) ]
     ISteamUserStats_GetAchievementProgressLimitsFloat.restype = c_bool
 
-    global SteamUserStats_v012
-    SteamUserStats_v012 = dll.SteamAPI_SteamUserStats_v012
-    SteamUserStats_v012.argtypes = [ ]
-    SteamUserStats_v012.restype = POINTER(ISteamUserStats)
+    global SteamUserStats_v013
+    SteamUserStats_v013 = dll.SteamAPI_SteamUserStats_v013
+    SteamUserStats_v013.argtypes = [ ]
+    SteamUserStats_v013.restype = POINTER(ISteamUserStats)
 
     global ISteamApps_BIsSubscribed
     ISteamApps_BIsSubscribed = dll.SteamAPI_ISteamApps_BIsSubscribed
@@ -10339,23 +10848,33 @@ def load(dll):
 
     global ISteamApps_GetNumBetas
     ISteamApps_GetNumBetas = dll.SteamAPI_ISteamApps_GetNumBetas
-    ISteamApps_GetNumBetas.argtypes = [ POINTER(ISteamApps), c_uint, POINTER(c_int), POINTER(c_int) ]
+    ISteamApps_GetNumBetas.argtypes = [ POINTER(ISteamApps), POINTER(c_int), POINTER(c_int) ]
     ISteamApps_GetNumBetas.restype = c_int
 
     global ISteamApps_GetBetaInfo
     ISteamApps_GetBetaInfo = dll.SteamAPI_ISteamApps_GetBetaInfo
-    ISteamApps_GetBetaInfo.argtypes = [ POINTER(ISteamApps), c_uint, c_int, POINTER(c_uint), POINTER(c_uint), c_char_p, c_int, c_char_p, c_int ]
+    ISteamApps_GetBetaInfo.argtypes = [ POINTER(ISteamApps), c_int, POINTER(c_uint), POINTER(c_uint), c_char_p, c_int, c_char_p, c_int, POINTER(c_uint) ]
     ISteamApps_GetBetaInfo.restype = c_bool
 
     global ISteamApps_SetActiveBeta
     ISteamApps_SetActiveBeta = dll.SteamAPI_ISteamApps_SetActiveBeta
-    ISteamApps_SetActiveBeta.argtypes = [ POINTER(ISteamApps), c_uint, c_char_p ]
+    ISteamApps_SetActiveBeta.argtypes = [ POINTER(ISteamApps), c_char_p ]
     ISteamApps_SetActiveBeta.restype = c_bool
 
-    global SteamApps_v008
-    SteamApps_v008 = dll.SteamAPI_SteamApps_v008
-    SteamApps_v008.argtypes = [ ]
-    SteamApps_v008.restype = POINTER(ISteamApps)
+    global ISteamApps_SetGamePerformanceSetting
+    ISteamApps_SetGamePerformanceSetting = dll.SteamAPI_ISteamApps_SetGamePerformanceSetting
+    ISteamApps_SetGamePerformanceSetting.argtypes = [ POINTER(ISteamApps), EGamePerformanceSetting ]
+    ISteamApps_SetGamePerformanceSetting.restype = None
+
+    global ISteamApps_SetGameRenderResolution
+    ISteamApps_SetGameRenderResolution = dll.SteamAPI_ISteamApps_SetGameRenderResolution
+    ISteamApps_SetGameRenderResolution.argtypes = [ POINTER(ISteamApps), c_uint, c_uint ]
+    ISteamApps_SetGameRenderResolution.restype = None
+
+    global SteamApps_v009
+    SteamApps_v009 = dll.SteamAPI_SteamApps_v009
+    SteamApps_v009.argtypes = [ ]
+    SteamApps_v009.restype = POINTER(ISteamApps)
 
     global ISteamNetworking_SendP2PPacket
     ISteamNetworking_SendP2PPacket = dll.SteamAPI_ISteamNetworking_SendP2PPacket
@@ -10576,171 +11095,6 @@ def load(dll):
     SteamMusic_v001 = dll.SteamAPI_SteamMusic_v001
     SteamMusic_v001.argtypes = [ ]
     SteamMusic_v001.restype = POINTER(ISteamMusic)
-
-    global ISteamMusicRemote_RegisterSteamMusicRemote
-    ISteamMusicRemote_RegisterSteamMusicRemote = dll.SteamAPI_ISteamMusicRemote_RegisterSteamMusicRemote
-    ISteamMusicRemote_RegisterSteamMusicRemote.argtypes = [ POINTER(ISteamMusicRemote), c_char_p ]
-    ISteamMusicRemote_RegisterSteamMusicRemote.restype = c_bool
-
-    global ISteamMusicRemote_DeregisterSteamMusicRemote
-    ISteamMusicRemote_DeregisterSteamMusicRemote = dll.SteamAPI_ISteamMusicRemote_DeregisterSteamMusicRemote
-    ISteamMusicRemote_DeregisterSteamMusicRemote.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_DeregisterSteamMusicRemote.restype = c_bool
-
-    global ISteamMusicRemote_BIsCurrentMusicRemote
-    ISteamMusicRemote_BIsCurrentMusicRemote = dll.SteamAPI_ISteamMusicRemote_BIsCurrentMusicRemote
-    ISteamMusicRemote_BIsCurrentMusicRemote.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_BIsCurrentMusicRemote.restype = c_bool
-
-    global ISteamMusicRemote_BActivationSuccess
-    ISteamMusicRemote_BActivationSuccess = dll.SteamAPI_ISteamMusicRemote_BActivationSuccess
-    ISteamMusicRemote_BActivationSuccess.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_BActivationSuccess.restype = c_bool
-
-    global ISteamMusicRemote_SetDisplayName
-    ISteamMusicRemote_SetDisplayName = dll.SteamAPI_ISteamMusicRemote_SetDisplayName
-    ISteamMusicRemote_SetDisplayName.argtypes = [ POINTER(ISteamMusicRemote), c_char_p ]
-    ISteamMusicRemote_SetDisplayName.restype = c_bool
-
-    global ISteamMusicRemote_SetPNGIcon_64x64
-    ISteamMusicRemote_SetPNGIcon_64x64 = dll.SteamAPI_ISteamMusicRemote_SetPNGIcon_64x64
-    ISteamMusicRemote_SetPNGIcon_64x64.argtypes = [ POINTER(ISteamMusicRemote), c_void_p, c_uint ]
-    ISteamMusicRemote_SetPNGIcon_64x64.restype = c_bool
-
-    global ISteamMusicRemote_EnablePlayPrevious
-    ISteamMusicRemote_EnablePlayPrevious = dll.SteamAPI_ISteamMusicRemote_EnablePlayPrevious
-    ISteamMusicRemote_EnablePlayPrevious.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_EnablePlayPrevious.restype = c_bool
-
-    global ISteamMusicRemote_EnablePlayNext
-    ISteamMusicRemote_EnablePlayNext = dll.SteamAPI_ISteamMusicRemote_EnablePlayNext
-    ISteamMusicRemote_EnablePlayNext.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_EnablePlayNext.restype = c_bool
-
-    global ISteamMusicRemote_EnableShuffled
-    ISteamMusicRemote_EnableShuffled = dll.SteamAPI_ISteamMusicRemote_EnableShuffled
-    ISteamMusicRemote_EnableShuffled.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_EnableShuffled.restype = c_bool
-
-    global ISteamMusicRemote_EnableLooped
-    ISteamMusicRemote_EnableLooped = dll.SteamAPI_ISteamMusicRemote_EnableLooped
-    ISteamMusicRemote_EnableLooped.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_EnableLooped.restype = c_bool
-
-    global ISteamMusicRemote_EnableQueue
-    ISteamMusicRemote_EnableQueue = dll.SteamAPI_ISteamMusicRemote_EnableQueue
-    ISteamMusicRemote_EnableQueue.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_EnableQueue.restype = c_bool
-
-    global ISteamMusicRemote_EnablePlaylists
-    ISteamMusicRemote_EnablePlaylists = dll.SteamAPI_ISteamMusicRemote_EnablePlaylists
-    ISteamMusicRemote_EnablePlaylists.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_EnablePlaylists.restype = c_bool
-
-    global ISteamMusicRemote_UpdatePlaybackStatus
-    ISteamMusicRemote_UpdatePlaybackStatus = dll.SteamAPI_ISteamMusicRemote_UpdatePlaybackStatus
-    ISteamMusicRemote_UpdatePlaybackStatus.argtypes = [ POINTER(ISteamMusicRemote), AudioPlayback_Status ]
-    ISteamMusicRemote_UpdatePlaybackStatus.restype = c_bool
-
-    global ISteamMusicRemote_UpdateShuffled
-    ISteamMusicRemote_UpdateShuffled = dll.SteamAPI_ISteamMusicRemote_UpdateShuffled
-    ISteamMusicRemote_UpdateShuffled.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_UpdateShuffled.restype = c_bool
-
-    global ISteamMusicRemote_UpdateLooped
-    ISteamMusicRemote_UpdateLooped = dll.SteamAPI_ISteamMusicRemote_UpdateLooped
-    ISteamMusicRemote_UpdateLooped.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_UpdateLooped.restype = c_bool
-
-    global ISteamMusicRemote_UpdateVolume
-    ISteamMusicRemote_UpdateVolume = dll.SteamAPI_ISteamMusicRemote_UpdateVolume
-    ISteamMusicRemote_UpdateVolume.argtypes = [ POINTER(ISteamMusicRemote), c_float ]
-    ISteamMusicRemote_UpdateVolume.restype = c_bool
-
-    global ISteamMusicRemote_CurrentEntryWillChange
-    ISteamMusicRemote_CurrentEntryWillChange = dll.SteamAPI_ISteamMusicRemote_CurrentEntryWillChange
-    ISteamMusicRemote_CurrentEntryWillChange.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_CurrentEntryWillChange.restype = c_bool
-
-    global ISteamMusicRemote_CurrentEntryIsAvailable
-    ISteamMusicRemote_CurrentEntryIsAvailable = dll.SteamAPI_ISteamMusicRemote_CurrentEntryIsAvailable
-    ISteamMusicRemote_CurrentEntryIsAvailable.argtypes = [ POINTER(ISteamMusicRemote), c_bool ]
-    ISteamMusicRemote_CurrentEntryIsAvailable.restype = c_bool
-
-    global ISteamMusicRemote_UpdateCurrentEntryText
-    ISteamMusicRemote_UpdateCurrentEntryText = dll.SteamAPI_ISteamMusicRemote_UpdateCurrentEntryText
-    ISteamMusicRemote_UpdateCurrentEntryText.argtypes = [ POINTER(ISteamMusicRemote), c_char_p ]
-    ISteamMusicRemote_UpdateCurrentEntryText.restype = c_bool
-
-    global ISteamMusicRemote_UpdateCurrentEntryElapsedSeconds
-    ISteamMusicRemote_UpdateCurrentEntryElapsedSeconds = dll.SteamAPI_ISteamMusicRemote_UpdateCurrentEntryElapsedSeconds
-    ISteamMusicRemote_UpdateCurrentEntryElapsedSeconds.argtypes = [ POINTER(ISteamMusicRemote), c_int ]
-    ISteamMusicRemote_UpdateCurrentEntryElapsedSeconds.restype = c_bool
-
-    global ISteamMusicRemote_UpdateCurrentEntryCoverArt
-    ISteamMusicRemote_UpdateCurrentEntryCoverArt = dll.SteamAPI_ISteamMusicRemote_UpdateCurrentEntryCoverArt
-    ISteamMusicRemote_UpdateCurrentEntryCoverArt.argtypes = [ POINTER(ISteamMusicRemote), c_void_p, c_uint ]
-    ISteamMusicRemote_UpdateCurrentEntryCoverArt.restype = c_bool
-
-    global ISteamMusicRemote_CurrentEntryDidChange
-    ISteamMusicRemote_CurrentEntryDidChange = dll.SteamAPI_ISteamMusicRemote_CurrentEntryDidChange
-    ISteamMusicRemote_CurrentEntryDidChange.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_CurrentEntryDidChange.restype = c_bool
-
-    global ISteamMusicRemote_QueueWillChange
-    ISteamMusicRemote_QueueWillChange = dll.SteamAPI_ISteamMusicRemote_QueueWillChange
-    ISteamMusicRemote_QueueWillChange.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_QueueWillChange.restype = c_bool
-
-    global ISteamMusicRemote_ResetQueueEntries
-    ISteamMusicRemote_ResetQueueEntries = dll.SteamAPI_ISteamMusicRemote_ResetQueueEntries
-    ISteamMusicRemote_ResetQueueEntries.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_ResetQueueEntries.restype = c_bool
-
-    global ISteamMusicRemote_SetQueueEntry
-    ISteamMusicRemote_SetQueueEntry = dll.SteamAPI_ISteamMusicRemote_SetQueueEntry
-    ISteamMusicRemote_SetQueueEntry.argtypes = [ POINTER(ISteamMusicRemote), c_int, c_int, c_char_p ]
-    ISteamMusicRemote_SetQueueEntry.restype = c_bool
-
-    global ISteamMusicRemote_SetCurrentQueueEntry
-    ISteamMusicRemote_SetCurrentQueueEntry = dll.SteamAPI_ISteamMusicRemote_SetCurrentQueueEntry
-    ISteamMusicRemote_SetCurrentQueueEntry.argtypes = [ POINTER(ISteamMusicRemote), c_int ]
-    ISteamMusicRemote_SetCurrentQueueEntry.restype = c_bool
-
-    global ISteamMusicRemote_QueueDidChange
-    ISteamMusicRemote_QueueDidChange = dll.SteamAPI_ISteamMusicRemote_QueueDidChange
-    ISteamMusicRemote_QueueDidChange.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_QueueDidChange.restype = c_bool
-
-    global ISteamMusicRemote_PlaylistWillChange
-    ISteamMusicRemote_PlaylistWillChange = dll.SteamAPI_ISteamMusicRemote_PlaylistWillChange
-    ISteamMusicRemote_PlaylistWillChange.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_PlaylistWillChange.restype = c_bool
-
-    global ISteamMusicRemote_ResetPlaylistEntries
-    ISteamMusicRemote_ResetPlaylistEntries = dll.SteamAPI_ISteamMusicRemote_ResetPlaylistEntries
-    ISteamMusicRemote_ResetPlaylistEntries.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_ResetPlaylistEntries.restype = c_bool
-
-    global ISteamMusicRemote_SetPlaylistEntry
-    ISteamMusicRemote_SetPlaylistEntry = dll.SteamAPI_ISteamMusicRemote_SetPlaylistEntry
-    ISteamMusicRemote_SetPlaylistEntry.argtypes = [ POINTER(ISteamMusicRemote), c_int, c_int, c_char_p ]
-    ISteamMusicRemote_SetPlaylistEntry.restype = c_bool
-
-    global ISteamMusicRemote_SetCurrentPlaylistEntry
-    ISteamMusicRemote_SetCurrentPlaylistEntry = dll.SteamAPI_ISteamMusicRemote_SetCurrentPlaylistEntry
-    ISteamMusicRemote_SetCurrentPlaylistEntry.argtypes = [ POINTER(ISteamMusicRemote), c_int ]
-    ISteamMusicRemote_SetCurrentPlaylistEntry.restype = c_bool
-
-    global ISteamMusicRemote_PlaylistDidChange
-    ISteamMusicRemote_PlaylistDidChange = dll.SteamAPI_ISteamMusicRemote_PlaylistDidChange
-    ISteamMusicRemote_PlaylistDidChange.argtypes = [ POINTER(ISteamMusicRemote),  ]
-    ISteamMusicRemote_PlaylistDidChange.restype = c_bool
-
-    global SteamMusicRemote_v001
-    SteamMusicRemote_v001 = dll.SteamAPI_SteamMusicRemote_v001
-    SteamMusicRemote_v001.argtypes = [ ]
-    SteamMusicRemote_v001.restype = POINTER(ISteamMusicRemote)
 
     global ISteamHTTP_CreateHTTPRequest
     ISteamHTTP_CreateHTTPRequest = dll.SteamAPI_ISteamHTTP_CreateHTTPRequest
@@ -11117,10 +11471,10 @@ def load(dll):
     ISteamInput_SetDualSenseTriggerEffect.argtypes = [ POINTER(ISteamInput), c_ulonglong, c_void_p ]
     ISteamInput_SetDualSenseTriggerEffect.restype = None
 
-    global SteamInput_v006
-    SteamInput_v006 = dll.SteamAPI_SteamInput_v006
-    SteamInput_v006.argtypes = [ ]
-    SteamInput_v006.restype = POINTER(ISteamInput)
+    global SteamInput_v007
+    SteamInput_v007 = dll.SteamAPI_SteamInput_v007
+    SteamInput_v007.argtypes = [ ]
+    SteamInput_v007.restype = POINTER(ISteamInput)
 
     global ISteamController_Init
     ISteamController_Init = dll.SteamAPI_ISteamController_Init
@@ -11669,12 +12023,12 @@ def load(dll):
 
     global ISteamUGC_GetNumSubscribedItems
     ISteamUGC_GetNumSubscribedItems = dll.SteamAPI_ISteamUGC_GetNumSubscribedItems
-    ISteamUGC_GetNumSubscribedItems.argtypes = [ POINTER(ISteamUGC),  ]
+    ISteamUGC_GetNumSubscribedItems.argtypes = [ POINTER(ISteamUGC), c_bool ]
     ISteamUGC_GetNumSubscribedItems.restype = c_uint
 
     global ISteamUGC_GetSubscribedItems
     ISteamUGC_GetSubscribedItems = dll.SteamAPI_ISteamUGC_GetSubscribedItems
-    ISteamUGC_GetSubscribedItems.argtypes = [ POINTER(ISteamUGC), POINTER(c_ulonglong), c_uint ]
+    ISteamUGC_GetSubscribedItems.argtypes = [ POINTER(ISteamUGC), POINTER(c_ulonglong), c_uint, c_bool ]
     ISteamUGC_GetSubscribedItems.restype = c_uint
 
     global ISteamUGC_GetItemState
@@ -11767,15 +12121,40 @@ def load(dll):
     ISteamUGC_GetUserContentDescriptorPreferences.argtypes = [ POINTER(ISteamUGC), POINTER(EUGCContentDescriptorID), c_uint ]
     ISteamUGC_GetUserContentDescriptorPreferences.restype = c_uint
 
-    global SteamUGC_v020
-    SteamUGC_v020 = dll.SteamAPI_SteamUGC_v020
-    SteamUGC_v020.argtypes = [ ]
-    SteamUGC_v020.restype = POINTER(ISteamUGC)
+    global ISteamUGC_SetItemsDisabledLocally
+    ISteamUGC_SetItemsDisabledLocally = dll.SteamAPI_ISteamUGC_SetItemsDisabledLocally
+    ISteamUGC_SetItemsDisabledLocally.argtypes = [ POINTER(ISteamUGC), POINTER(c_ulonglong), c_uint, c_bool ]
+    ISteamUGC_SetItemsDisabledLocally.restype = c_bool
 
-    global SteamGameServerUGC_v020
-    SteamGameServerUGC_v020 = dll.SteamAPI_SteamGameServerUGC_v020
-    SteamGameServerUGC_v020.argtypes = [ ]
-    SteamGameServerUGC_v020.restype = POINTER(ISteamUGC)
+    global ISteamUGC_SetSubscriptionsLoadOrder
+    ISteamUGC_SetSubscriptionsLoadOrder = dll.SteamAPI_ISteamUGC_SetSubscriptionsLoadOrder
+    ISteamUGC_SetSubscriptionsLoadOrder.argtypes = [ POINTER(ISteamUGC), POINTER(c_ulonglong), c_uint ]
+    ISteamUGC_SetSubscriptionsLoadOrder.restype = c_bool
+
+    global ISteamUGC_MarkDownloadedItemAsUnused
+    ISteamUGC_MarkDownloadedItemAsUnused = dll.SteamAPI_ISteamUGC_MarkDownloadedItemAsUnused
+    ISteamUGC_MarkDownloadedItemAsUnused.argtypes = [ POINTER(ISteamUGC), c_ulonglong ]
+    ISteamUGC_MarkDownloadedItemAsUnused.restype = c_bool
+
+    global ISteamUGC_GetNumDownloadedItems
+    ISteamUGC_GetNumDownloadedItems = dll.SteamAPI_ISteamUGC_GetNumDownloadedItems
+    ISteamUGC_GetNumDownloadedItems.argtypes = [ POINTER(ISteamUGC),  ]
+    ISteamUGC_GetNumDownloadedItems.restype = c_uint
+
+    global ISteamUGC_GetDownloadedItems
+    ISteamUGC_GetDownloadedItems = dll.SteamAPI_ISteamUGC_GetDownloadedItems
+    ISteamUGC_GetDownloadedItems.argtypes = [ POINTER(ISteamUGC), POINTER(c_ulonglong), c_uint ]
+    ISteamUGC_GetDownloadedItems.restype = c_uint
+
+    global SteamUGC_v021
+    SteamUGC_v021 = dll.SteamAPI_SteamUGC_v021
+    SteamUGC_v021.argtypes = [ ]
+    SteamUGC_v021.restype = POINTER(ISteamUGC)
+
+    global SteamGameServerUGC_v021
+    SteamGameServerUGC_v021 = dll.SteamAPI_SteamGameServerUGC_v021
+    SteamGameServerUGC_v021.argtypes = [ ]
+    SteamGameServerUGC_v021.restype = POINTER(ISteamUGC)
 
     global ISteamHTMLSurface_Init
     ISteamHTMLSurface_Init = dll.SteamAPI_ISteamHTMLSurface_Init
@@ -12167,30 +12546,100 @@ def load(dll):
     SteamGameServerInventory_v003.argtypes = [ ]
     SteamGameServerInventory_v003.restype = POINTER(ISteamInventory)
 
-    global ISteamTimeline_SetTimelineStateDescription
-    ISteamTimeline_SetTimelineStateDescription = dll.SteamAPI_ISteamTimeline_SetTimelineStateDescription
-    ISteamTimeline_SetTimelineStateDescription.argtypes = [ POINTER(ISteamTimeline), c_char_p, c_float ]
-    ISteamTimeline_SetTimelineStateDescription.restype = None
+    global ISteamTimeline_SetTimelineTooltip
+    ISteamTimeline_SetTimelineTooltip = dll.SteamAPI_ISteamTimeline_SetTimelineTooltip
+    ISteamTimeline_SetTimelineTooltip.argtypes = [ POINTER(ISteamTimeline), c_char_p, c_float ]
+    ISteamTimeline_SetTimelineTooltip.restype = None
 
-    global ISteamTimeline_ClearTimelineStateDescription
-    ISteamTimeline_ClearTimelineStateDescription = dll.SteamAPI_ISteamTimeline_ClearTimelineStateDescription
-    ISteamTimeline_ClearTimelineStateDescription.argtypes = [ POINTER(ISteamTimeline), c_float ]
-    ISteamTimeline_ClearTimelineStateDescription.restype = None
-
-    global ISteamTimeline_AddTimelineEvent
-    ISteamTimeline_AddTimelineEvent = dll.SteamAPI_ISteamTimeline_AddTimelineEvent
-    ISteamTimeline_AddTimelineEvent.argtypes = [ POINTER(ISteamTimeline), c_char_p, c_char_p, c_char_p, c_uint, c_float, c_float, ETimelineEventClipPriority ]
-    ISteamTimeline_AddTimelineEvent.restype = None
+    global ISteamTimeline_ClearTimelineTooltip
+    ISteamTimeline_ClearTimelineTooltip = dll.SteamAPI_ISteamTimeline_ClearTimelineTooltip
+    ISteamTimeline_ClearTimelineTooltip.argtypes = [ POINTER(ISteamTimeline), c_float ]
+    ISteamTimeline_ClearTimelineTooltip.restype = None
 
     global ISteamTimeline_SetTimelineGameMode
     ISteamTimeline_SetTimelineGameMode = dll.SteamAPI_ISteamTimeline_SetTimelineGameMode
     ISteamTimeline_SetTimelineGameMode.argtypes = [ POINTER(ISteamTimeline), ETimelineGameMode ]
     ISteamTimeline_SetTimelineGameMode.restype = None
 
-    global SteamTimeline_v001
-    SteamTimeline_v001 = dll.SteamAPI_SteamTimeline_v001
-    SteamTimeline_v001.argtypes = [ ]
-    SteamTimeline_v001.restype = POINTER(ISteamTimeline)
+    global ISteamTimeline_AddInstantaneousTimelineEvent
+    ISteamTimeline_AddInstantaneousTimelineEvent = dll.SteamAPI_ISteamTimeline_AddInstantaneousTimelineEvent
+    ISteamTimeline_AddInstantaneousTimelineEvent.argtypes = [ POINTER(ISteamTimeline), c_char_p, c_char_p, c_char_p, c_uint, c_float, ETimelineEventClipPriority ]
+    ISteamTimeline_AddInstantaneousTimelineEvent.restype = c_ulonglong
+
+    global ISteamTimeline_AddRangeTimelineEvent
+    ISteamTimeline_AddRangeTimelineEvent = dll.SteamAPI_ISteamTimeline_AddRangeTimelineEvent
+    ISteamTimeline_AddRangeTimelineEvent.argtypes = [ POINTER(ISteamTimeline), c_char_p, c_char_p, c_char_p, c_uint, c_float, c_float, ETimelineEventClipPriority ]
+    ISteamTimeline_AddRangeTimelineEvent.restype = c_ulonglong
+
+    global ISteamTimeline_StartRangeTimelineEvent
+    ISteamTimeline_StartRangeTimelineEvent = dll.SteamAPI_ISteamTimeline_StartRangeTimelineEvent
+    ISteamTimeline_StartRangeTimelineEvent.argtypes = [ POINTER(ISteamTimeline), c_char_p, c_char_p, c_char_p, c_uint, c_float, ETimelineEventClipPriority ]
+    ISteamTimeline_StartRangeTimelineEvent.restype = c_ulonglong
+
+    global ISteamTimeline_UpdateRangeTimelineEvent
+    ISteamTimeline_UpdateRangeTimelineEvent = dll.SteamAPI_ISteamTimeline_UpdateRangeTimelineEvent
+    ISteamTimeline_UpdateRangeTimelineEvent.argtypes = [ POINTER(ISteamTimeline), c_ulonglong, c_char_p, c_char_p, c_char_p, c_uint, ETimelineEventClipPriority ]
+    ISteamTimeline_UpdateRangeTimelineEvent.restype = None
+
+    global ISteamTimeline_EndRangeTimelineEvent
+    ISteamTimeline_EndRangeTimelineEvent = dll.SteamAPI_ISteamTimeline_EndRangeTimelineEvent
+    ISteamTimeline_EndRangeTimelineEvent.argtypes = [ POINTER(ISteamTimeline), c_ulonglong, c_float ]
+    ISteamTimeline_EndRangeTimelineEvent.restype = None
+
+    global ISteamTimeline_RemoveTimelineEvent
+    ISteamTimeline_RemoveTimelineEvent = dll.SteamAPI_ISteamTimeline_RemoveTimelineEvent
+    ISteamTimeline_RemoveTimelineEvent.argtypes = [ POINTER(ISteamTimeline), c_ulonglong ]
+    ISteamTimeline_RemoveTimelineEvent.restype = None
+
+    global ISteamTimeline_DoesEventRecordingExist
+    ISteamTimeline_DoesEventRecordingExist = dll.SteamAPI_ISteamTimeline_DoesEventRecordingExist
+    ISteamTimeline_DoesEventRecordingExist.argtypes = [ POINTER(ISteamTimeline), c_ulonglong ]
+    ISteamTimeline_DoesEventRecordingExist.restype = c_ulonglong
+
+    global ISteamTimeline_StartGamePhase
+    ISteamTimeline_StartGamePhase = dll.SteamAPI_ISteamTimeline_StartGamePhase
+    ISteamTimeline_StartGamePhase.argtypes = [ POINTER(ISteamTimeline),  ]
+    ISteamTimeline_StartGamePhase.restype = None
+
+    global ISteamTimeline_EndGamePhase
+    ISteamTimeline_EndGamePhase = dll.SteamAPI_ISteamTimeline_EndGamePhase
+    ISteamTimeline_EndGamePhase.argtypes = [ POINTER(ISteamTimeline),  ]
+    ISteamTimeline_EndGamePhase.restype = None
+
+    global ISteamTimeline_SetGamePhaseID
+    ISteamTimeline_SetGamePhaseID = dll.SteamAPI_ISteamTimeline_SetGamePhaseID
+    ISteamTimeline_SetGamePhaseID.argtypes = [ POINTER(ISteamTimeline), c_char_p ]
+    ISteamTimeline_SetGamePhaseID.restype = None
+
+    global ISteamTimeline_DoesGamePhaseRecordingExist
+    ISteamTimeline_DoesGamePhaseRecordingExist = dll.SteamAPI_ISteamTimeline_DoesGamePhaseRecordingExist
+    ISteamTimeline_DoesGamePhaseRecordingExist.argtypes = [ POINTER(ISteamTimeline), c_char_p ]
+    ISteamTimeline_DoesGamePhaseRecordingExist.restype = c_ulonglong
+
+    global ISteamTimeline_AddGamePhaseTag
+    ISteamTimeline_AddGamePhaseTag = dll.SteamAPI_ISteamTimeline_AddGamePhaseTag
+    ISteamTimeline_AddGamePhaseTag.argtypes = [ POINTER(ISteamTimeline), c_char_p, c_char_p, c_char_p, c_uint ]
+    ISteamTimeline_AddGamePhaseTag.restype = None
+
+    global ISteamTimeline_SetGamePhaseAttribute
+    ISteamTimeline_SetGamePhaseAttribute = dll.SteamAPI_ISteamTimeline_SetGamePhaseAttribute
+    ISteamTimeline_SetGamePhaseAttribute.argtypes = [ POINTER(ISteamTimeline), c_char_p, c_char_p, c_uint ]
+    ISteamTimeline_SetGamePhaseAttribute.restype = None
+
+    global ISteamTimeline_OpenOverlayToGamePhase
+    ISteamTimeline_OpenOverlayToGamePhase = dll.SteamAPI_ISteamTimeline_OpenOverlayToGamePhase
+    ISteamTimeline_OpenOverlayToGamePhase.argtypes = [ POINTER(ISteamTimeline), c_char_p ]
+    ISteamTimeline_OpenOverlayToGamePhase.restype = None
+
+    global ISteamTimeline_OpenOverlayToTimelineEvent
+    ISteamTimeline_OpenOverlayToTimelineEvent = dll.SteamAPI_ISteamTimeline_OpenOverlayToTimelineEvent
+    ISteamTimeline_OpenOverlayToTimelineEvent.argtypes = [ POINTER(ISteamTimeline), c_ulonglong ]
+    ISteamTimeline_OpenOverlayToTimelineEvent.restype = None
+
+    global SteamTimeline_v004
+    SteamTimeline_v004 = dll.SteamAPI_SteamTimeline_v004
+    SteamTimeline_v004.argtypes = [ ]
+    SteamTimeline_v004.restype = POINTER(ISteamTimeline)
 
     global ISteamVideo_GetVideoURL
     ISteamVideo_GetVideoURL = dll.SteamAPI_ISteamVideo_GetVideoURL
@@ -12262,10 +12711,35 @@ def load(dll):
     ISteamRemotePlay_GetSessionID.argtypes = [ POINTER(ISteamRemotePlay), c_int ]
     ISteamRemotePlay_GetSessionID.restype = c_uint
 
+    global ISteamRemotePlay_BSessionRemotePlayTogether
+    ISteamRemotePlay_BSessionRemotePlayTogether = dll.SteamAPI_ISteamRemotePlay_BSessionRemotePlayTogether
+    ISteamRemotePlay_BSessionRemotePlayTogether.argtypes = [ POINTER(ISteamRemotePlay), c_uint ]
+    ISteamRemotePlay_BSessionRemotePlayTogether.restype = c_bool
+
     global ISteamRemotePlay_GetSessionSteamID
     ISteamRemotePlay_GetSessionSteamID = dll.SteamAPI_ISteamRemotePlay_GetSessionSteamID
     ISteamRemotePlay_GetSessionSteamID.argtypes = [ POINTER(ISteamRemotePlay), c_uint ]
     ISteamRemotePlay_GetSessionSteamID.restype = c_ulonglong
+
+    global ISteamRemotePlay_GetSessionGuestID
+    ISteamRemotePlay_GetSessionGuestID = dll.SteamAPI_ISteamRemotePlay_GetSessionGuestID
+    ISteamRemotePlay_GetSessionGuestID.argtypes = [ POINTER(ISteamRemotePlay), c_uint ]
+    ISteamRemotePlay_GetSessionGuestID.restype = c_uint
+
+    global ISteamRemotePlay_GetSmallSessionAvatar
+    ISteamRemotePlay_GetSmallSessionAvatar = dll.SteamAPI_ISteamRemotePlay_GetSmallSessionAvatar
+    ISteamRemotePlay_GetSmallSessionAvatar.argtypes = [ POINTER(ISteamRemotePlay), c_uint ]
+    ISteamRemotePlay_GetSmallSessionAvatar.restype = c_int
+
+    global ISteamRemotePlay_GetMediumSessionAvatar
+    ISteamRemotePlay_GetMediumSessionAvatar = dll.SteamAPI_ISteamRemotePlay_GetMediumSessionAvatar
+    ISteamRemotePlay_GetMediumSessionAvatar.argtypes = [ POINTER(ISteamRemotePlay), c_uint ]
+    ISteamRemotePlay_GetMediumSessionAvatar.restype = c_int
+
+    global ISteamRemotePlay_GetLargeSessionAvatar
+    ISteamRemotePlay_GetLargeSessionAvatar = dll.SteamAPI_ISteamRemotePlay_GetLargeSessionAvatar
+    ISteamRemotePlay_GetLargeSessionAvatar.argtypes = [ POINTER(ISteamRemotePlay), c_uint ]
+    ISteamRemotePlay_GetLargeSessionAvatar.restype = c_int
 
     global ISteamRemotePlay_GetSessionClientName
     ISteamRemotePlay_GetSessionClientName = dll.SteamAPI_ISteamRemotePlay_GetSessionClientName
@@ -12282,20 +12756,55 @@ def load(dll):
     ISteamRemotePlay_BGetSessionClientResolution.argtypes = [ POINTER(ISteamRemotePlay), c_uint, POINTER(c_int), POINTER(c_int) ]
     ISteamRemotePlay_BGetSessionClientResolution.restype = c_bool
 
-    global ISteamRemotePlay_BStartRemotePlayTogether
-    ISteamRemotePlay_BStartRemotePlayTogether = dll.SteamAPI_ISteamRemotePlay_BStartRemotePlayTogether
-    ISteamRemotePlay_BStartRemotePlayTogether.argtypes = [ POINTER(ISteamRemotePlay), c_bool ]
-    ISteamRemotePlay_BStartRemotePlayTogether.restype = c_bool
+    global ISteamRemotePlay_ShowRemotePlayTogetherUI
+    ISteamRemotePlay_ShowRemotePlayTogetherUI = dll.SteamAPI_ISteamRemotePlay_ShowRemotePlayTogetherUI
+    ISteamRemotePlay_ShowRemotePlayTogetherUI.argtypes = [ POINTER(ISteamRemotePlay),  ]
+    ISteamRemotePlay_ShowRemotePlayTogetherUI.restype = c_bool
 
     global ISteamRemotePlay_BSendRemotePlayTogetherInvite
     ISteamRemotePlay_BSendRemotePlayTogetherInvite = dll.SteamAPI_ISteamRemotePlay_BSendRemotePlayTogetherInvite
     ISteamRemotePlay_BSendRemotePlayTogetherInvite.argtypes = [ POINTER(ISteamRemotePlay), c_ulonglong ]
     ISteamRemotePlay_BSendRemotePlayTogetherInvite.restype = c_bool
 
-    global SteamRemotePlay_v002
-    SteamRemotePlay_v002 = dll.SteamAPI_SteamRemotePlay_v002
-    SteamRemotePlay_v002.argtypes = [ ]
-    SteamRemotePlay_v002.restype = POINTER(ISteamRemotePlay)
+    global ISteamRemotePlay_BEnableRemotePlayTogetherDirectInput
+    ISteamRemotePlay_BEnableRemotePlayTogetherDirectInput = dll.SteamAPI_ISteamRemotePlay_BEnableRemotePlayTogetherDirectInput
+    ISteamRemotePlay_BEnableRemotePlayTogetherDirectInput.argtypes = [ POINTER(ISteamRemotePlay),  ]
+    ISteamRemotePlay_BEnableRemotePlayTogetherDirectInput.restype = c_bool
+
+    global ISteamRemotePlay_DisableRemotePlayTogetherDirectInput
+    ISteamRemotePlay_DisableRemotePlayTogetherDirectInput = dll.SteamAPI_ISteamRemotePlay_DisableRemotePlayTogetherDirectInput
+    ISteamRemotePlay_DisableRemotePlayTogetherDirectInput.argtypes = [ POINTER(ISteamRemotePlay),  ]
+    ISteamRemotePlay_DisableRemotePlayTogetherDirectInput.restype = None
+
+    global ISteamRemotePlay_GetInput
+    ISteamRemotePlay_GetInput = dll.SteamAPI_ISteamRemotePlay_GetInput
+    ISteamRemotePlay_GetInput.argtypes = [ POINTER(ISteamRemotePlay), POINTER(RemotePlayInput_t), c_uint ]
+    ISteamRemotePlay_GetInput.restype = c_uint
+
+    global ISteamRemotePlay_SetMouseVisibility
+    ISteamRemotePlay_SetMouseVisibility = dll.SteamAPI_ISteamRemotePlay_SetMouseVisibility
+    ISteamRemotePlay_SetMouseVisibility.argtypes = [ POINTER(ISteamRemotePlay), c_uint, c_bool ]
+    ISteamRemotePlay_SetMouseVisibility.restype = None
+
+    global ISteamRemotePlay_SetMousePosition
+    ISteamRemotePlay_SetMousePosition = dll.SteamAPI_ISteamRemotePlay_SetMousePosition
+    ISteamRemotePlay_SetMousePosition.argtypes = [ POINTER(ISteamRemotePlay), c_uint, c_float, c_float ]
+    ISteamRemotePlay_SetMousePosition.restype = None
+
+    global ISteamRemotePlay_CreateMouseCursor
+    ISteamRemotePlay_CreateMouseCursor = dll.SteamAPI_ISteamRemotePlay_CreateMouseCursor
+    ISteamRemotePlay_CreateMouseCursor.argtypes = [ POINTER(ISteamRemotePlay), c_int, c_int, c_int, c_int, c_void_p, c_int ]
+    ISteamRemotePlay_CreateMouseCursor.restype = c_uint
+
+    global ISteamRemotePlay_SetMouseCursor
+    ISteamRemotePlay_SetMouseCursor = dll.SteamAPI_ISteamRemotePlay_SetMouseCursor
+    ISteamRemotePlay_SetMouseCursor.argtypes = [ POINTER(ISteamRemotePlay), c_uint, c_uint ]
+    ISteamRemotePlay_SetMouseCursor.restype = None
+
+    global SteamRemotePlay_v004
+    SteamRemotePlay_v004 = dll.SteamAPI_SteamRemotePlay_v004
+    SteamRemotePlay_v004.argtypes = [ ]
+    SteamRemotePlay_v004.restype = POINTER(ISteamRemotePlay)
 
     global ISteamNetworkingMessages_SendMessageToUser
     ISteamNetworkingMessages_SendMessageToUser = dll.SteamAPI_ISteamNetworkingMessages_SendMessageToUser
@@ -12399,7 +12908,7 @@ def load(dll):
 
     global ISteamNetworkingSockets_SendMessages
     ISteamNetworkingSockets_SendMessages = dll.SteamAPI_ISteamNetworkingSockets_SendMessages
-    ISteamNetworkingSockets_SendMessages.argtypes = [ POINTER(ISteamNetworkingSockets), c_int, POINTER(POINTER(SteamNetworkingMessage_t)), POINTER(c_longlong) ]
+    ISteamNetworkingSockets_SendMessages.argtypes = [ POINTER(ISteamNetworkingSockets), c_int, POINTER(POINTER(SteamNetworkingMessage_t)), POINTER(c_longlong), c_bool ]
     ISteamNetworkingSockets_SendMessages.restype = None
 
     global ISteamNetworkingSockets_FlushMessagesOnConnection
@@ -12572,15 +13081,15 @@ def load(dll):
     ISteamNetworkingSockets_CreateFakeUDPPort.argtypes = [ POINTER(ISteamNetworkingSockets), c_int ]
     ISteamNetworkingSockets_CreateFakeUDPPort.restype = POINTER(ISteamNetworkingFakeUDPPort)
 
-    global SteamNetworkingSockets_SteamAPI_v012
-    SteamNetworkingSockets_SteamAPI_v012 = dll.SteamAPI_SteamNetworkingSockets_SteamAPI_v012
-    SteamNetworkingSockets_SteamAPI_v012.argtypes = [ ]
-    SteamNetworkingSockets_SteamAPI_v012.restype = POINTER(ISteamNetworkingSockets)
+    global SteamNetworkingSockets_SteamAPI_v013
+    SteamNetworkingSockets_SteamAPI_v013 = dll.SteamAPI_SteamNetworkingSockets_SteamAPI_v013
+    SteamNetworkingSockets_SteamAPI_v013.argtypes = [ ]
+    SteamNetworkingSockets_SteamAPI_v013.restype = POINTER(ISteamNetworkingSockets)
 
-    global SteamGameServerNetworkingSockets_SteamAPI_v012
-    SteamGameServerNetworkingSockets_SteamAPI_v012 = dll.SteamAPI_SteamGameServerNetworkingSockets_SteamAPI_v012
-    SteamGameServerNetworkingSockets_SteamAPI_v012.argtypes = [ ]
-    SteamGameServerNetworkingSockets_SteamAPI_v012.restype = POINTER(ISteamNetworkingSockets)
+    global SteamGameServerNetworkingSockets_SteamAPI_v013
+    SteamGameServerNetworkingSockets_SteamAPI_v013 = dll.SteamAPI_SteamGameServerNetworkingSockets_SteamAPI_v013
+    SteamGameServerNetworkingSockets_SteamAPI_v013.argtypes = [ ]
+    SteamGameServerNetworkingSockets_SteamAPI_v013.restype = POINTER(ISteamNetworkingSockets)
 
     global ISteamNetworkingUtils_AllocateMessage
     ISteamNetworkingUtils_AllocateMessage = dll.SteamAPI_ISteamNetworkingUtils_AllocateMessage
@@ -13079,8 +13588,8 @@ def load(dll):
 
     global InitFlat
     InitFlat = dll.SteamAPI_InitFlat
-    InitFlat.argtypes = [ ESteamAPIInitResult ]
-    InitFlat.restype = c_char_p
+    InitFlat.argtypes = [ c_char_p ]
+    InitFlat.restype = ESteamAPIInitResult
 
     global Shutdown
     Shutdown = dll.SteamAPI_Shutdown
@@ -13175,11 +13684,15 @@ servernetadr_t_IsLessThan = not_ready
 
 servernetadr_t_Assign = not_ready
 
+servernetadr_t_IsEqualTo = not_ready
+
 gameserveritem_t_Construct = not_ready
 
 gameserveritem_t_GetName = not_ready
 
 gameserveritem_t_SetName = not_ready
+
+gameserveritem_t_IsEqualTo = not_ready
 
 SteamNetworkingIPAddr_Clear = not_ready
 
@@ -13226,10 +13739,6 @@ SteamNetworkingIdentity_GetXboxPairwiseID = not_ready
 SteamNetworkingIdentity_SetPSNID = not_ready
 
 SteamNetworkingIdentity_GetPSNID = not_ready
-
-SteamNetworkingIdentity_SetStadiaID = not_ready
-
-SteamNetworkingIdentity_GetStadiaID = not_ready
 
 SteamNetworkingIdentity_SetIPAddr = not_ready
 
@@ -13317,8 +13826,6 @@ ISteamClient_GetISteamRemoteStorage = not_ready
 
 ISteamClient_GetISteamScreenshots = not_ready
 
-ISteamClient_GetISteamGameSearch = not_ready
-
 ISteamClient_GetIPCCallCount = not_ready
 
 ISteamClient_SetWarningMessageHook = not_ready
@@ -13332,8 +13839,6 @@ ISteamClient_GetISteamController = not_ready
 ISteamClient_GetISteamUGC = not_ready
 
 ISteamClient_GetISteamMusic = not_ready
-
-ISteamClient_GetISteamMusicRemote = not_ready
 
 ISteamClient_GetISteamHTMLSurface = not_ready
 
@@ -13422,8 +13927,6 @@ def SteamUser(): # type: () -> ISteamUser
 
 ISteamFriends_GetPersonaName = not_ready
 
-ISteamFriends_SetPersonaName = not_ready
-
 ISteamFriends_GetPersonaState = not_ready
 
 ISteamFriends_GetFriendCount = not_ready
@@ -13504,8 +14007,6 @@ ISteamFriends_GetClanOfficerCount = not_ready
 
 ISteamFriends_GetClanOfficerByIndex = not_ready
 
-ISteamFriends_GetUserRestrictions = not_ready
-
 ISteamFriends_SetRichPresence = not_ready
 
 ISteamFriends_ClearRichPresence = not_ready
@@ -13580,10 +14081,10 @@ ISteamFriends_GetProfileItemPropertyString = not_ready
 
 ISteamFriends_GetProfileItemPropertyUint = not_ready
 
-SteamFriends_v017 = not_ready
+SteamFriends_v018 = not_ready
 
 def SteamFriends(): # type: () -> ISteamFriends
-    return SteamFriends_v017().contents
+    return SteamFriends_v018().contents
 
 ISteamUtils_GetSecondsSinceAppActive = not_ready
 
@@ -13649,8 +14150,6 @@ ISteamUtils_FilterText = not_ready
 
 ISteamUtils_GetIPv6ConnectivityState = not_ready
 
-ISteamUtils_IsSteamRunningOnSteamDeck = not_ready
-
 ISteamUtils_ShowFloatingGamepadTextInput = not_ready
 
 ISteamUtils_SetGameLauncherMode = not_ready
@@ -13659,15 +14158,21 @@ ISteamUtils_DismissFloatingGamepadTextInput = not_ready
 
 ISteamUtils_DismissGamepadTextInput = not_ready
 
-SteamUtils_v010 = not_ready
+ISteamUtils_IsRunningOnSteamHardware = not_ready
+
+ISteamUtils_GetSteamHardwareDefaultConfig = not_ready
+
+ISteamUtils_IsRunningUnderProton = not_ready
+
+SteamUtils_v011 = not_ready
 
 def SteamUtils(): # type: () -> ISteamUtils
-    return SteamUtils_v010().contents
+    return SteamUtils_v011().contents
 
-SteamGameServerUtils_v010 = not_ready
+SteamGameServerUtils_v011 = not_ready
 
 def SteamGameServerUtils(): # type: () -> ISteamUtils
-    return SteamGameServerUtils_v010().contents
+    return SteamGameServerUtils_v011().contents
 
 ISteamMatchmaking_GetFavoriteGameCount = not_ready
 
@@ -13772,6 +14277,12 @@ ISteamMatchmakingRulesResponse_RulesFailedToRespond = not_ready
 
 ISteamMatchmakingRulesResponse_RulesRefreshComplete = not_ready
 
+ISteamMatchmakingServerFriendsResponse_AddFriendToList = not_ready
+
+ISteamMatchmakingServerFriendsResponse_FriendsFailedToRespond = not_ready
+
+ISteamMatchmakingServerFriendsResponse_FriendsRefreshComplete = not_ready
+
 ISteamMatchmakingServers_RequestInternetServerList = not_ready
 
 ISteamMatchmakingServers_RequestLANServerList = not_ready
@@ -13804,45 +14315,14 @@ ISteamMatchmakingServers_PlayerDetails = not_ready
 
 ISteamMatchmakingServers_ServerRules = not_ready
 
+ISteamMatchmakingServers_ServerFriends = not_ready
+
 ISteamMatchmakingServers_CancelServerQuery = not_ready
 
-SteamMatchmakingServers_v002 = not_ready
+SteamMatchmakingServers_v003 = not_ready
 
 def SteamMatchmakingServers(): # type: () -> ISteamMatchmakingServers
-    return SteamMatchmakingServers_v002().contents
-
-ISteamGameSearch_AddGameSearchParams = not_ready
-
-ISteamGameSearch_SearchForGameWithLobby = not_ready
-
-ISteamGameSearch_SearchForGameSolo = not_ready
-
-ISteamGameSearch_AcceptGame = not_ready
-
-ISteamGameSearch_DeclineGame = not_ready
-
-ISteamGameSearch_RetrieveConnectionDetails = not_ready
-
-ISteamGameSearch_EndGameSearch = not_ready
-
-ISteamGameSearch_SetGameHostParams = not_ready
-
-ISteamGameSearch_SetConnectionDetails = not_ready
-
-ISteamGameSearch_RequestPlayersForGame = not_ready
-
-ISteamGameSearch_HostConfirmGameStart = not_ready
-
-ISteamGameSearch_CancelRequestPlayersForGame = not_ready
-
-ISteamGameSearch_SubmitPlayerResult = not_ready
-
-ISteamGameSearch_EndGame = not_ready
-
-SteamGameSearch_v001 = not_ready
-
-def SteamGameSearch(): # type: () -> ISteamGameSearch
-    return SteamGameSearch_v001().contents
+    return SteamMatchmakingServers_v003().contents
 
 ISteamParties_GetNumActiveBeacons = not_ready
 
@@ -13996,8 +14476,6 @@ SteamRemoteStorage_v016 = not_ready
 def SteamRemoteStorage(): # type: () -> ISteamRemoteStorage
     return SteamRemoteStorage_v016().contents
 
-ISteamUserStats_RequestCurrentStats = not_ready
-
 ISteamUserStats_GetStatInt32 = not_ready
 
 ISteamUserStats_GetStatFloat = not_ready
@@ -14086,10 +14564,10 @@ ISteamUserStats_GetAchievementProgressLimitsInt32 = not_ready
 
 ISteamUserStats_GetAchievementProgressLimitsFloat = not_ready
 
-SteamUserStats_v012 = not_ready
+SteamUserStats_v013 = not_ready
 
 def SteamUserStats(): # type: () -> ISteamUserStats
-    return SteamUserStats_v012().contents
+    return SteamUserStats_v013().contents
 
 ISteamApps_BIsSubscribed = not_ready
 
@@ -14157,10 +14635,14 @@ ISteamApps_GetBetaInfo = not_ready
 
 ISteamApps_SetActiveBeta = not_ready
 
-SteamApps_v008 = not_ready
+ISteamApps_SetGamePerformanceSetting = not_ready
+
+ISteamApps_SetGameRenderResolution = not_ready
+
+SteamApps_v009 = not_ready
 
 def SteamApps(): # type: () -> ISteamApps
-    return SteamApps_v008().contents
+    return SteamApps_v009().contents
 
 ISteamNetworking_SendP2PPacket = not_ready
 
@@ -14261,75 +14743,6 @@ SteamMusic_v001 = not_ready
 
 def SteamMusic(): # type: () -> ISteamMusic
     return SteamMusic_v001().contents
-
-ISteamMusicRemote_RegisterSteamMusicRemote = not_ready
-
-ISteamMusicRemote_DeregisterSteamMusicRemote = not_ready
-
-ISteamMusicRemote_BIsCurrentMusicRemote = not_ready
-
-ISteamMusicRemote_BActivationSuccess = not_ready
-
-ISteamMusicRemote_SetDisplayName = not_ready
-
-ISteamMusicRemote_SetPNGIcon_64x64 = not_ready
-
-ISteamMusicRemote_EnablePlayPrevious = not_ready
-
-ISteamMusicRemote_EnablePlayNext = not_ready
-
-ISteamMusicRemote_EnableShuffled = not_ready
-
-ISteamMusicRemote_EnableLooped = not_ready
-
-ISteamMusicRemote_EnableQueue = not_ready
-
-ISteamMusicRemote_EnablePlaylists = not_ready
-
-ISteamMusicRemote_UpdatePlaybackStatus = not_ready
-
-ISteamMusicRemote_UpdateShuffled = not_ready
-
-ISteamMusicRemote_UpdateLooped = not_ready
-
-ISteamMusicRemote_UpdateVolume = not_ready
-
-ISteamMusicRemote_CurrentEntryWillChange = not_ready
-
-ISteamMusicRemote_CurrentEntryIsAvailable = not_ready
-
-ISteamMusicRemote_UpdateCurrentEntryText = not_ready
-
-ISteamMusicRemote_UpdateCurrentEntryElapsedSeconds = not_ready
-
-ISteamMusicRemote_UpdateCurrentEntryCoverArt = not_ready
-
-ISteamMusicRemote_CurrentEntryDidChange = not_ready
-
-ISteamMusicRemote_QueueWillChange = not_ready
-
-ISteamMusicRemote_ResetQueueEntries = not_ready
-
-ISteamMusicRemote_SetQueueEntry = not_ready
-
-ISteamMusicRemote_SetCurrentQueueEntry = not_ready
-
-ISteamMusicRemote_QueueDidChange = not_ready
-
-ISteamMusicRemote_PlaylistWillChange = not_ready
-
-ISteamMusicRemote_ResetPlaylistEntries = not_ready
-
-ISteamMusicRemote_SetPlaylistEntry = not_ready
-
-ISteamMusicRemote_SetCurrentPlaylistEntry = not_ready
-
-ISteamMusicRemote_PlaylistDidChange = not_ready
-
-SteamMusicRemote_v001 = not_ready
-
-def SteamMusicRemote(): # type: () -> ISteamMusicRemote
-    return SteamMusicRemote_v001().contents
 
 ISteamHTTP_CreateHTTPRequest = not_ready
 
@@ -14487,10 +14900,10 @@ ISteamInput_GetSessionInputConfigurationSettings = not_ready
 
 ISteamInput_SetDualSenseTriggerEffect = not_ready
 
-SteamInput_v006 = not_ready
+SteamInput_v007 = not_ready
 
 def SteamInput(): # type: () -> ISteamInput
-    return SteamInput_v006().contents
+    return SteamInput_v007().contents
 
 ISteamController_Init = not_ready
 
@@ -14753,15 +15166,25 @@ ISteamUGC_GetWorkshopEULAStatus = not_ready
 
 ISteamUGC_GetUserContentDescriptorPreferences = not_ready
 
-SteamUGC_v020 = not_ready
+ISteamUGC_SetItemsDisabledLocally = not_ready
+
+ISteamUGC_SetSubscriptionsLoadOrder = not_ready
+
+ISteamUGC_MarkDownloadedItemAsUnused = not_ready
+
+ISteamUGC_GetNumDownloadedItems = not_ready
+
+ISteamUGC_GetDownloadedItems = not_ready
+
+SteamUGC_v021 = not_ready
 
 def SteamUGC(): # type: () -> ISteamUGC
-    return SteamUGC_v020().contents
+    return SteamUGC_v021().contents
 
-SteamGameServerUGC_v020 = not_ready
+SteamGameServerUGC_v021 = not_ready
 
 def SteamGameServerUGC(): # type: () -> ISteamUGC
-    return SteamGameServerUGC_v020().contents
+    return SteamGameServerUGC_v021().contents
 
 ISteamHTMLSurface_Init = not_ready
 
@@ -14928,18 +15351,46 @@ SteamGameServerInventory_v003 = not_ready
 def SteamGameServerInventory(): # type: () -> ISteamInventory
     return SteamGameServerInventory_v003().contents
 
-ISteamTimeline_SetTimelineStateDescription = not_ready
+ISteamTimeline_SetTimelineTooltip = not_ready
 
-ISteamTimeline_ClearTimelineStateDescription = not_ready
-
-ISteamTimeline_AddTimelineEvent = not_ready
+ISteamTimeline_ClearTimelineTooltip = not_ready
 
 ISteamTimeline_SetTimelineGameMode = not_ready
 
-SteamTimeline_v001 = not_ready
+ISteamTimeline_AddInstantaneousTimelineEvent = not_ready
+
+ISteamTimeline_AddRangeTimelineEvent = not_ready
+
+ISteamTimeline_StartRangeTimelineEvent = not_ready
+
+ISteamTimeline_UpdateRangeTimelineEvent = not_ready
+
+ISteamTimeline_EndRangeTimelineEvent = not_ready
+
+ISteamTimeline_RemoveTimelineEvent = not_ready
+
+ISteamTimeline_DoesEventRecordingExist = not_ready
+
+ISteamTimeline_StartGamePhase = not_ready
+
+ISteamTimeline_EndGamePhase = not_ready
+
+ISteamTimeline_SetGamePhaseID = not_ready
+
+ISteamTimeline_DoesGamePhaseRecordingExist = not_ready
+
+ISteamTimeline_AddGamePhaseTag = not_ready
+
+ISteamTimeline_SetGamePhaseAttribute = not_ready
+
+ISteamTimeline_OpenOverlayToGamePhase = not_ready
+
+ISteamTimeline_OpenOverlayToTimelineEvent = not_ready
+
+SteamTimeline_v004 = not_ready
 
 def SteamTimeline(): # type: () -> ISteamTimeline
-    return SteamTimeline_v001().contents
+    return SteamTimeline_v004().contents
 
 ISteamVideo_GetVideoURL = not_ready
 
@@ -14975,7 +15426,17 @@ ISteamRemotePlay_GetSessionCount = not_ready
 
 ISteamRemotePlay_GetSessionID = not_ready
 
+ISteamRemotePlay_BSessionRemotePlayTogether = not_ready
+
 ISteamRemotePlay_GetSessionSteamID = not_ready
+
+ISteamRemotePlay_GetSessionGuestID = not_ready
+
+ISteamRemotePlay_GetSmallSessionAvatar = not_ready
+
+ISteamRemotePlay_GetMediumSessionAvatar = not_ready
+
+ISteamRemotePlay_GetLargeSessionAvatar = not_ready
 
 ISteamRemotePlay_GetSessionClientName = not_ready
 
@@ -14983,14 +15444,28 @@ ISteamRemotePlay_GetSessionClientFormFactor = not_ready
 
 ISteamRemotePlay_BGetSessionClientResolution = not_ready
 
-ISteamRemotePlay_BStartRemotePlayTogether = not_ready
+ISteamRemotePlay_ShowRemotePlayTogetherUI = not_ready
 
 ISteamRemotePlay_BSendRemotePlayTogetherInvite = not_ready
 
-SteamRemotePlay_v002 = not_ready
+ISteamRemotePlay_BEnableRemotePlayTogetherDirectInput = not_ready
+
+ISteamRemotePlay_DisableRemotePlayTogetherDirectInput = not_ready
+
+ISteamRemotePlay_GetInput = not_ready
+
+ISteamRemotePlay_SetMouseVisibility = not_ready
+
+ISteamRemotePlay_SetMousePosition = not_ready
+
+ISteamRemotePlay_CreateMouseCursor = not_ready
+
+ISteamRemotePlay_SetMouseCursor = not_ready
+
+SteamRemotePlay_v004 = not_ready
 
 def SteamRemotePlay(): # type: () -> ISteamRemotePlay
-    return SteamRemotePlay_v002().contents
+    return SteamRemotePlay_v004().contents
 
 ISteamNetworkingMessages_SendMessageToUser = not_ready
 
@@ -15108,15 +15583,15 @@ ISteamNetworkingSockets_GetRemoteFakeIPForConnection = not_ready
 
 ISteamNetworkingSockets_CreateFakeUDPPort = not_ready
 
-SteamNetworkingSockets_SteamAPI_v012 = not_ready
+SteamNetworkingSockets_SteamAPI_v013 = not_ready
 
 def SteamNetworkingSockets_SteamAPI(): # type: () -> ISteamNetworkingSockets
-    return SteamNetworkingSockets_SteamAPI_v012().contents
+    return SteamNetworkingSockets_SteamAPI_v013().contents
 
-SteamGameServerNetworkingSockets_SteamAPI_v012 = not_ready
+SteamGameServerNetworkingSockets_SteamAPI_v013 = not_ready
 
 def SteamGameServerNetworkingSockets_SteamAPI(): # type: () -> ISteamNetworkingSockets
-    return SteamGameServerNetworkingSockets_SteamAPI_v012().contents
+    return SteamGameServerNetworkingSockets_SteamAPI_v013().contents
 
 ISteamNetworkingUtils_AllocateMessage = not_ready
 

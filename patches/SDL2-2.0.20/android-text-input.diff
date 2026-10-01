@@ -1,0 +1,9 @@
+--- a/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java
++++ b/android-project/app/src/main/java/org/libsdl/app/SDLActivity.java
+@@ -2177,3 +2177,5 @@
+-        outAttrs.inputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
++        // This is an ordinary text editor. Password variations cause some
++        // Android keyboards to switch to their secure/password input mode.
++        outAttrs.inputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+         outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
+                 | EditorInfo.IME_FLAG_NO_FULLSCREEN /* API 11 */;

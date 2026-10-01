@@ -56,6 +56,7 @@ def link_linux(c: Context):
 
     -lassimp
 
+    -lavfilter
     -lavformat
     -lavcodec
     -lswscale
@@ -135,6 +136,7 @@ def link_android(c: Context):
 
     -lassimp
 
+    -lavfilter
     -lavformat
     -lavcodec
     -lswscale
@@ -202,6 +204,7 @@ def link_mac(c: Context):
 
     -lassimp
 
+    -lavfilter
     -lavformat
     -lavcodec
     -lswscale
@@ -356,6 +359,7 @@ def link_windows(c: Context):
     -lassimp
     {{cross}}/llvm-mingw/{{host_platform}}/lib/libunwind.a
 
+    -lavfilter
     -lavformat
     -lavcodec
     -lswscale

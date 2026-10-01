@@ -4,6 +4,20 @@ import re
 
 commit = "b61d65fdc620dbe19892d2419b77340341e76084"
 
+
+def unpack_source(c: Context):
+    c.var("commit", commit)
+    c.run("""
+        curl -L --fail --retry 5
+        https://codeload.github.com/kivy/pyobjus/tar.gz/{{ commit }}
+        -o pyobjus.tar.gz
+        """)
+    c.run("tar xzf pyobjus.tar.gz")
+    c.run("mv pyobjus-{{ commit }} pyobjus")
+    c.chdir("pyobjus")
+
+    c.patch("pyobjus/ffi-h.diff")
+
 @annotator
 def annotate(c: Context):
     c.env("CFLAGS", "{{ CFLAGS }} -DOBJC_OLD_DISPATCH_PROTOTYPES=1")
@@ -12,26 +26,14 @@ def annotate(c: Context):
 @task(kind="python", platforms="mac,ios")
 def unpack(c: Context):
     c.clean()
-
-    c.var("commit", commit)
-    c.run("git clone https://github.com/kivy/pyobjus pyobjus")
-    c.chdir("pyobjus")
-
-    c.run("git checkout  {{commit}}")
-    c.patch("pyobjus/ffi-h.diff")
+    unpack_source(c)
 
 
 @task(kind="host-python")
 def host_unpack(c: Context):
 
     c.clean()
-
-    c.var("commit", commit)
-    c.run("git clone https://github.com/kivy/pyobjus pyobjus")
-    c.chdir("pyobjus")
-
-    c.run("git checkout  {{commit}}")
-    c.patch("pyobjus/ffi-h.diff")
+    unpack_source(c)
 
 
 @task(kind="python", platforms="mac,ios")

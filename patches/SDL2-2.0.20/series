@@ -13,4 +13,5 @@ android-no-multi-window.diff
 x11-numlock-capslock-scrolllock.diff
 x11-ime.diff
 android-alooper-fix.diff
+android-text-input.diff
 missing-usb-name-crash.diff

@@ -12,6 +12,20 @@ Ren'Py build fork. It is based on upstream commit
 - Additional ARM architecture mappings for dav1d.
 - Updated Ren'Py/Python build and link tasks, including pthread fixes.
 - Custom Ren'Py C/Cython modules are built and linked on supported platforms.
+- Native FFmpeg `atempo` filtering and `libavfilter` runtime links.
+- 24-bit PCM WAV decoding on native platforms and the web.
+- Android SDL text-input fix for ordinary, non-password input fields.
+- LLVM lipo 18 and target-aware dav1d/Python linker fixes.
+- Pinned pyobjus source downloads and optional Steamworks SDK 165 support,
+  including Linux ARM64 redistributables.
+
+## October 2026 synchronization
+
+Source changes through build revision `aa1725b` were synchronized on
+2026-10-01, together with engine changes through `294bdcb12`. The existing
+public history, FFmpeg source archive, licensing flags, and publication
+cleanup are retained. Generated Gradle caches and commercial SDK binaries
+remain excluded.
 
 FFmpeg is explicitly configured with `--disable-gpl` and
 `--disable-nonfree`. The resulting FFmpeg build remains under the LGPL.
