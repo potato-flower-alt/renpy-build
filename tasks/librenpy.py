@@ -65,6 +65,9 @@ def build(c: Context):
 
     if c.platform == "windows" or c.platform == "mac" or c.platform == "linux":
         read_setup(c.renpy / "src", ".tfd")
+        read_setup(c.renpy / "src", ".nativefiledialog")
+        if c.platform == "mac":
+            sources.append(c.renpy / "src" / "nativefiledialog_mac.mm")
 
     if c.platform == "web" and c.python == "3":
         read_setup(c.path("{{ install }}/emscripten_pyx"))
@@ -87,6 +90,13 @@ def build(c: Context):
 
             if ext == "c":
                 g.run("{{ CC }} {{ CFLAGS }} -c {{ src }} -o {{ object }}")
+            elif name in ("nativefiledialog", "renpy._nativefiledialog", "nativefiledialog_mac"):
+                native_flags = " -std=c++17"
+                if c.platform == "linux":
+                    native_flags += " -I{{ sysroot }}/usr/include/dbus-1.0 -I{{ sysroot }}/usr/lib/{{ architecture_name }}/dbus-1.0/include"
+                elif c.platform == "mac":
+                    native_flags += " -fblocks"
+                g.run("{{ CXX }} {{ CXXFLAGS }}" + native_flags + " -c {{ src }} -o {{ object }}")
             else:
                 g.run("{{ CXX }} {{ CXXFLAGS }} -c {{ src }} -o {{ object }}")
 

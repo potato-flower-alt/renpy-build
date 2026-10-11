@@ -9,6 +9,15 @@ dav1d, and platform hardware-decoding support. Start with `FORK_NOTES.md
 <FORK_NOTES.md>`_ and `SOURCE_OFFER.md <SOURCE_OFFER.md>`_. Commercial SDKs
 are not included or enabled.
 
+SDL2 fork build rules
+--------------------
+
+Read `BUILDING.md <BUILDING.md>`_ before building this fork.
+It defines the current SDL2/FFmpeg 7.1.1 rules, separate Focal Linux target
+dependencies, GLIBC <= 2.31 release gate, and staged SDK deployment.
+Adapt its example paths to your prepared dependency and source directories.
+Always select platforms explicitly; the default includes iOS and Web.
+
 The purpose of the Ren'Py build system is to provide a single system that
 can build the binary components of Ren'Py and all its dependencies, in
 the same manner that is used to make official Ren'Py releases.

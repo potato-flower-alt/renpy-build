@@ -54,7 +54,7 @@ set(CMAKE_OBJCXX_EXTENSIONS ON)
 # https://cmake.org/cmake/help/latest/variable/CMAKE_LINKER_TYPE.html and
 # https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_USING_LINKER_TYPE.html,
 # but Ubuntu's current version of camke is too low
-if(CMAKE_VERSION VERSION_GREATER "3.29")
+if(CMAKE_VERSION VERSION_GREATER "3.29" AND "$ENV{CC}" MATCHES "-fuse-ld=lld")
     set_env_without_string(CC "-fuse-ld=lld -Wno-unused-command-line-argument ")
     set_env_without_string(CXX "-fuse-ld=lld -Wno-unused-command-line-argument ")
     set_env_without_string(CPP "-fuse-ld=lld -Wno-unused-command-line-argument ")

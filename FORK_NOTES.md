@@ -27,6 +27,18 @@ public history, FFmpeg source archive, licensing flags, and publication
 cleanup are retained. Generated Gradle caches and commercial SDK binaries
 remain excluded.
 
+## 2026-10-11 synchronization
+
+Build source through `539ec99` is synchronized with engine source through
+`3abc3712dab2`. This update adds desktop native file-dialog compilation,
+Android pause-lock handling, isolated incremental runtime builds, Focal GCC 9
+sysroot enforcement, complete Linux ELF release checks, and Windows PE relocation
+directory cleanup. `BUILDING.md` is the current entry point and documents
+explicit dependency roots, target selection, staged validation, and SDK deployment.
+
+Existing public FFmpeg licensing flags, source archives, and commercial SDK
+exclusions are retained. Generated Gradle caches remain excluded.
+
 FFmpeg is explicitly configured with `--disable-gpl` and
 `--disable-nonfree`. The resulting FFmpeg build remains under the LGPL.
 FFmpeg, Fribidi, and other LGPL libraries are statically linked into some

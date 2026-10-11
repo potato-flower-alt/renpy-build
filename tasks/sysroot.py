@@ -53,7 +53,10 @@ def install_linux(c: Context):
 
         c.run("""mkdir -p "{{ tmp }}/debs" """)
         c.run("""sudo debootstrap --cache-dir="{{ tmp }}/debs" --variant=minbase --include={{ packages }} --components=main,restricted,universe,multiverse --arch {{deb_arch}} {{ release }} "{{ sysroot }}" """)
-        c.run("""sudo {{source}}/make_links_relative.py {{sysroot}}""")
+    # Also repair existing sysroots: absolute links otherwise resolve on the host.
+    c.run("""sudo python3 {{source}}/make_links_relative.py {{sysroot}}""")
+    if not c.path("{{sysroot}}/usr/include/stdio.h").is_file():
+        raise RuntimeError("Incomplete Focal sysroot: complete debootstrap before building target libraries.")
 
 
 @task(platforms="linux")

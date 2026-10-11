@@ -159,6 +159,10 @@ int SDL_main(int argc, char **argv) {
     init_environ();
     setenv_workaround("RENPY_PLATFORM", PLATFORM "-" ARCH);
     SDL_SetHint(SDL_HINT_ANDROID_BLOCK_ON_PAUSE, "0");
+    /* Ren'Py pauses audio itself. SDL's nonblocking Android pause must not
+     * retain the mixer lock while the Python audio thread can take the GIL.
+     */
+    SDL_SetHint(SDL_HINT_ANDROID_BLOCK_ON_PAUSE_PAUSEAUDIO, "0");
 
 	call_prepare_python();
 

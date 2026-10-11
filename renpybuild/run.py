@@ -203,27 +203,28 @@ def build_environment(c):
 
     elif (c.platform == "linux") and (c.arch == "x86_64"):
 
-        # Use host toolchain directly (no --sysroot) since we're building
-        # x86_64 on x86_64. The sysroot approach causes pthread resolution
-        # failures with lld on Ubuntu 24.04 host.
-        llvm(c, clang_args="-fPIC -pthread")
+        # Native architecture still needs the target libc and C++ runtime.
+        # GNU ld handles Focal's pthread linker inputs without using host libs.
+        llvm(c, clang_args="-target {{ host_platform }} --sysroot {{ sysroot }} --gcc-install-dir={{ sysroot }}/usr/lib/gcc/{{architecture_name}}/9 -fPIC -pthread", use_ld=False)
         c.env("LDFLAGS", "{{ LDFLAGS }} -L{{install}}/lib64 -L{{install}}/lib/x86_64-linux-gnu")
-        c.env("PKG_CONFIG_LIBDIR", "{{ install }}/lib/pkgconfig:{{ install }}/lib/x86_64-linux-gnu/pkgconfig")
+        c.env("PKG_CONFIG_LIBDIR", "{{ sysroot }}/usr/lib/{{ architecture_name }}/pkgconfig:{{ sysroot }}/usr/share/pkgconfig")
+        c.env("PKG_CONFIG_PATH", "")
 
         c.var("cmake_system_name", "Linux")
         c.var("cmake_system_processor", "x86_64")
-        c.var("cmake_args", "-DCMAKE_FIND_ROOT_PATH={{ install }}")
+        c.var("cmake_args", "-DCMAKE_FIND_ROOT_PATH='{{ install }};{{ sysroot }}' -DCMAKE_SYSROOT={{ sysroot }} -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER")
 
     elif (c.platform == "linux") and (c.arch == "aarch64"):
 
-        llvm(c, clang_args="-target {{ host_platform }} --sysroot {{ sysroot }} -fPIC -pthread")
-        c.env("LDFLAGS", "{{ LDFLAGS }} -L{{install}}/lib64")
+        llvm(c, clang_args="-target {{ host_platform }} --sysroot {{ sysroot }} --gcc-install-dir={{ sysroot }}/usr/lib/gcc/{{architecture_name}}/9 -fPIC -pthread")
+        c.env("PKG_CONFIG_PATH", "")
+        c.env("LDFLAGS", "{{ LDFLAGS }} -L{{install}}/lib64 -L{{install}}/lib/{{architecture_name}}")
         c.env("PKG_CONFIG_LIBDIR", "{{ sysroot }}/usr/lib/{{ architecture_name }}/pkgconfig:{{ sysroot }}/usr/share/pkgconfig")
         # c.env("PKG_CONFIG_SYSROOT_DIR", "{{ sysroot }}")
 
         c.var("cmake_system_name", "Linux")
         c.var("cmake_system_processor", "aarch64")
-        c.var("cmake_args", "-DCMAKE_FIND_ROOT_PATH='{{ install }};{{ sysroot }}' -DCMAKE_SYSROOT={{ sysroot }}")
+        c.var("cmake_args", "-DCMAKE_FIND_ROOT_PATH='{{ install }};{{ sysroot }}' -DCMAKE_SYSROOT={{ sysroot }} -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER")
 
     elif (c.platform == "linux") and (c.arch == "armv7l"):
 
@@ -406,6 +407,10 @@ def build_environment(c):
         c.var("cmake_args", "{{cmake_args}} -DCMAKE_SYSTEM_NAME={{ cmake_system_name }} -DCMAKE_SYSTEM_PROCESSOR={{ cmake_system_processor }} -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY")
 
     c.env("PKG_CONFIG", "pkg-config --static")
+    if c.platform == "linux" and c.kind not in ("host", "host-python", "cross"):
+        c.env("PKG_CONFIG_LIBDIR", "{{install}}/lib/{{architecture_name}}/pkgconfig:{{install}}/lib64/pkgconfig:{{PKG_CONFIG_LIBDIR}}")
+        for variable in ("CPATH", "C_INCLUDE_PATH", "CPLUS_INCLUDE_PATH", "LIBRARY_PATH", "CMAKE_PREFIX_PATH"):
+            c.env(variable, "")
 
     c.env("CFLAGS", "{{ CFLAGS }} -DRENPY_BUILD")
     c.env("CXXFLAGS", "{{ CFLAGS }}")

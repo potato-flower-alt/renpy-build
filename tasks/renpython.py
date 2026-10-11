@@ -332,6 +332,10 @@ fn = sys.argv[1]
 
 pe = pefile.PE(fn)
 pe.FILE_HEADER.Characteristics = pe.FILE_HEADER.Characteristics | pefile.IMAGE_CHARACTERISTICS["IMAGE_FILE_RELOCS_STRIPPED"]
+if not any(section.Name.startswith(b".reloc") for section in pe.sections):
+    reloc = pe.OPTIONAL_HEADER.DATA_DIRECTORY[pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_BASERELOC"]]
+    reloc.VirtualAddress = 0
+    reloc.Size = 0
 pe.OPTIONAL_HEADER.CheckSum = pe.generate_checksum()
 pe.OPTIONAL_HEADER.SizeOfStackReserve=0x800000
 pe.write(fn)
