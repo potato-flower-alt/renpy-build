@@ -18,6 +18,7 @@ from types import SimpleNamespace
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from renpybuild.context import Context
+from renpybuild.engine import validate_engine
 from renpybuild.task import annotators
 import renpybuild.run
 import tasks.librenpy
@@ -76,6 +77,7 @@ def main():
     )
     runtime = Path(__file__).resolve().parents[1] / "runtime"
     try:
+        validate_engine(engine, platforms)
         roots = dependency_roots(deps, args.linux_dependencies, platforms)
     except ValueError as error:
         parser.error(str(error))

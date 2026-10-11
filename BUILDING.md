@@ -45,6 +45,11 @@ source archives, download caches, and separately obtained compatible Cubism head
 Do not reuse legacy Linux target libraries or task completion markers.
 
 Review `prepare.sh` before running it: it modifies the host and clones sources.
+The public prepare/nightly scripts default to the companion engine fork's
+`main` branch. `RENPY_ENGINE_REPOSITORY` and `RENPY_ENGINE_BRANCH` can select
+another matching fork/ref explicitly. Existing checkouts with another origin
+or local edits are rejected without resetting their source. Updates use
+fast-forward merges only.
 Use this fork's rules and matching engine source rather than the current upstream
 branch. In a prepared isolated Linux dependency root, the dependency phase can
 run `python -m renpybuild --platform linux --stop zsync`. Engine compilation and
@@ -73,6 +78,11 @@ python "$BUILD_RULES/tools/build_runtime.py" \
 ```
 
 After the input check passes, rerun the same command without `--check-only`.
+The input check validates engine sources and Setup registrations as well as
+dependencies. Old or partially synchronized engines are rejected before any
+generation or compilation; point `--engine` to the complete companion checkout.
+The direct librenpy build and generation tasks apply the same source checks,
+including common spectrum and GL2 registrations on mobile targets.
 For Windows alone, use `--platforms windows` and omit `--linux-dependencies`.
 The tool regenerates static Cython, builds the affected extensions, and stages
 runtimes without replacing installed dependency archives or installing an SDK.
@@ -128,6 +138,7 @@ With the prepared WSL/Linux dependency Python environment:
 cd /path/to/public/renpy-build
 python -m unittest discover -s source -p test_linux_elf.py
 python -m unittest discover -s tools -p test_build_runtime.py
+python -m unittest discover -s tools -p test_prepare_engine.py
 ```
 
 Engine tests need the matching native runtime:

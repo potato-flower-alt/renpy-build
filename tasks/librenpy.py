@@ -1,4 +1,5 @@
 from renpybuild.context import Context
+from renpybuild.engine import validate_engine
 from renpybuild.task import task
 
 
@@ -10,6 +11,8 @@ def clean(c: Context):
 
 @task(kind="host-python", platforms="all", pythons="3", always=True)
 def gen_static3(c: Context):
+
+    validate_engine(c.renpy, ("windows", "linux", "mac"))
 
     c.chdir("{{ renpy }}")
     c.env("RENPY_DEPS_INSTALL", "/usr::/usr/lib/x86_64-linux-gnu/")
@@ -23,6 +26,8 @@ def build(c: Context):
 
     if c.platform == "web" and c.python == "2":
         return
+
+    validate_engine(c.renpy, (c.platform,))
 
     c.env("CFLAGS", """{{ CFLAGS }} "-I{{ renpy }}/src" "-I{{renpy}}/tmp/gen3" """)
     c.env("CXXFLAGS", """{{ CXXFLAGS }} "-I{{ renpy }}/src" "-I{{renpy}}/tmp/gen3" """)

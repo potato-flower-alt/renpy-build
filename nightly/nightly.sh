@@ -54,7 +54,7 @@ fi
 
 BASE="$1"
 VENV="$1/renpy/.venv"
-BRANCH="${2:-master}"
+BRANCH="${2:-main}"
 
 export RENPY_DEPS_INSTALL=/usr::/usr/lib/x86_64-linux-gnu/
 

@@ -31,7 +31,9 @@ update () {
 
 if [ "$NOPULL" != 1 ]; then
     update $(git remote get-url origin)
-    update https://github.com/renpy/renpy renpy
+    python3 "$ROOT/tools/prepare_engine.py" "$BASE/renpy" \
+        --repository "${RENPY_ENGINE_REPOSITORY:-https://github.com/potato-flower-alt/renpy.git}" \
+        --branch "${RENPY_ENGINE_BRANCH:-$BRANCH}"
 fi
 
 rm -Rf "$BASE/renpy/tmp/gen3"

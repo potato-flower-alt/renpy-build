@@ -61,7 +61,7 @@ To get ready to build, log in as the rb user, and then run the following
 commands to instal git and clone renpy-build::
 
     sudo apt install git
-    git clone https://github.com/renpy/renpy-build
+    git clone https://github.com/potato-flower-alt/renpy-build
 
 Change into the renpy-build directory, and run prepare.sh::
 
@@ -73,7 +73,9 @@ and LLVM repositories, and the UV website. Please make sure you're comfortable w
 this change before continuing.
 
 This will first install all the packages required to build Ren'Py, and
-then it will clone Ren'Py. It will also create a python
+then it will clone the companion potato-flower-alt/renpy fork on ``main``.
+Existing engine checkouts with another origin or local edits are rejected
+without resetting their source. It will also create a python
 virtual environment with the tools in it. If this completes successfully,
 you are ready to build.
 
